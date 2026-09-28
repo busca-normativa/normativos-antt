@@ -62,7 +62,7 @@ npm run coletar
    git remote add origin https://github.com/SEU-USUARIO/normativos-antt.git
    git push -u origin main
    ```
-3. No repositório: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. No repositório: **Settings → Pages → Build and deployment → Source: GitHub Actions**. Não use "Deploy from a branch": nesse modo o GitHub publica este README no lugar do painel.
 4. Em **Actions**, abra "Atualizar normativos" e clique em **Run workflow** para a primeira publicação. O endereço do painel aparece no resumo da execução (algo como `https://SEU-USUARIO.github.io/normativos-antt/`).
 
 A partir daí o painel se atualiza sozinho todo dia às 07:30 (Brasília).

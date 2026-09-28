@@ -381,7 +381,10 @@ function desenharGraficoAno(lista) {
       : '';
     const cls = selecao === s.ano ? 'selecionado' : '';
     svg += `<g class="${cls}" data-ano="${s.ano}" data-n="${s.n}"><rect class="alvo" x="${m.l + banda * i}" y="${m.t}" width="${banda}" height="${ih}"/>${path ? `<path class="marca-dado" d="${path}"/>` : ''}</g>`;
-    if (i % cadaRotulo === 0 || i === serie.length - 1) {
+    // rótulo a cada N anos; o último ano sempre aparece, sem encostar no rótulo anterior
+    const ultimo = i === serie.length - 1;
+    const rotuloRegular = i % cadaRotulo === 0 && !(i > serie.length - 1 - cadaRotulo && !ultimo && cadaRotulo > 1);
+    if (rotuloRegular || ultimo) {
       svg += `<text class="eixo" x="${cx}" y="${H - 6}" text-anchor="middle">${s.ano}</text>`;
     }
   });
