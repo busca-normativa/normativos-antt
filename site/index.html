@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Normativos ANTT Rodovias</title>
+  <meta name="description" content="Painel de busca de resoluções, deliberações, portarias, instruções normativas e decisões da ANTT sobre rodovias, atualizado diariamente a partir do ANTTlegis e do gov.br.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231351b4'/%3E%3Cpath d='M9 8h10l4 4v12H9z' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 15h8M12 19h8' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    // aplica o tema salvo antes de pintar a página
+    try { const t = localStorage.getItem('tema-visual'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-busca" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-baixar" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-lua" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-filtro" viewBox="0 0 24 24"><path d="M4 5h16l-6 8v5l-4 2v-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <header class="topo">
+    <div class="wrap">
+      <a class="marca" href="./"><span class="marca-logo" aria-hidden="true">FD</span> Normativos ANTT · Rodovias</a>
+      <nav aria-label="Links">
+        <a href="https://anttlegis.antt.gov.br/" target="_blank" rel="noopener"><svg class="icone"><use href="#i-externo"/></svg><span>ANTTlegis</span></a>
+        <a href="https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias" target="_blank" rel="noopener"><svg class="icone"><use href="#i-externo"/></svg><span>gov.br/ANTT</span></a>
+        <a href="#sobre"><span>Sobre</span></a>
+        <button class="botao-icone" id="alternar-tema" type="button" aria-label="Alternar tema claro/escuro"><svg class="icone"><use href="#i-lua"/></svg></button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <h1>Encontre normas da ANTT por assunto</h1>
+      <p class="sub">Resoluções, deliberações, portarias, instruções normativas, decisões e documentos de rodovias — reunidos do ANTTlegis e do gov.br e <span id="frase-atualizacao">atualizados automaticamente</span>.</p>
+      <form class="caixa-busca" role="search" id="form-busca">
+        <svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg>
+        <label for="q" class="sr-only">Buscar normativos</label>
+        <input id="q" name="q" type="search" autocomplete="off" spellcheck="false"
+          placeholder="Ex.: desapropriação, faixa de domínio, Resolução 6.054, ocupação longitudinal…">
+        <button class="botao" type="submit"><svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg><span>Buscar</span></button>
+      </form>
+      <div class="exemplos" id="exemplos">
+        <span>Experimente:</span>
+        <button type="button">desapropriação</button>
+        <button type="button">faixa de domínio</button>
+        <button type="button">ocupação longitudinal</button>
+        <button type="button">Resolução 6.054</button>
+        <button type="button">"projeto executivo"</button>
+        <button type="button">RCR</button>
+      </div>
+      <div id="alerta-atualizacao"></div>
+    </section>
+
+    <h2 class="secao-titulo">Temas</h2>
+    <div class="temas" id="temas" role="group" aria-label="Temas"></div>
+
+    <section class="kpis" aria-label="Indicadores">
+      <div class="kpi"><div class="rotulo">Atos na base</div><div class="valor" id="k-total">—</div><div class="detalhe" id="k-total-d">&nbsp;</div></div>
+      <div class="kpi"><div class="rotulo">Resultados da consulta</div><div class="valor" id="k-res">—</div><div class="detalhe" id="k-res-d">&nbsp;</div></div>
+      <div class="kpi"><div class="rotulo">Vigentes nos resultados</div><div class="valor" id="k-vig">—</div><div class="detalhe" id="k-vig-d">&nbsp;</div></div>
+      <div class="kpi"><div class="rotulo">Publicados nos últimos 30 dias</div><div class="valor" id="k-novos">—</div><div class="detalhe" id="k-novos-d">&nbsp;</div></div>
+    </section>
+
+    <div class="layout">
+      <aside class="filtros" id="filtros" aria-label="Filtros">
+        <h2>Filtros <button class="link-botao" type="button" id="limpar">Limpar tudo</button></h2>
+
+        <fieldset>
+          <legend>Abrangência</legend>
+          <label class="opcao"><input type="checkbox" id="f-rodovias" checked> Só rodovias e gerais</label>
+          <label class="opcao"><input type="checkbox" id="f-vigentes"> Ocultar revogados</label>
+          <label class="opcao"><input type="checkbox" id="f-destaque"> Só destaques do gov.br</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Período (ano do ato)</legend>
+          <div class="periodo">
+            <label class="sr-only" for="f-de">Ano inicial</label>
+            <input type="number" id="f-de" placeholder="de" min="1990" max="2100" inputmode="numeric">
+            <span>a</span>
+            <label class="sr-only" for="f-ate">Ano final</label>
+            <input type="number" id="f-ate" placeholder="até" min="1990" max="2100" inputmode="numeric">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tipo de ato</legend>
+          <div id="f-tipos"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Órgão emissor</legend>
+          <label class="sr-only" for="f-orgao">Órgão emissor</label>
+          <select id="f-orgao"><option value="">Todos</option></select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Destaque no gov.br</legend>
+          <label class="sr-only" for="f-categoria">Categoria gov.br</label>
+          <select id="f-categoria"><option value="">Todas</option></select>
+        </fieldset>
+      </aside>
+
+      <main id="principal">
+        <div class="graficos">
+          <figure class="grafico" id="g-ano">
+            <figcaption>Atos por ano <small id="g-ano-sub">clique em uma barra para filtrar</small></figcaption>
+            <div class="area"></div>
+          </figure>
+          <figure class="grafico" id="g-tipo">
+            <figcaption>Por tipo de ato <small>nos resultados</small></figcaption>
+            <div class="area"></div>
+          </figure>
+        </div>
+
+        <div class="barra-resultados">
+          <button class="botao secundario pequeno abrir-filtros" type="button" id="abrir-filtros" aria-controls="filtros" aria-expanded="false"><svg class="icone"><use href="#i-filtro"/></svg> Filtros</button>
+          <div class="contagem" id="contagem" aria-live="polite">Carregando…</div>
+          <label class="sr-only" for="ordem">Ordenar por</label>
+          <select id="ordem">
+            <option value="relevancia">Mais relevantes</option>
+            <option value="recentes">Mais recentes</option>
+            <option value="antigos">Mais antigos</option>
+          </select>
+          <button class="botao secundario pequeno" type="button" id="integral-btn" title="Pesquisar o termo dentro do texto completo dos atos no ANTTlegis"><svg class="icone"><use href="#i-doc"/></svg> Texto integral</button>
+          <button class="botao secundario pequeno" type="button" id="exportar" title="Baixar os resultados em planilha (CSV)"><svg class="icone"><use href="#i-baixar"/></svg> Planilha</button>
+        </div>
+        <div class="filtros-ativos" id="filtros-ativos"></div>
+        <div id="aviso-tema"></div>
+        <div id="aviso-setor" class="aviso-setor"></div>
+        <section id="integral" hidden></section>
+        <ol class="resultados" id="resultados">
+          <li class="carregando"><div class="giro"></div>Carregando a base de normativos…</li>
+        </ol>
+        <div class="mais"><button class="botao secundario" type="button" id="mais" hidden>Mostrar mais</button></div>
+      </main>
+    </div>
+  </div>
+
+  <footer class="rodape" id="sobre">
+    <div class="wrap colunas">
+      <div>
+        <h2>Sobre este painel</h2>
+        <p>Ferramenta de consulta que reúne, em um só lugar, os atos normativos e decisórios da ANTT relacionados a rodovias. A base é montada automaticamente a partir de fontes públicas:</p>
+        <ul id="lista-fontes"></ul>
+        <p><strong>Como a busca funciona:</strong> a pesquisa ignora acentos e maiúsculas, reconhece variações das palavras (desapropriar, desapropriação) e números de atos (6.054, 5819/2018). Ao buscar um tema (como <em>desapropriação</em>), o painel inclui também os atos em que o termo aparece no <em>texto integral</em> do ato no ANTTlegis — não só na ementa.</p>
+      </div>
+      <div>
+        <h2>Aviso</h2>
+        <p>Este painel não é um canal oficial da ANTT. Confira sempre o texto vigente no ANTTlegis ou no Diário Oficial da União antes de fundamentar decisões.</p>
+        <p id="info-atualizacao"></p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="dica" id="dica" role="tooltip"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

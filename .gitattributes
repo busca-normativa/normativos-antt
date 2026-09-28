@@ -1,0 +1,2 @@
+# Mesma quebra de linha no Windows e no GitHub Actions (evita diffs falsos nos dados)
+* text=auto eol=lf

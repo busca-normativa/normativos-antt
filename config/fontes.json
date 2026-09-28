@@ -1,0 +1,18 @@
+{
+  "_comentario": "Listagens do ANTTlegis coletadas por ano. 'modulo' e 'menu' vêm dos links do ANTTlegis (cod_modulo e cod_menu). 'orgaos' (opcional) mantém só atos desses órgãos. 'semPessoal' descarta atos de pessoal (nomeações, exonerações etc.).",
+  "anttlegis": [
+    { "id": "res", "nome": "Resoluções", "modulo": 161, "menu": 7796, "acao": "abrirResenhaAnoData" },
+    { "id": "dlb", "nome": "Deliberações", "modulo": 161, "menu": 7795, "acao": "abrirResenhaAnoData", "semPessoal": true },
+    { "id": "inm", "nome": "Instruções Normativas", "modulo": 161, "menu": 7797, "acao": "abrirResenhaAnoData" },
+    { "id": "por", "nome": "Portarias (SUROD, SUINF, SUFIS, DG e outras)", "modulo": 161, "menu": 7804, "acao": "abrirResenhaAnoData", "orgaos": ["SUROD", "SUINF", "SUFIS", "SUREG", "SUEXE", "SUCON", "DG"], "semPessoal": true },
+    { "id": "porrod", "nome": "Portarias de Rodovias", "modulo": 422, "menu": 7743, "acao": "abrirResenhaAnoAto" },
+    { "id": "pcj", "nome": "Portarias Conjuntas", "modulo": 161, "menu": 8435, "acao": "abrirResenhaAnoData" },
+    { "id": "dcsrod", "nome": "Decisões SUROD", "modulo": 422, "menu": 8234, "acao": "abrirResenhaAnoData" },
+    { "id": "ntc", "nome": "Notas Técnicas", "modulo": 161, "menu": 8263, "acao": "abrirResenhaAnoData" },
+    { "id": "isv", "nome": "Instruções de Serviço", "modulo": 161, "menu": 8265, "acao": "abrirResenhaAnoData" },
+    { "id": "aud", "nome": "Audiências Públicas", "modulo": 419, "menu": 7156, "acao": "abrirResenhaAnoData" },
+    { "id": "cpb", "nome": "Consultas Públicas", "modulo": 419, "menu": 7157, "acao": "abrirResenhaAnoData" },
+    { "id": "reu", "nome": "Reuniões Participativas", "modulo": 419, "menu": 7158, "acao": "abrirResenhaAnoData" },
+    { "id": "tms", "nome": "Tomadas de Subsídios", "modulo": 419, "menu": 7159, "acao": "abrirResenhaAnoData" }
+  ]
+}

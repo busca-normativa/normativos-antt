@@ -1,0 +1,16 @@
+{
+  "name": "normativos-antt-rodovias",
+  "version": "1.0.0",
+  "description": "Painel de busca de normativos da ANTT sobre rodovias (resoluções, deliberações, portarias, instruções normativas, decisões), atualizado a partir do ANTTlegis e do gov.br.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node scripts/servir.mjs",
+    "coletar": "node scripts/coletar.mjs",
+    "coletar:completo": "node scripts/coletar.mjs --completo",
+    "coletar:rapido": "node scripts/coletar.mjs --sem-temas"
+  }
+}

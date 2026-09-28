@@ -1,0 +1,149 @@
+{
+  "_comentario": "Temas do painel. 'busca': expressões pesquisadas no TEXTO INTEGRAL do ANTTlegis (busca exata). 'palavras': trechos (sem acento, minúsculos, aceitam expressão regular) procurados no título/ementa. 'sinonimos': termos que o painel trata como equivalentes na busca. Para criar um tema novo, copie um bloco e ajuste.",
+  "temas": [
+    {
+      "id": "desapropriacao",
+      "nome": "Desapropriação e DUP",
+      "descricao": "Declarações de utilidade pública, desapropriação, servidão administrativa e imissão na posse.",
+      "busca": ["desapropriação", "utilidade pública", "servidão administrativa", "imissão na posse"],
+      "palavras": ["desapropria", "utilidade publica", "\\bdup\\b", "servidao administrativa", "imissao (na|de) posse", "expropria"],
+      "sinonimos": ["desapropriação", "desapropriar", "DUP", "declaração de utilidade pública", "utilidade pública", "servidão administrativa", "imissão na posse", "expropriação"]
+    },
+    {
+      "id": "faixa-dominio",
+      "nome": "Faixa de domínio",
+      "descricao": "Uso, ocupação, controle e proteção da faixa de domínio e da área non aedificandi.",
+      "busca": ["faixa de domínio", "non aedificandi", "área não edificável"],
+      "palavras": ["faixa de dominio", "non aedificandi", "nao edificavel", "faixa marginal"],
+      "sinonimos": ["faixa de domínio", "non aedificandi", "área não edificável", "faixa não edificável", "faixa marginal"]
+    },
+    {
+      "id": "ocupacao-faixa",
+      "nome": "Ocupação da faixa (redes e dutos)",
+      "descricao": "Ocupações longitudinais e transversais: redes elétricas, fibra óptica, dutos, adutoras, gasodutos e travessias.",
+      "busca": ["ocupação longitudinal", "ocupação transversal", "uso da faixa de domínio", "ocupação da faixa de domínio"],
+      "palavras": ["ocupac(ao|oes) (longitudinal|transversal|da faixa)", "uso da faixa", "travessia (aerea|subterranea|de rede|de duto)", "fibra optica", "rede (eletrica|de distribuicao|de energia)", "linha de transmissao", "gasoduto", "adutora", "oleoduto", "\\bdutos?\\b", "cabos? (opticos?|eletricos?)"],
+      "sinonimos": ["ocupação da faixa", "ocupação longitudinal", "ocupação transversal", "uso da faixa", "fibra óptica", "rede elétrica", "linha de transmissão", "gasoduto", "adutora", "travessia"]
+    },
+    {
+      "id": "acessos",
+      "nome": "Acessos e interseções",
+      "descricao": "Implantação, regularização e readequação de acessos, interseções e retornos.",
+      "busca": ["implantação de acesso", "regularização de acesso", "readequação de acesso", "acesso à rodovia"],
+      "palavras": ["(implantacao|regularizacao|readequacao|adequacao|construcao|autorizacao|execucao|remanejamento|fechamento|supressao) (d[oae]s? )?acessos?", "acessos? (a|ao|as|aos) (rodovia|propriedade|posto|estabelecimento|imovel|loteamento|area|fazenda|empresa|condominio)", "acessos? (comercia|particular|rura|industria|provisori)", "intersec(ao|oes)", "dispositivo de (acesso|retorno)"],
+      "sinonimos": ["acesso", "acessos", "interseção", "retorno", "dispositivo de acesso"]
+    },
+    {
+      "id": "publicidade",
+      "nome": "Publicidade na faixa",
+      "descricao": "Engenhos, painéis e exploração publicitária ao longo das rodovias.",
+      "busca": ["exploração publicitária", "painel publicitário", "painéis publicitários", "engenhos publicitários", "placas publicitárias", "outdoor"],
+      "palavras": ["publicitari", "outdoor", "engenhos? de publicidade", "(exploracao|veiculacao) de publicidade", "publicidade (ao longo|na faixa|em rodovia|nas rodovias)"],
+      "sinonimos": ["publicidade", "engenho publicitário", "painel publicitário", "outdoor", "propaganda"]
+    },
+    {
+      "id": "receitas",
+      "nome": "Receitas extraordinárias",
+      "descricao": "Receitas alternativas, complementares, acessórias ou de projetos associados.",
+      "busca": ["receitas extraordinárias", "receitas alternativas", "receitas acessórias", "projetos associados"],
+      "palavras": ["receitas? (extraordinari|alternativ|acessori|complementar)", "projetos? associados?"],
+      "sinonimos": ["receitas extraordinárias", "receita alternativa", "receitas acessórias", "projetos associados"]
+    },
+    {
+      "id": "terceiros",
+      "nome": "Projetos de terceiros e interferências",
+      "descricao": "Projetos e obras de interesse de terceiros, remanejamento de interferências e acordos com terceiros.",
+      "busca": ["interesse de terceiros", "remanejamento de interferências", "acordos com terceiros"],
+      "palavras": ["interesse de terceiros", "interferenc", "remanejamento", "acordos? com terceiros"],
+      "sinonimos": ["interesse de terceiros", "projeto de terceiros", "interferência", "remanejamento"]
+    },
+    {
+      "id": "obras",
+      "nome": "Obras, projetos e investimentos",
+      "descricao": "Análise de projetos, obras de ampliação, melhorias e cronograma de investimentos.",
+      "busca": ["projeto executivo", "obras de ampliação de capacidade", "anteprojeto"],
+      "palavras": ["projeto executivo", "anteprojeto", "obras? de (ampliacao|melhoria|duplicacao|implantacao)", "duplicacao", "terceira faixa", "contorno", "cronograma fisico"],
+      "sinonimos": ["obras", "projeto executivo", "anteprojeto", "duplicação", "ampliação de capacidade", "investimentos"]
+    },
+    {
+      "id": "pedagio",
+      "nome": "Pedágio e tarifas",
+      "descricao": "Tarifas de pedágio, reajustes, praças de pedágio e free flow.",
+      "busca": ["tarifa de pedágio", "praça de pedágio", "free flow", "livre passagem"],
+      "palavras": ["pedagio", "tarifa basica", "reajuste tarifario", "revisao tarifaria", "free flow", "livre passagem"],
+      "sinonimos": ["pedágio", "tarifa", "reajuste", "praça de pedágio", "free flow", "livre passagem"]
+    },
+    {
+      "id": "reequilibrio",
+      "nome": "Reequilíbrio e revisões",
+      "descricao": "Recomposição do equilíbrio econômico-financeiro, revisões ordinárias, extraordinárias e quinquenais.",
+      "busca": ["reequilíbrio econômico-financeiro", "recomposição do equilíbrio", "revisão extraordinária", "revisão quinquenal"],
+      "palavras": ["reequilibrio", "equilibrio economico", "revisao (extraordinaria|ordinaria|quinquenal)", "fator de recomposicao"],
+      "sinonimos": ["reequilíbrio", "equilíbrio econômico-financeiro", "revisão extraordinária", "revisão quinquenal", "recomposição"]
+    },
+    {
+      "id": "penalidades",
+      "nome": "Fiscalização e penalidades",
+      "descricao": "Autos de infração, processos sancionadores, multas e advertências às concessionárias.",
+      "busca": ["processo administrativo simplificado", "aplicação de penalidade", "penalidade de advertência", "penalidade de multa"],
+      "palavras": ["auto de infracao", "penalidade", "\\bmultas?\\b", "advertencia", "sancion", "processo administrativo (simplificado|ordinario)", "\\bpas\\b"],
+      "sinonimos": ["penalidade", "multa", "auto de infração", "sanção", "advertência", "fiscalização"]
+    },
+    {
+      "id": "ambiental",
+      "nome": "Meio ambiente e licenciamento",
+      "descricao": "Licenciamento e regularização ambiental, passivos ambientais e sustentabilidade.",
+      "busca": ["licenciamento ambiental", "regularização ambiental", "passivo ambiental"],
+      "palavras": ["ambiental", "ambientais", "meio ambiente", "sustentabilidade", "licenca (previa|de instalacao|de operacao)", "ibama"],
+      "sinonimos": ["meio ambiente", "licenciamento ambiental", "regularização ambiental", "passivo ambiental", "sustentabilidade"]
+    },
+    {
+      "id": "seguranca",
+      "nome": "Segurança viária e sinalização",
+      "descricao": "Segurança viária, sinalização, dispositivos de contenção e redução de acidentes.",
+      "busca": ["segurança viária", "sinalização de obras", "dispositivos de contenção"],
+      "palavras": ["seguranca viaria", "sinalizac", "acidente", "defensa", "dispositivos? de contencao", "barreira"],
+      "sinonimos": ["segurança viária", "sinalização", "acidentes", "defensas", "dispositivos de contenção"]
+    },
+    {
+      "id": "pesagem",
+      "nome": "Pesagem e excesso de peso",
+      "descricao": "Postos de pesagem, balanças e controle de excesso de peso.",
+      "busca": ["pesagem veicular", "posto de pesagem", "postos de pesagem"],
+      "palavras": ["pesagem", "excesso de peso", "balanca"],
+      "sinonimos": ["pesagem", "balança", "excesso de peso", "PPV", "posto de pesagem"]
+    },
+    {
+      "id": "ppd",
+      "nome": "Pontos de parada e descanso",
+      "descricao": "Pontos de parada e descanso (PPD) para caminhoneiros.",
+      "busca": ["pontos de parada e descanso", "ponto de parada e descanso"],
+      "palavras": ["pontos? de parada e descanso", "\\bppds?\\b"],
+      "sinonimos": ["ponto de parada e descanso", "PPD", "descanso de motoristas"]
+    },
+    {
+      "id": "bens-reversiveis",
+      "nome": "Bens reversíveis",
+      "descricao": "Inventário, alienação, desvinculação e reversão de bens da concessão.",
+      "busca": ["bens reversíveis", "inventário de bens", "desvinculação de bens"],
+      "palavras": ["bens reversiveis", "inventario de bens", "desvinculac", "aliena(cao|r) (de )?bens"],
+      "sinonimos": ["bens reversíveis", "inventário de bens", "alienação de bens", "desvinculação"]
+    },
+    {
+      "id": "encerramento",
+      "nome": "Encerramento, caducidade e relicitação",
+      "descricao": "Extinção de contratos, caducidade, relicitação e transição de concessões.",
+      "busca": ["caducidade", "relicitação", "encerramento contratual", "extinção do contrato"],
+      "palavras": ["caducidade", "relicitac", "encerramento contratual", "extincao (do|de) contrato"],
+      "sinonimos": ["caducidade", "relicitação", "encerramento contratual", "extinção do contrato"]
+    },
+    {
+      "id": "rcr",
+      "nome": "Regulamento das Concessões (RCR)",
+      "descricao": "Resoluções que compõem o Regulamento das Concessões Rodoviárias e a adesão a ele.",
+      "busca": ["Regulamento das Concessões Rodoviárias"],
+      "palavras": ["regulamento das concessoes rodoviarias", "\\brcr ?\\d?\\b"],
+      "sinonimos": ["RCR", "Regulamento das Concessões Rodoviárias", "regulamento de concessões"]
+    }
+  ]
+}

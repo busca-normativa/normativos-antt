@@ -1,0 +1,479 @@
+{
+  "atualizadoEm": "2026-09-28T21:54:52.729Z",
+  "ultimaColetaCompleta": "2026-09-28T21:46:23.707Z",
+  "modo": "incremental",
+  "duracaoSegundos": 15,
+  "total": 31985,
+  "porTipo": {
+    "Decisão": 4529,
+    "Deliberação": 11007,
+    "Portaria": 7206,
+    "Comunicado": 23,
+    "Voto": 1630,
+    "Resolução": 6369,
+    "Voto Vista": 40,
+    "Reunião Participativa": 127,
+    "Aviso": 159,
+    "Audiência Pública": 229,
+    "Tomada de Subsídio": 100,
+    "Instrução Normativa": 48,
+    "Consulta Pública": 35,
+    "Portaria Conjunta": 26,
+    "PT9": 1,
+    "Licitação - Concessão": 1,
+    "Leilão / Concessão": 7,
+    "Instrução Normativa Conjunta": 1,
+    "Documento": 34,
+    "PT7": 1,
+    "Instrução de Serviço": 51,
+    "Decreto": 4,
+    "Súmula": 1,
+    "Nota Técnica": 3,
+    "Portaria Complementar": 15,
+    "Lei": 12,
+    "Ofício Circular": 2,
+    "Norma Técnica": 250,
+    "Manual": 61,
+    "Regulamento": 9,
+    "Plano de Fiscalização": 4
+  },
+  "porSetor": {
+    "R": 13163,
+    "G": 12911,
+    "F": 2364,
+    "C": 1753,
+    "P": 3116
+  },
+  "porFonte": {
+    "dcsrod": 4371,
+    "dlb": 11007,
+    "busca": 11863,
+    "por": 6774,
+    "porrod": 3941,
+    "res": 6356,
+    "govbr": 504,
+    "reu": 185,
+    "tms": 165,
+    "aud": 229,
+    "inm": 48,
+    "cpb": 48,
+    "pcj": 26,
+    "isv": 51,
+    "ntc": 3
+  },
+  "fontes": [
+    {
+      "id": "res",
+      "nome": "Resoluções",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=7796"
+    },
+    {
+      "id": "dlb",
+      "nome": "Deliberações",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=7795"
+    },
+    {
+      "id": "inm",
+      "nome": "Instruções Normativas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=7797"
+    },
+    {
+      "id": "por",
+      "nome": "Portarias (SUROD, SUINF, SUFIS, DG e outras)",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=7804"
+    },
+    {
+      "id": "porrod",
+      "nome": "Portarias de Rodovias",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoAto&cod_modulo=422&cod_menu=7743"
+    },
+    {
+      "id": "pcj",
+      "nome": "Portarias Conjuntas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=8435"
+    },
+    {
+      "id": "dcsrod",
+      "nome": "Decisões SUROD",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=422&cod_menu=8234"
+    },
+    {
+      "id": "ntc",
+      "nome": "Notas Técnicas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=8263"
+    },
+    {
+      "id": "isv",
+      "nome": "Instruções de Serviço",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=161&cod_menu=8265"
+    },
+    {
+      "id": "aud",
+      "nome": "Audiências Públicas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=419&cod_menu=7156"
+    },
+    {
+      "id": "cpb",
+      "nome": "Consultas Públicas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=419&cod_menu=7157"
+    },
+    {
+      "id": "reu",
+      "nome": "Reuniões Participativas",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=419&cod_menu=7158"
+    },
+    {
+      "id": "tms",
+      "nome": "Tomadas de Subsídios",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirResenhaAnoData&cod_modulo=419&cod_menu=7159"
+    },
+    {
+      "id": "busca",
+      "nome": "Busca no texto integral do ANTTlegis (por tema)",
+      "url": "https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirLegislacao&cod_modulo=161&cod_menu=5408"
+    },
+    {
+      "id": "govbr",
+      "nome": "gov.br/antt — Normativos de Rodovias",
+      "url": "https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias"
+    }
+  ],
+  "temas": [
+    {
+      "id": "desapropriacao",
+      "nome": "Desapropriação e DUP",
+      "descricao": "Declarações de utilidade pública, desapropriação, servidão administrativa e imissão na posse.",
+      "sinonimos": [
+        "desapropriação",
+        "desapropriar",
+        "DUP",
+        "declaração de utilidade pública",
+        "utilidade pública",
+        "servidão administrativa",
+        "imissão na posse",
+        "expropriação"
+      ],
+      "busca": [
+        "desapropriação",
+        "utilidade pública",
+        "servidão administrativa",
+        "imissão na posse"
+      ],
+      "total": 1853
+    },
+    {
+      "id": "faixa-dominio",
+      "nome": "Faixa de domínio",
+      "descricao": "Uso, ocupação, controle e proteção da faixa de domínio e da área non aedificandi.",
+      "sinonimos": [
+        "faixa de domínio",
+        "non aedificandi",
+        "área não edificável",
+        "faixa não edificável",
+        "faixa marginal"
+      ],
+      "busca": [
+        "faixa de domínio",
+        "non aedificandi",
+        "área não edificável"
+      ],
+      "total": 6218
+    },
+    {
+      "id": "ocupacao-faixa",
+      "nome": "Ocupação da faixa (redes e dutos)",
+      "descricao": "Ocupações longitudinais e transversais: redes elétricas, fibra óptica, dutos, adutoras, gasodutos e travessias.",
+      "sinonimos": [
+        "ocupação da faixa",
+        "ocupação longitudinal",
+        "ocupação transversal",
+        "uso da faixa",
+        "fibra óptica",
+        "rede elétrica",
+        "linha de transmissão",
+        "gasoduto",
+        "adutora",
+        "travessia"
+      ],
+      "busca": [
+        "ocupação longitudinal",
+        "ocupação transversal",
+        "uso da faixa de domínio",
+        "ocupação da faixa de domínio"
+      ],
+      "total": 2949
+    },
+    {
+      "id": "acessos",
+      "nome": "Acessos e interseções",
+      "descricao": "Implantação, regularização e readequação de acessos, interseções e retornos.",
+      "sinonimos": [
+        "acesso",
+        "acessos",
+        "interseção",
+        "retorno",
+        "dispositivo de acesso"
+      ],
+      "busca": [
+        "implantação de acesso",
+        "regularização de acesso",
+        "readequação de acesso",
+        "acesso à rodovia"
+      ],
+      "total": 1810
+    },
+    {
+      "id": "publicidade",
+      "nome": "Publicidade na faixa",
+      "descricao": "Engenhos, painéis e exploração publicitária ao longo das rodovias.",
+      "sinonimos": [
+        "publicidade",
+        "engenho publicitário",
+        "painel publicitário",
+        "outdoor",
+        "propaganda"
+      ],
+      "busca": [
+        "exploração publicitária",
+        "painel publicitário",
+        "painéis publicitários",
+        "engenhos publicitários",
+        "placas publicitárias",
+        "outdoor"
+      ],
+      "total": 121
+    },
+    {
+      "id": "receitas",
+      "nome": "Receitas extraordinárias",
+      "descricao": "Receitas alternativas, complementares, acessórias ou de projetos associados.",
+      "sinonimos": [
+        "receitas extraordinárias",
+        "receita alternativa",
+        "receitas acessórias",
+        "projetos associados"
+      ],
+      "busca": [
+        "receitas extraordinárias",
+        "receitas alternativas",
+        "receitas acessórias",
+        "projetos associados"
+      ],
+      "total": 218
+    },
+    {
+      "id": "terceiros",
+      "nome": "Projetos de terceiros e interferências",
+      "descricao": "Projetos e obras de interesse de terceiros, remanejamento de interferências e acordos com terceiros.",
+      "sinonimos": [
+        "interesse de terceiros",
+        "projeto de terceiros",
+        "interferência",
+        "remanejamento"
+      ],
+      "busca": [
+        "interesse de terceiros",
+        "remanejamento de interferências",
+        "acordos com terceiros"
+      ],
+      "total": 257
+    },
+    {
+      "id": "obras",
+      "nome": "Obras, projetos e investimentos",
+      "descricao": "Análise de projetos, obras de ampliação, melhorias e cronograma de investimentos.",
+      "sinonimos": [
+        "obras",
+        "projeto executivo",
+        "anteprojeto",
+        "duplicação",
+        "ampliação de capacidade",
+        "investimentos"
+      ],
+      "busca": [
+        "projeto executivo",
+        "obras de ampliação de capacidade",
+        "anteprojeto"
+      ],
+      "total": 3807
+    },
+    {
+      "id": "pedagio",
+      "nome": "Pedágio e tarifas",
+      "descricao": "Tarifas de pedágio, reajustes, praças de pedágio e free flow.",
+      "sinonimos": [
+        "pedágio",
+        "tarifa",
+        "reajuste",
+        "praça de pedágio",
+        "free flow",
+        "livre passagem"
+      ],
+      "busca": [
+        "tarifa de pedágio",
+        "praça de pedágio",
+        "free flow",
+        "livre passagem"
+      ],
+      "total": 1464
+    },
+    {
+      "id": "reequilibrio",
+      "nome": "Reequilíbrio e revisões",
+      "descricao": "Recomposição do equilíbrio econômico-financeiro, revisões ordinárias, extraordinárias e quinquenais.",
+      "sinonimos": [
+        "reequilíbrio",
+        "equilíbrio econômico-financeiro",
+        "revisão extraordinária",
+        "revisão quinquenal",
+        "recomposição"
+      ],
+      "busca": [
+        "reequilíbrio econômico-financeiro",
+        "recomposição do equilíbrio",
+        "revisão extraordinária",
+        "revisão quinquenal"
+      ],
+      "total": 1538
+    },
+    {
+      "id": "penalidades",
+      "nome": "Fiscalização e penalidades",
+      "descricao": "Autos de infração, processos sancionadores, multas e advertências às concessionárias.",
+      "sinonimos": [
+        "penalidade",
+        "multa",
+        "auto de infração",
+        "sanção",
+        "advertência",
+        "fiscalização"
+      ],
+      "busca": [
+        "processo administrativo simplificado",
+        "aplicação de penalidade",
+        "penalidade de advertência",
+        "penalidade de multa"
+      ],
+      "total": 1193
+    },
+    {
+      "id": "ambiental",
+      "nome": "Meio ambiente e licenciamento",
+      "descricao": "Licenciamento e regularização ambiental, passivos ambientais e sustentabilidade.",
+      "sinonimos": [
+        "meio ambiente",
+        "licenciamento ambiental",
+        "regularização ambiental",
+        "passivo ambiental",
+        "sustentabilidade"
+      ],
+      "busca": [
+        "licenciamento ambiental",
+        "regularização ambiental",
+        "passivo ambiental"
+      ],
+      "total": 1488
+    },
+    {
+      "id": "seguranca",
+      "nome": "Segurança viária e sinalização",
+      "descricao": "Segurança viária, sinalização, dispositivos de contenção e redução de acidentes.",
+      "sinonimos": [
+        "segurança viária",
+        "sinalização",
+        "acidentes",
+        "defensas",
+        "dispositivos de contenção"
+      ],
+      "busca": [
+        "segurança viária",
+        "sinalização de obras",
+        "dispositivos de contenção"
+      ],
+      "total": 480
+    },
+    {
+      "id": "pesagem",
+      "nome": "Pesagem e excesso de peso",
+      "descricao": "Postos de pesagem, balanças e controle de excesso de peso.",
+      "sinonimos": [
+        "pesagem",
+        "balança",
+        "excesso de peso",
+        "PPV",
+        "posto de pesagem"
+      ],
+      "busca": [
+        "pesagem veicular",
+        "posto de pesagem",
+        "postos de pesagem"
+      ],
+      "total": 262
+    },
+    {
+      "id": "ppd",
+      "nome": "Pontos de parada e descanso",
+      "descricao": "Pontos de parada e descanso (PPD) para caminhoneiros.",
+      "sinonimos": [
+        "ponto de parada e descanso",
+        "PPD",
+        "descanso de motoristas"
+      ],
+      "busca": [
+        "pontos de parada e descanso",
+        "ponto de parada e descanso"
+      ],
+      "total": 120
+    },
+    {
+      "id": "bens-reversiveis",
+      "nome": "Bens reversíveis",
+      "descricao": "Inventário, alienação, desvinculação e reversão de bens da concessão.",
+      "sinonimos": [
+        "bens reversíveis",
+        "inventário de bens",
+        "alienação de bens",
+        "desvinculação"
+      ],
+      "busca": [
+        "bens reversíveis",
+        "inventário de bens",
+        "desvinculação de bens"
+      ],
+      "total": 125
+    },
+    {
+      "id": "encerramento",
+      "nome": "Encerramento, caducidade e relicitação",
+      "descricao": "Extinção de contratos, caducidade, relicitação e transição de concessões.",
+      "sinonimos": [
+        "caducidade",
+        "relicitação",
+        "encerramento contratual",
+        "extinção do contrato"
+      ],
+      "busca": [
+        "caducidade",
+        "relicitação",
+        "encerramento contratual",
+        "extinção do contrato"
+      ],
+      "total": 585
+    },
+    {
+      "id": "rcr",
+      "nome": "Regulamento das Concessões (RCR)",
+      "descricao": "Resoluções que compõem o Regulamento das Concessões Rodoviárias e a adesão a ele.",
+      "sinonimos": [
+        "RCR",
+        "Regulamento das Concessões Rodoviárias",
+        "regulamento de concessões"
+      ],
+      "busca": [
+        "Regulamento das Concessões Rodoviárias"
+      ],
+      "total": 202
+    }
+  ],
+  "erros": []
+}
