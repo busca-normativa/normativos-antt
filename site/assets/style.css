@@ -76,6 +76,8 @@
 }
 
 * { box-sizing: border-box; }
+/* o atributo hidden precisa vencer o display dos componentes (ex.: .botao usa inline-flex) */
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
