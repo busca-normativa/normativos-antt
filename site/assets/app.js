@@ -88,6 +88,7 @@ const estado = {
   q: '',
   tema: '',
   tipos: new Set(),
+  tiposFora: new Set(), // tipos ocultados ("todos menos estes")
   orgao: '',
   categoria: '',
   de: null,
@@ -242,7 +243,7 @@ function aplicar() {
     (!estado.categoria || a.destaque === estado.categoria);
   const f1 = lista.filter((a) => passaAbrangencia(a));
   const ocultosSetor = estado.rodovias ? lista.filter((a) => !a._rod && passaAbrangencia(a, true)).length : 0;
-  const passaTipo = (a) => !estado.tipos.size || estado.tipos.has(a.tipoNome);
+  const passaTipo = (a) => (!estado.tipos.size || estado.tipos.has(a.tipoNome)) && !estado.tiposFora.has(a.tipoNome);
   const passaOrgao = (a) => !estado.orgao || a._org === estado.orgao;
   const passaPeriodo = (a) => (!estado.de || (a.ano || 0) >= estado.de) && (!estado.ate || (a.ano || 0) <= estado.ate);
 
@@ -299,12 +300,15 @@ function desenharTemas() {
 
 function desenharFacetas(paraTipo, paraOrgao) {
   const contTipo = contar(paraTipo, (a) => a.tipoNome);
-  const tipos = [...new Set([...Object.keys(contTipo), ...estado.tipos])].sort((x, y) => (contTipo[y] || 0) - (contTipo[x] || 0) || x.localeCompare(y));
+  const tipos = [...new Set([...Object.keys(contTipo), ...estado.tipos, ...estado.tiposFora])].sort((x, y) => (contTipo[y] || 0) - (contTipo[x] || 0) || x.localeCompare(y));
   const el = $('#f-tipos');
   const expandido = el.dataset.expandido === '1';
   const visiveis = expandido ? tipos : tipos.slice(0, 8);
   el.innerHTML =
-    visiveis.map((t) => `<label class="opcao${contTipo[t] ? '' : ' zero'}"><input type="checkbox" value="${escapar(t)}" ${estado.tipos.has(t) ? 'checked' : ''}> ${escapar(t)}<span class="n">${compacto(contTipo[t] || 0)}</span></label>`).join('') +
+    visiveis.map((t) => {
+      const fora = estado.tiposFora.has(t);
+      return `<div class="linha-tipo${fora ? ' fora' : ''}"><label class="opcao${contTipo[t] ? '' : ' zero'}"><input type="checkbox" value="${escapar(t)}" ${estado.tipos.has(t) ? 'checked' : ''}> <span class="nome-tipo">${escapar(t)}</span><span class="n">${compacto(contTipo[t] || 0)}</span></label><button type="button" class="ocultar-tipo" data-fora="${escapar(t)}" title="${fora ? 'Mostrar' : 'Ocultar'} ${escapar(t)} (mantém todos os outros tipos)" aria-pressed="${fora}">${fora ? 'mostrar' : 'ocultar'}</button></div>`;
+    }).join('') +
     (tipos.length > 8 ? `<button type="button" class="link-botao" id="ver-tipos">${expandido ? 'ver menos' : `ver todos (${tipos.length})`}</button>` : '') +
     (!tipos.length ? '<div class="opcao zero">Nenhum</div>' : '');
 
@@ -406,8 +410,9 @@ function desenharGraficoTipo(lista) {
   area.innerHTML = `<div class="barras-h" role="list">${linhas
     .map(([t, n]) => {
       const sel = estado.tipos.has(t);
+      const fora = estado.tiposFora.has(t);
       const outros = t === 'Outros';
-      return `<button type="button" role="listitem" class="barra-h${sel ? ' sel' : ''}${algumSel && !sel ? ' apagada' : ''}" ${outros ? 'disabled' : `data-tipo="${escapar(t)}"`} data-n="${n}" aria-label="${escapar(t)}: ${compacto(n)} atos">
+      return `<button type="button" role="listitem" class="barra-h${sel ? ' sel' : ''}${(algumSel && !sel) || fora ? ' apagada' : ''}" ${outros ? 'disabled' : `data-tipo="${escapar(t)}"`} data-n="${n}" aria-label="${escapar(t)}: ${compacto(n)} atos">
         <span class="rot">${escapar(t)}</span>
         <span class="trilho"><span class="fill" style="width:${Math.max(1.5, (n / max) * 100)}%"></span></span>
         <span class="val">${compacto(n)}</span></button>`;
@@ -441,6 +446,7 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
   const chips = [];
   if (estado.tema) chips.push(['tema', `Tema: ${TEMA_POR_ID.get(estado.tema)?.nome}`]);
   for (const t of estado.tipos) chips.push([`tipo:${t}`, t]);
+  for (const t of estado.tiposFora) chips.push([`fora:${t}`, `Sem ${t}`]);
   if (estado.orgao) chips.push(['orgao', `Órgão: ${estado.orgao}`]);
   if (estado.categoria) chips.push(['categoria', `gov.br: ${estado.categoria}`]);
   if (estado.de || estado.ate) chips.push(['periodo', estado.de === estado.ate ? `Ano: ${estado.de}` : `Período: ${estado.de || '…'}–${estado.ate || '…'}`]);
@@ -524,6 +530,7 @@ function salvarUrl() {
   if (estado.q) p.set('q', estado.q);
   if (estado.tema) p.set('tema', estado.tema);
   if (estado.tipos.size) p.set('tipo', [...estado.tipos].join('|'));
+  if (estado.tiposFora.size) p.set('sem', [...estado.tiposFora].join('|'));
   if (estado.orgao) p.set('orgao', estado.orgao);
   if (estado.categoria) p.set('gov', estado.categoria);
   if (estado.de) p.set('de', estado.de);
@@ -541,6 +548,7 @@ function lerUrl() {
   estado.q = p.get('q') || '';
   estado.tema = p.get('tema') || '';
   estado.tipos = new Set((p.get('tipo') || '').split('|').filter(Boolean));
+  estado.tiposFora = new Set((p.get('sem') || '').split('|').filter(Boolean));
   estado.orgao = p.get('orgao') || '';
   estado.categoria = p.get('gov') || '';
   estado.de = +p.get('de') || null;
@@ -648,10 +656,18 @@ function ligarEventos() {
   $('#f-ate').addEventListener('input', periodo);
   $('#f-tipos').addEventListener('change', (e) => {
     if (e.target.type !== 'checkbox') return;
-    e.target.checked ? estado.tipos.add(e.target.value) : estado.tipos.delete(e.target.value);
+    if (e.target.checked) { estado.tipos.add(e.target.value); estado.tiposFora.delete(e.target.value); } else estado.tipos.delete(e.target.value);
     executar();
   });
   $('#f-tipos').addEventListener('click', (e) => {
+    const ocultar = e.target.closest('[data-fora]');
+    if (ocultar) {
+      const t = ocultar.dataset.fora;
+      if (estado.tiposFora.has(t)) estado.tiposFora.delete(t);
+      else { estado.tiposFora.add(t); estado.tipos.delete(t); }
+      executar();
+      return;
+    }
     if (e.target.id !== 'ver-tipos') return;
     const el = $('#f-tipos');
     el.dataset.expandido = el.dataset.expandido === '1' ? '0' : '1';
@@ -661,7 +677,7 @@ function ligarEventos() {
   $('#f-categoria').addEventListener('change', (e) => { estado.categoria = e.target.value; executar(); });
   $('#ordem').addEventListener('change', (e) => { estado.ordem = e.target.value; executar(); });
   $('#limpar').addEventListener('click', () => {
-    Object.assign(estado, { q: '', tema: '', tipos: new Set(), orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
+    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
     sincronizarControles();
     executar();
   });
@@ -681,6 +697,7 @@ function ligarEventos() {
       const k = lim.dataset.limpar;
       if (k === 'tema') estado.tema = '';
       else if (k.startsWith('tipo:')) estado.tipos.delete(k.slice(5));
+      else if (k.startsWith('fora:')) estado.tiposFora.delete(k.slice(5));
       else if (k === 'orgao') estado.orgao = '';
       else if (k === 'categoria') estado.categoria = '';
       else if (k === 'periodo') { estado.de = null; estado.ate = null; }
@@ -711,7 +728,8 @@ function ligarEventos() {
     const barraTipo = e.target.closest('#g-tipo [data-tipo]');
     if (barraTipo) {
       const t = barraTipo.dataset.tipo;
-      estado.tipos.has(t) ? estado.tipos.delete(t) : estado.tipos.add(t);
+      if (estado.tiposFora.has(t)) estado.tiposFora.delete(t);
+      else estado.tipos.has(t) ? estado.tipos.delete(t) : estado.tipos.add(t);
       executar();
     }
   });

@@ -170,6 +170,18 @@ button, input, select { font: inherit; color: inherit; }
 .opcao input { margin: 0; accent-color: var(--accent); width: 16px; height: 16px; flex: none; }
 .opcao .n { margin-left: auto; font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .opcao.zero { opacity: 0.55; }
+.linha-tipo { display: flex; align-items: center; gap: 4px; }
+.linha-tipo .opcao { flex: 1; min-width: 0; }
+.linha-tipo .nome-tipo { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ocultar-tipo {
+  flex: none; border: 1px solid transparent; background: none; color: var(--ink-3); font-size: 12px; padding: 1px 6px;
+  border-radius: 6px; cursor: pointer; opacity: 0; transition: opacity 0.12s;
+}
+.linha-tipo:hover .ocultar-tipo, .ocultar-tipo:focus-visible, .linha-tipo.fora .ocultar-tipo { opacity: 1; }
+.ocultar-tipo:hover { border-color: var(--border); color: var(--ink); background: var(--surface-2); }
+.linha-tipo.fora .nome-tipo { text-decoration: line-through; color: var(--ink-3); }
+.linha-tipo.fora .ocultar-tipo { color: var(--link); }
+@media (hover: none) { .ocultar-tipo { opacity: 1; } }
 .periodo { display: flex; gap: 8px; align-items: center; }
 .periodo input, .filtros select {
   width: 100%; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
