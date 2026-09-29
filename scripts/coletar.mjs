@@ -6,13 +6,15 @@
 //   node scripts/coletar.mjs --completo    recoleta todos os anos (recomendado 1x por semana)
 //   node scripts/coletar.mjs --sem-temas   pula a busca no texto integral por tema
 //   node scripts/coletar.mjs --sem-govbr   pula as páginas curadas do gov.br
-//   node scripts/coletar.mjs --fontes=res,dlb   coleta só as listagens indicadas (ids de config/fontes.json)
+//   node scripts/coletar.mjs --sem-relatorios   pula os relatórios das páginas das concessões
+//   node scripts/coletar.mjs --fontes=res,dlb   coleta só as listagens indicadas (ids de config/fontes.json; "nenhuma" pula todas)
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { criarSessaoLegis, coletarListagem, buscarTextoIntegral, idAto } from './lib/anttlegis.mjs';
 import { coletarGovBr } from './lib/govbr.mjs';
+import { coletarRelatorios, tipoDoRelatorio } from './lib/relatorios.mjs';
 import { setoresDoAto, ehAtoDePessoal, ehAdministrativo, nomeDoTipo, compilarTemas, temasPorPalavras } from './lib/classificar.mjs';
 import { normalizar } from './lib/texto.mjs';
 
@@ -28,6 +30,7 @@ const valor = (nome) => (args.find((a) => a.startsWith(`--${nome}=`)) || '').spl
 const COMPLETO = opt('completo');
 const SEM_TEMAS = opt('sem-temas');
 const SEM_GOVBR = opt('sem-govbr');
+const SEM_RELATORIOS = opt('sem-relatorios');
 const FILTRO_FONTES = valor('fontes') ? valor('fontes').split(',') : null;
 const ANO_ATUAL = new Date().getFullYear();
 const ANO_MINIMO = COMPLETO ? 0 : ANO_ATUAL - 1;
@@ -84,6 +87,7 @@ const fontesDaExecucao = new Set([
   ...cfgFontes.filter((f) => !FILTRO_FONTES || FILTRO_FONTES.includes(f.id)).map((f) => f.id),
   ...(SEM_TEMAS ? [] : ['busca']),
   ...(SEM_GOVBR ? [] : ['govbr']),
+  ...(SEM_RELATORIOS ? [] : ['relatorios']),
 ]);
 
 function copiaDoAnterior(id) {
@@ -273,10 +277,46 @@ async function etapaGovBr() {
   log(`   ${r.itens.length} itens em ${r.paginas} páginas (${ligados} ligados ao ANTTlegis, ${novos} documentos próprios)`);
 }
 
+// ---------- 4. relatórios das concessões (gov.br) ----------
+// Tipos de registro que apontam para documentos fora do ANTTlegis (link próprio, tipo definido na coleta)
+const TIPOS_EXTERNOS = new Set(['GOV', 'REL']);
+
+// Siglas usadas no dia a dia, acrescentadas à ementa para a busca encontrar
+const SIGLAS_RELATORIO = [
+  [/relat[oó]rio mensal de atividades/i, 'RMA'],
+  [/relat[oó]rio mensal de acompanhamento|acompanhamento mensal/i, 'RMA'],
+  [/relat[oó]rio de monitora[çc][ãa]o/i, 'RM'],
+  [/relat[oó]rio geral de verifica[çc][ãa]o/i, 'RGV'],
+];
+
+async function etapaRelatorios() {
+  log(`gov.br: relatórios das concessões${COMPLETO ? ' (todos os anos)' : ` (desde ${ANO_MINIMO})`}`);
+  const r = await coletarRelatorios({ anoMinimo: ANO_MINIMO, log: () => {} });
+  erros.push(...r.erros);
+  if (!r.erros.length) fontesOk.add('relatorios');
+  for (const it of r.itens) {
+    const ano = it.ano || (it.modificado ? +it.modificado.slice(0, 4) : null);
+    const texto = `${it.categoria} ${it.titulo}`;
+    const siglas = [...new Set(SIGLAS_RELATORIO.filter(([re]) => re.test(texto)).map(([, s]) => s))];
+    registrar({
+      id: `REL-${hash(it.url)}`,
+      tipo: 'REL',
+      tipoNome: tipoDoRelatorio(it.categoria, it.titulo),
+      orgao: it.concessao,
+      titulo: it.titulo,
+      ementa: `${it.categoria} — ${it.concessao}${it.encerrada ? ' (contrato encerrado)' : ''}${ano ? `, ${ano}` : ''}${siglas.length ? ` · ${siglas.join(', ')}` : ''}`,
+      ano,
+      publicado: it.modificado,
+      url: it.url,
+    }, 'relatorios');
+  }
+  log(`   ${r.itens.length} arquivos em ${r.concessoes.length} concessões${r.erros.length ? `, ${r.erros.length} erro(s)` : ''}`);
+}
+
 // ---------- execução ----------
 async function principal() {
   log(`Modo ${COMPLETO ? 'COMPLETO' : 'incremental'} — base existente: ${anteriores.size} atos`);
-  await etapaListagens();
+  if (!(FILTRO_FONTES && FILTRO_FONTES.includes('nenhuma'))) await etapaListagens();
   if (!SEM_TEMAS) await etapaTemas();
   if (!SEM_GOVBR) {
     try {
@@ -284,6 +324,14 @@ async function principal() {
     } catch (e) {
       erros.push(`gov.br: ${e.message}`);
       log('! gov.br:', e.message);
+    }
+  }
+  if (!SEM_RELATORIOS) {
+    try {
+      await etapaRelatorios();
+    } catch (e) {
+      erros.push(`relatórios: ${e.message}`);
+      log('! relatórios:', e.message);
     }
   }
 
@@ -298,14 +346,14 @@ async function principal() {
 
   // Pós-processamento
   for (const [id, a] of atos) {
-    if (a.tipo !== 'GOV' && ehAdministrativo(a)) {
+    if (!TIPOS_EXTERNOS.has(a.tipo) && ehAdministrativo(a)) {
       atos.delete(id);
       continue;
     }
-    if (a.tipo !== 'GOV') a.tipoNome = nomeDoTipo(a);
+    if (!TIPOS_EXTERNOS.has(a.tipo)) a.tipoNome = nomeDoTipo(a);
     a.setores = setoresDoAto(a);
     a.temas = unir(temasPorPalavras(a, temasCompilados), a.temasBusca || []).sort();
-    if (a.url && a.tipo !== 'GOV') delete a.url;
+    if (a.url && !TIPOS_EXTERNOS.has(a.tipo)) delete a.url;
   }
 
   const lista = [...atos.values()].sort((x, y) => (y.data || '').localeCompare(x.data || '') || (y.numero || 0) - (x.numero || 0));
@@ -328,6 +376,7 @@ async function principal() {
       ...cfgFontes.map((f) => ({ id: f.id, nome: f.nome, url: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=${f.acao}&cod_modulo=${f.modulo}&cod_menu=${f.menu}` })),
       { id: 'busca', nome: 'Busca no texto integral do ANTTlegis (por tema)', url: 'https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirLegislacao&cod_modulo=161&cod_menu=5408' },
       { id: 'govbr', nome: 'gov.br/antt — Normativos de Rodovias', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias' },
+      { id: 'relatorios', nome: 'gov.br/antt — Relatórios das concessões (monitoração, verificador, obras, financeiros)', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias' },
     ],
     temas: cfgTemas.map((t) => ({ id: t.id, nome: t.nome, descricao: t.descricao, sinonimos: t.sinonimos, busca: t.busca, total: lista.filter((a) => a.temas.includes(t.id)).length })),
     erros,

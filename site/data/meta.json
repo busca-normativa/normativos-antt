@@ -1,15 +1,15 @@
 {
-  "atualizadoEm": "2026-09-29T16:41:10.916Z",
-  "ultimaColetaCompleta": "2026-09-28T22:21:04.812Z",
+  "atualizadoEm": "2026-09-29T18:18:41.251Z",
+  "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 378,
-  "total": 32000,
+  "duracaoSegundos": 227,
+  "total": 34297,
   "porTipo": {
-    "Decisão": 4538,
+    "Decisão": 4539,
     "Deliberação": 11011,
-    "Portaria": 7207,
-    "Comunicado": 23,
-    "Voto": 1630,
+    "Portaria": 7210,
+    "Comunicado": 27,
+    "Voto": 1637,
     "Resolução": 6369,
     "Voto Vista": 40,
     "Reunião Participativa": 127,
@@ -31,6 +31,12 @@
     "Nota Técnica": 3,
     "Portaria Complementar": 16,
     "Lei": 12,
+    "Relatório de Obras": 950,
+    "Relatório de Monitoração": 1297,
+    "Relatório do Verificador": 6,
+    "Relatório Financeiro": 8,
+    "Relatório do Verificador (mensal)": 18,
+    "Relatório de Concessão": 3,
     "Ofício Circular": 2,
     "Norma Técnica": 250,
     "Manual": 61,
@@ -38,16 +44,16 @@
     "Plano de Fiscalização": 4
   },
   "porSetor": {
-    "R": 13175,
+    "R": 15463,
     "C": 1756,
-    "G": 12912,
-    "F": 2363,
+    "G": 12916,
+    "F": 2369,
     "P": 3116
   },
   "porFonte": {
     "dcsrod": 4381,
     "dlb": 11011,
-    "busca": 11711,
+    "busca": 11731,
     "por": 6774,
     "porrod": 3941,
     "res": 6356,
@@ -59,7 +65,8 @@
     "cpb": 48,
     "pcj": 26,
     "isv": 51,
-    "ntc": 3
+    "ntc": 3,
+    "relatorios": 2282
   },
   "fontes": [
     {
@@ -136,6 +143,11 @@
       "id": "govbr",
       "nome": "gov.br/antt — Normativos de Rodovias",
       "url": "https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias"
+    },
+    {
+      "id": "relatorios",
+      "nome": "gov.br/antt — Relatórios das concessões (monitoração, verificador, obras, financeiros)",
+      "url": "https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias"
     }
   ],
   "temas": [
@@ -177,7 +189,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 6295
+      "total": 6548
     },
     {
       "id": "ocupacao-faixa",
@@ -201,7 +213,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 2951
+      "total": 2950
     },
     {
       "id": "acessos",
@@ -295,7 +307,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3761
+      "total": 3816
     },
     {
       "id": "pedagio",
@@ -372,7 +384,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1525
+      "total": 1531
     },
     {
       "id": "seguranca",
@@ -390,7 +402,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 480
+      "total": 703
     },
     {
       "id": "pesagem",
@@ -408,7 +420,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 262
+      "total": 263
     },
     {
       "id": "ppd",
@@ -458,7 +470,23 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 585
+      "total": 638
+    },
+    {
+      "id": "verificador",
+      "nome": "Verificador Independente (RGV)",
+      "descricao": "Relatórios e atos do Verificador Independente: aferição dos indicadores de desempenho e não conformidades (nas PPPs estaduais, o Relatório Geral de Verificação — RGV).",
+      "sinonimos": [
+        "RGV",
+        "relatório geral de verificação",
+        "verificador independente",
+        "verificador",
+        "verificação independente"
+      ],
+      "busca": [
+        "verificador independente"
+      ],
+      "total": 124
     },
     {
       "id": "rcr",

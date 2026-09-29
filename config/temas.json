@@ -138,6 +138,14 @@
       "sinonimos": ["caducidade", "relicitação", "encerramento contratual", "extinção do contrato"]
     },
     {
+      "id": "verificador",
+      "nome": "Verificador Independente (RGV)",
+      "descricao": "Relatórios e atos do Verificador Independente: aferição dos indicadores de desempenho e não conformidades (nas PPPs estaduais, o Relatório Geral de Verificação — RGV).",
+      "busca": ["verificador independente"],
+      "palavras": ["verificador", "relatorio geral de verificacao", "\\brgv\\b"],
+      "sinonimos": ["RGV", "relatório geral de verificação", "verificador independente", "verificador", "verificação independente"]
+    },
+    {
       "id": "rcr",
       "nome": "Regulamento das Concessões (RCR)",
       "descricao": "Resoluções que compõem o Regulamento das Concessões Rodoviárias e a adesão a ele.",

@@ -38,7 +38,7 @@
   <div class="wrap">
     <section class="hero">
       <h1>Encontre normas da ANTT por assunto</h1>
-      <p class="sub">Resoluções, deliberações, portarias, instruções normativas, decisões e documentos de rodovias — reunidos do ANTTlegis e do gov.br e <span id="frase-atualizacao">atualizados automaticamente</span>.</p>
+      <p class="sub">Resoluções, deliberações, portarias, instruções normativas, decisões, documentos e relatórios das concessões de rodovias — reunidos do ANTTlegis e do gov.br e <span id="frase-atualizacao">atualizados automaticamente</span>.</p>
       <form class="caixa-busca" role="search" id="form-busca">
         <svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg>
         <label for="q" class="sr-only">Buscar normativos</label>
@@ -54,6 +54,8 @@
         <button type="button">Resolução 6.054</button>
         <button type="button">"projeto executivo"</button>
         <button type="button">RCR</button>
+        <button type="button">monitoração faixa de domínio</button>
+        <button type="button">RMA</button>
       </div>
       <div id="alerta-atualizacao"></div>
     </section>
@@ -71,6 +73,16 @@
     <div class="layout">
       <aside class="filtros" id="filtros" aria-label="Filtros">
         <h2>Filtros <button class="link-botao" type="button" id="limpar">Limpar tudo</button></h2>
+
+        <fieldset>
+          <legend>Conteúdo</legend>
+          <div class="segmentado" role="radiogroup" aria-label="Conteúdo" id="f-conteudo">
+            <label><input type="radio" name="conteudo" value="tudo" checked><span>Tudo</span></label>
+            <label><input type="radio" name="conteudo" value="normas"><span>Normas e atos</span></label>
+            <label><input type="radio" name="conteudo" value="relatorios"><span>Relatórios</span></label>
+          </div>
+          <p class="dica-filtro">Relatórios: monitoração, verificador independente, obras e financeiros publicados nas páginas de cada concessão.</p>
+        </fieldset>
 
         <fieldset>
           <legend>Abrangência</legend>
@@ -96,8 +108,8 @@
         </fieldset>
 
         <fieldset>
-          <legend>Órgão emissor</legend>
-          <label class="sr-only" for="f-orgao">Órgão emissor</label>
+          <legend>Órgão ou concessão</legend>
+          <label class="sr-only" for="f-orgao">Órgão emissor ou concessão</label>
           <select id="f-orgao"><option value="">Todos</option></select>
         </fieldset>
 

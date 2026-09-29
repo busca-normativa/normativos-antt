@@ -89,6 +89,7 @@ const estado = {
   tema: '',
   tipos: new Set(),
   tiposFora: new Set(), // tipos ocultados ("todos menos estes")
+  conteudo: 'tudo', // tudo | normas | relatorios
   orgao: '',
   categoria: '',
   de: null,
@@ -125,7 +126,7 @@ async function carregar() {
     a._ti = semMilhar(normalizar(a.titulo));
     a._sit = classeSituacao(a.situacao);
     a._rod = a.setores.includes('R') || a.setores.includes('G');
-    a._org = a.tipo === 'GOV' ? a.orgao || 'gov.br' : (a.orgao || '').split('/')[0];
+    a._org = a.tipo === 'GOV' || a.tipo === 'REL' ? a.orgao || 'gov.br' : (a.orgao || '').split('/')[0];
     a._dt = a.data || a.publicado || (a.ano ? `${a.ano}-01-01` : '');
     return a;
   });
@@ -237,6 +238,7 @@ function atosDaConsulta() {
 function aplicar() {
   const { lista, consulta } = atosDaConsulta();
   const passaAbrangencia = (a, ignorarRodovias = false) =>
+    (estado.conteudo === 'tudo' || (estado.conteudo === 'relatorios') === (a.tipo === 'REL')) &&
     (ignorarRodovias || !estado.rodovias || a._rod) &&
     (!estado.vigentes || a._sit !== 'revogado') &&
     (!estado.destaque || a.destaque) &&
@@ -444,6 +446,7 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
 
   // filtros ativos
   const chips = [];
+  if (estado.conteudo !== 'tudo') chips.push(['conteudo', estado.conteudo === 'relatorios' ? 'Só relatórios' : 'Só normas e atos']);
   if (estado.tema) chips.push(['tema', `Tema: ${TEMA_POR_ID.get(estado.tema)?.nome}`]);
   for (const t of estado.tipos) chips.push([`tipo:${t}`, t]);
   for (const t of estado.tiposFora) chips.push([`fora:${t}`, `Sem ${t}`]);
@@ -492,8 +495,11 @@ function cartaoAto(a, termos, extra = '') {
   const setores = (a.setores || []).filter((s) => s !== 'G' && s !== 'R').map((s) => `<span class="selo">${SETORES[s]}</span>`).join('');
   const temas = (a.temas || []).map((t) => TEMA_POR_ID.get(t)).filter(Boolean).map((t) => `<button type="button" data-tema="${t.id}" title="Ver todos os atos do tema">${escapar(t.nome)}</button>`).join('');
   const url = urlDoAto(a);
-  const meta = [a.tipo === 'GOV' ? a.orgao : a.orgao?.replace(/\/ANTT.*$/, ''), a.data ? `ato de ${dataBR(a.data)}` : a.ano, a.publicado && a.publicado !== a.data ? `publicado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ');
-  const origem = a.tipo === 'GOV' ? 'Abrir documento' : 'Abrir no ANTTlegis';
+  const rel = a.tipo === 'REL';
+  const meta = rel
+    ? [a.orgao, a.ano, a.publicado ? `atualizado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ')
+    : [a.tipo === 'GOV' ? a.orgao : a.orgao?.replace(/\/ANTT.*$/, ''), a.data ? `ato de ${dataBR(a.data)}` : a.ano, a.publicado && a.publicado !== a.data ? `publicado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ');
+  const origem = rel ? 'Abrir relatório' : a.tipo === 'GOV' ? 'Abrir documento' : 'Abrir no ANTTlegis';
   return `<li class="ato" data-id="${escapar(a.id)}">
     <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${sit}${dest}${setores}${extra}</div>
     <h3><a href="${escapar(url)}" target="_blank" rel="noopener">${destacar(a.titulo || a.id, termos)}</a></h3>
@@ -531,6 +537,7 @@ function salvarUrl() {
   if (estado.tema) p.set('tema', estado.tema);
   if (estado.tipos.size) p.set('tipo', [...estado.tipos].join('|'));
   if (estado.tiposFora.size) p.set('sem', [...estado.tiposFora].join('|'));
+  if (estado.conteudo !== 'tudo') p.set('conteudo', estado.conteudo);
   if (estado.orgao) p.set('orgao', estado.orgao);
   if (estado.categoria) p.set('gov', estado.categoria);
   if (estado.de) p.set('de', estado.de);
@@ -549,6 +556,7 @@ function lerUrl() {
   estado.tema = p.get('tema') || '';
   estado.tipos = new Set((p.get('tipo') || '').split('|').filter(Boolean));
   estado.tiposFora = new Set((p.get('sem') || '').split('|').filter(Boolean));
+  estado.conteudo = ['normas', 'relatorios'].includes(p.get('conteudo')) ? p.get('conteudo') : 'tudo';
   estado.orgao = p.get('orgao') || '';
   estado.categoria = p.get('gov') || '';
   estado.de = +p.get('de') || null;
@@ -562,6 +570,7 @@ function lerUrl() {
 function sincronizarControles() {
   $('#q').value = estado.q;
   $('#f-rodovias').checked = estado.rodovias;
+  for (const r of document.querySelectorAll('#f-conteudo input')) r.checked = r.value === estado.conteudo;
   $('#f-vigentes').checked = estado.vigentes;
   $('#f-destaque').checked = estado.destaque;
   $('#f-de').value = estado.de || '';
@@ -648,6 +657,7 @@ function ligarEventos() {
     estado.tema = estado.tema === b.dataset.tema ? '' : b.dataset.tema;
     executar();
   });
+  $('#f-conteudo').addEventListener('change', (e) => { estado.conteudo = e.target.value; executar(); });
   $('#f-rodovias').addEventListener('change', (e) => { estado.rodovias = e.target.checked; executar(); });
   $('#f-vigentes').addEventListener('change', (e) => { estado.vigentes = e.target.checked; executar(); });
   $('#f-destaque').addEventListener('change', (e) => { estado.destaque = e.target.checked; executar(); });
@@ -677,7 +687,7 @@ function ligarEventos() {
   $('#f-categoria').addEventListener('change', (e) => { estado.categoria = e.target.value; executar(); });
   $('#ordem').addEventListener('change', (e) => { estado.ordem = e.target.value; executar(); });
   $('#limpar').addEventListener('click', () => {
-    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
+    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
     sincronizarControles();
     executar();
   });
@@ -698,6 +708,7 @@ function ligarEventos() {
       if (k === 'tema') estado.tema = '';
       else if (k.startsWith('tipo:')) estado.tipos.delete(k.slice(5));
       else if (k.startsWith('fora:')) estado.tiposFora.delete(k.slice(5));
+      else if (k === 'conteudo') estado.conteudo = 'tudo';
       else if (k === 'orgao') estado.orgao = '';
       else if (k === 'categoria') estado.categoria = '';
       else if (k === 'periodo') { estado.de = null; estado.ate = null; }

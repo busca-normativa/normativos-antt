@@ -182,6 +182,14 @@ button, input, select { font: inherit; color: inherit; }
 .linha-tipo.fora .nome-tipo { text-decoration: line-through; color: var(--ink-3); }
 .linha-tipo.fora .ocultar-tipo { color: var(--link); }
 @media (hover: none) { .ocultar-tipo { opacity: 1; } }
+.segmentado { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.segmentado label { flex: 1; cursor: pointer; }
+.segmentado input { position: absolute; opacity: 0; pointer-events: none; }
+.segmentado span { display: block; text-align: center; font-size: 12.5px; padding: 6px 4px; color: var(--ink-2); line-height: 1.25; }
+.segmentado label + label span { border-left: 1px solid var(--border); }
+.segmentado input:checked + span { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.segmentado input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: -2px; }
+.dica-filtro { font-size: 12px; color: var(--ink-3); margin: 6px 0 0; }
 .periodo { display: flex; gap: 8px; align-items: center; }
 .periodo input, .filtros select {
   width: 100%; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);

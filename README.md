@@ -9,6 +9,7 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 | **ANTTlegis** (anttlegis.antt.gov.br), listagens por ano | Resoluções, Deliberações, Instruções Normativas, Portarias (SUROD, SUINF, SUFIS, DG…), Portarias Conjuntas, Decisões SUROD, Notas Técnicas, Instruções de Serviço, Audiências e Consultas Públicas, Tomadas de Subsídios |
 | **ANTTlegis**, busca no texto integral | Para cada tema (ex.: desapropriação), os atos em que o termo aparece **no texto completo**, não só na ementa |
 | **gov.br/antt**, "Normativos de Rodovias" | Destaques curados (RCR, POPs, INs, manuais, PAF, ofícios circulares, portarias do Ministério dos Transportes, normas das OIAs) |
+| **gov.br/antt**, páginas de cada concessão | Relatórios de Monitoração, do Verificador Independente (inclusive o acompanhamento mensal), de Acompanhamento das Principais Obras e financeiros — título, concessão, ano e link do PDF |
 
 > Não é um canal oficial da ANTT. Confira sempre o texto vigente no ANTTlegis ou no DOU.
 
@@ -24,6 +25,7 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 ## Como usar o painel
 
 - **Busca**: digite o assunto, um número de ato ou uma expressão. Ao reconhecer um tema (ex.: *desapropriação*, *faixa de domínio*, *pedágio*), o painel inclui os atos do tema encontrados no texto integral.
+- **Conteúdo**: escolha entre tudo, só normas e atos, ou só os relatórios das concessões. Combine com o filtro "Órgão ou concessão" para ver os relatórios de uma concessão específica (ex.: *monitoração faixa de domínio* + Via Brasil).
 - **Temas**: os cartões no topo filtram por assunto. Os temas ficam em `config/temas.json` e são editáveis.
 - **Filtros**: tipo de ato, órgão (SUROD, DG, SUINF…), período, "ocultar revogados", "só destaques do gov.br". Por padrão ficam ocultos atos exclusivos de ferrovias, passageiros ou cargas (o painel avisa quantos e permite mostrar).
 - **Gráficos**: clique em uma barra de ano ou de tipo para filtrar.
@@ -50,6 +52,8 @@ npm run coletar
 | `npm run coletar` | Incremental: ano atual e anterior, temas e gov.br | 5 a 10 min |
 | `npm run coletar:completo` | Recoleta todos os anos (capta revogações de atos antigos) | 15 a 25 min |
 | `npm run coletar:rapido` | Incremental sem a busca por temas | 1 a 2 min |
+
+Outras opções: `--sem-relatorios` pula os relatórios das concessões; `--sem-govbr` pula as páginas curadas do gov.br.
 
 ## Publicar no GitHub (recomendado)
 
@@ -88,6 +92,6 @@ site/              painel publicado (index.html, assets/, data/)
 
 ## Limitações conhecidas
 
-- Fora dos temas, a busca do painel olha título, ementa e descrição do gov.br — não o texto completo de cada ato. Para isso use o botão **Texto integral** ou crie um tema.
+- Fora dos temas, a busca do painel olha título, ementa e descrição do gov.br — não o texto completo de cada ato. Dos relatórios das concessões, o painel conhece título, categoria, concessão e ano; o conteúdo dos PDFs não é lido. Para isso use o botão **Texto integral** ou crie um tema.
 - A classificação por setor e tema é automática (por palavras e órgão emissor) e pode ter falsos positivos.
 - Mudanças no layout do ANTTlegis ou do gov.br podem exigir ajuste nos coletores (`scripts/lib/`). As falhas ficam registradas em `site/data/meta.json` e o painel exibe um aviso.
