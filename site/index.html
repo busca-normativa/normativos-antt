@@ -56,6 +56,7 @@
         <button type="button">RCR</button>
         <button type="button">monitoração faixa de domínio</button>
         <button type="button">RMA</button>
+        <button type="button">DUP Via Brasil</button>
       </div>
       <div id="alerta-atualizacao"></div>
     </section>
@@ -89,6 +90,14 @@
           <label class="opcao"><input type="checkbox" id="f-rodovias" checked> Só rodovias e gerais</label>
           <label class="opcao"><input type="checkbox" id="f-vigentes"> Ocultar revogados</label>
           <label class="opcao"><input type="checkbox" id="f-destaque"> Só destaques do gov.br</label>
+          <label class="opcao"><input type="checkbox" id="f-dups"> Só DUPs (utilidade pública)</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Concessão</legend>
+          <label class="sr-only" for="f-concessao">Concessão</label>
+          <select id="f-concessao"><option value="">Todas</option></select>
+          <div class="atalho-destaque" id="atalho-destaque"></div>
         </fieldset>
 
         <fieldset>

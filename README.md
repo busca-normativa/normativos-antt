@@ -26,6 +26,8 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 
 - **Busca**: digite o assunto, um número de ato ou uma expressão. Ao reconhecer um tema (ex.: *desapropriação*, *faixa de domínio*, *pedágio*), o painel inclui os atos do tema encontrados no texto integral.
 - **Conteúdo**: escolha entre tudo, só normas e atos, ou só os relatórios das concessões. Combine com o filtro "Órgão ou concessão" para ver os relatórios de uma concessão específica (ex.: *monitoração faixa de domínio* + Via Brasil).
+- **DUPs**: cada Declaração de Utilidade Pública ganha uma *ficha* extraída do texto integral: concessionária, obra, rodovia, trecho (km), município, processo SEI, urgência e data do DOU. Marque **"Só DUPs"** ou busque, por exemplo, *DUP Via Brasil* ou o nome de um município. A planilha exportada traz essas colunas.
+- **Concessão**: filtro próprio, com as concessões marcadas como destaque em `config/concessoes.json` (hoje, a Via Brasil) sempre no topo. Nos resultados parecidos, os itens da concessão em destaque aparecem primeiro.
 - **Temas**: os cartões no topo filtram por assunto. Os temas ficam em `config/temas.json` e são editáveis.
 - **Filtros**: tipo de ato, órgão (SUROD, DG, SUINF…), período, "ocultar revogados", "só destaques do gov.br". Por padrão ficam ocultos atos exclusivos de ferrovias, passageiros ou cargas (o painel avisa quantos e permite mostrar).
 - **Gráficos**: clique em uma barra de ano ou de tipo para filtrar.
@@ -76,6 +78,7 @@ A partir daí o painel se atualiza sozinho todo dia às 07:30 (Brasília).
 ## Personalizar
 
 - **Novos temas**: copie um bloco em `config/temas.json`. `busca` são expressões pesquisadas no texto integral do ANTTlegis; `palavras` são trechos procurados em título/ementa (sem acento, minúsculas, aceitam expressão regular); `sinonimos` são os termos que ativam o tema quando digitados na busca.
+- **Concessões**: `config/concessoes.json` lista cada concessão e os trechos de texto que a identificam (nome da concessionária, rodovia). `"destaque": true` fixa a concessão no topo do filtro.
 - **Novas listagens do ANTTlegis**: adicione em `config/fontes.json` usando `cod_modulo` e `cod_menu` do link da listagem no ANTTlegis.
 
 ## Estrutura

@@ -1,8 +1,8 @@
 {
-  "atualizadoEm": "2026-09-29T18:18:41.251Z",
+  "atualizadoEm": "2026-09-29T19:22:49.510Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 227,
+  "duracaoSegundos": 672,
   "total": 34297,
   "porTipo": {
     "Decisão": 4539,
@@ -150,6 +150,249 @@
       "url": "https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias"
     }
   ],
+  "concessoes": [
+    {
+      "nome": "Via Brasil BR-163",
+      "destaque": true,
+      "total": 157,
+      "dups": 20
+    },
+    {
+      "nome": "Nova Rota do Oeste",
+      "destaque": false,
+      "total": 519,
+      "dups": 65
+    },
+    {
+      "nome": "Motiva Pantanal (MSVia)",
+      "destaque": false,
+      "total": 334,
+      "dups": 24
+    },
+    {
+      "nome": "RioSP (Nova Dutra)",
+      "destaque": false,
+      "total": 429,
+      "dups": 55
+    },
+    {
+      "nome": "Autopista Fluminense",
+      "destaque": false,
+      "total": 316,
+      "dups": 25
+    },
+    {
+      "nome": "Autopista Litoral Sul",
+      "destaque": false,
+      "total": 673,
+      "dups": 22
+    },
+    {
+      "nome": "Autopista Planalto Sul",
+      "destaque": false,
+      "total": 313,
+      "dups": 6
+    },
+    {
+      "nome": "Autopista Régis Bittencourt",
+      "destaque": false,
+      "total": 494,
+      "dups": 10
+    },
+    {
+      "nome": "Autopista Fernão Dias",
+      "destaque": false,
+      "total": 528,
+      "dups": 18
+    },
+    {
+      "nome": "ViaCosteira",
+      "destaque": false,
+      "total": 291,
+      "dups": 80
+    },
+    {
+      "nome": "Concebra",
+      "destaque": false,
+      "total": 335,
+      "dups": 6
+    },
+    {
+      "nome": "Concer",
+      "destaque": false,
+      "total": 610,
+      "dups": 0
+    },
+    {
+      "nome": "ViaBahia",
+      "destaque": false,
+      "total": 344,
+      "dups": 15
+    },
+    {
+      "nome": "Via 040",
+      "destaque": false,
+      "total": 228,
+      "dups": 7
+    },
+    {
+      "nome": "Ecovias Capixaba (Eco101)",
+      "destaque": false,
+      "total": 278,
+      "dups": 22
+    },
+    {
+      "nome": "Ecovias Minas Goiás (Eco050)",
+      "destaque": false,
+      "total": 274,
+      "dups": 38
+    },
+    {
+      "nome": "Ecovias Ponte (Ecoponte)",
+      "destaque": false,
+      "total": 147,
+      "dups": 0
+    },
+    {
+      "nome": "Ecovias Rio Minas",
+      "destaque": false,
+      "total": 277,
+      "dups": 52
+    },
+    {
+      "nome": "Ecovias do Araguaia",
+      "destaque": false,
+      "total": 294,
+      "dups": 15
+    },
+    {
+      "nome": "Ecovias do Cerrado",
+      "destaque": false,
+      "total": 261,
+      "dups": 34
+    },
+    {
+      "nome": "Ecovias Sul (Ecosul)",
+      "destaque": false,
+      "total": 388,
+      "dups": 1
+    },
+    {
+      "nome": "Transbrasiliana",
+      "destaque": false,
+      "total": 429,
+      "dups": 18
+    },
+    {
+      "nome": "Via Araucária",
+      "destaque": false,
+      "total": 143,
+      "dups": 22
+    },
+    {
+      "nome": "ViaSul",
+      "destaque": false,
+      "total": 240,
+      "dups": 24
+    },
+    {
+      "nome": "PR Vias",
+      "destaque": false,
+      "total": 104,
+      "dups": 24
+    },
+    {
+      "nome": "EPR Iguaçu",
+      "destaque": false,
+      "total": 341,
+      "dups": 3
+    },
+    {
+      "nome": "EPR Litoral Pioneiro",
+      "destaque": false,
+      "total": 208,
+      "dups": 43
+    },
+    {
+      "nome": "EPR Via Mineira",
+      "destaque": false,
+      "total": 76,
+      "dups": 3
+    },
+    {
+      "nome": "Via Cristais",
+      "destaque": false,
+      "total": 45,
+      "dups": 6
+    },
+    {
+      "nome": "Way-262",
+      "destaque": false,
+      "total": 21,
+      "dups": 0
+    },
+    {
+      "nome": "Nova 364",
+      "destaque": false,
+      "total": 15,
+      "dups": 1
+    },
+    {
+      "nome": "Nova 381",
+      "destaque": false,
+      "total": 66,
+      "dups": 2
+    },
+    {
+      "nome": "Rota Verde Goiás",
+      "destaque": false,
+      "total": 36,
+      "dups": 0
+    },
+    {
+      "nome": "Rota Sertaneja",
+      "destaque": false,
+      "total": 11,
+      "dups": 0
+    },
+    {
+      "nome": "Rota Agro",
+      "destaque": false,
+      "total": 11,
+      "dups": 0
+    },
+    {
+      "nome": "Elovias",
+      "destaque": false,
+      "total": 20,
+      "dups": 1
+    },
+    {
+      "nome": "Rodovia do Aço",
+      "destaque": false,
+      "total": 161,
+      "dups": 2
+    },
+    {
+      "nome": "Via Campos",
+      "destaque": false,
+      "total": 3,
+      "dups": 0
+    },
+    {
+      "nome": "Motiva Minas SP",
+      "destaque": false,
+      "total": 3,
+      "dups": 0
+    },
+    {
+      "nome": "EPR Paraná",
+      "destaque": false,
+      "total": 14,
+      "dups": 0
+    }
+  ],
+  "totalDups": 1028,
   "temas": [
     {
       "id": "desapropriacao",

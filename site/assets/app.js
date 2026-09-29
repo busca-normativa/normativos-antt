@@ -7,7 +7,7 @@ const LEGIS = 'https://anttlegis.antt.gov.br/action/ActionDatalegis.php';
 const BUSCA_LIVRE = `${LEGIS}?acao=abrirLegislacao&cod_modulo=161&cod_menu=5408`;
 const POR_PAGINA = 50;
 
-const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', se: 'setores', g: 'destaque', nt: 'nota' };
+const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', cc: 'concessao' };
 const SETORES = { R: 'Rodovias', F: 'Ferrovias', P: 'Passageiros', C: 'Cargas', G: 'Geral' };
 const STOP = new Set('de da do das dos e o a os as em no na nos nas para por com sobre ao aos um uma que se ou sem sob pelo pela pelos pelas n'.split(' '));
 const SUFIXOS = ['acoes', 'icoes', 'mentos', 'mento', 'acao', 'icao', 'ados', 'adas', 'idos', 'idas', 'ado', 'ada', 'ido', 'ida', 'ares', 'eres', 'ires', 'ar', 'er', 'ir', 'oes', 'aes', 'ais', 'eis', 'es', 's'];
@@ -90,6 +90,8 @@ const estado = {
   tipos: new Set(),
   tiposFora: new Set(), // tipos ocultados ("todos menos estes")
   conteudo: 'tudo', // tudo | normas | relatorios
+  concessao: '',
+  soDups: false,
   orgao: '',
   categoria: '',
   de: null,
@@ -106,6 +108,7 @@ let META = {};
 let TEMAS = [];
 let TEMA_POR_ID = new Map();
 let modoServidor = false;
+let CONCESSOES_DESTAQUE = new Set();
 let ultimo = { final: [], consulta: null };
 
 // ---------------------------------------------------------------- carga
@@ -115,6 +118,7 @@ async function carregar() {
     fetch('data/atos.json', { cache: 'no-cache' }).then((r) => r.json()),
   ]);
   META = meta;
+  CONCESSOES_DESTAQUE = new Set((meta.concessoes || []).filter((c) => c.destaque).map((c) => c.nome));
   TEMAS = (meta.temas || []).map((t) => ({ ...t, sin: (t.sinonimos || []).map((s) => semMilhar(normalizar(s))) }));
   TEMA_POR_ID = new Map(TEMAS.map((t) => [t.id, t]));
   ATOS = atos.map((o) => {
@@ -122,7 +126,9 @@ async function carregar() {
     for (const k in o) a[CHAVES[k] || k] = o[k];
     a.temas = a.temas || [];
     a.setores = a.setores || ['G'];
-    a._h = semMilhar(normalizar([a.titulo, a.ementa, a.nota, a.tipoNome, a.orgao, a.destaque].filter(Boolean).join(' · ')));
+    const d = a.dup;
+    const ficha = d ? [d.concessionaria, d.obra, d.processo, ...(d.rodovias || []), ...(d.kms || []), ...(d.municipios || []), 'DUP declaração de utilidade pública'] : [];
+    a._h = semMilhar(normalizar([a.titulo, a.ementa, a.nota, a.tipoNome, a.orgao, a.destaque, a.concessao, ...ficha].filter(Boolean).join(' · ')));
     a._ti = semMilhar(normalizar(a.titulo));
     a._sit = classeSituacao(a.situacao);
     a._rod = a.setores.includes('R') || a.setores.includes('G');
@@ -207,6 +213,7 @@ function pontuar(a, c) {
     else return -1;
   }
   if (a.destaque) score += 1.5;
+  if (a.concessao && CONCESSOES_DESTAQUE.has(a.concessao)) score += 3; // Via Brasil primeiro entre resultados parecidos
   if (a._sit === 'vigente') score += 1;
   if (a._sit === 'revogado') score -= 1.5;
   if (/^(RES|INM|DLB|POR)$/.test(a.tipo)) score += 0.5;
@@ -242,18 +249,21 @@ function aplicar() {
     (ignorarRodovias || !estado.rodovias || a._rod) &&
     (!estado.vigentes || a._sit !== 'revogado') &&
     (!estado.destaque || a.destaque) &&
-    (!estado.categoria || a.destaque === estado.categoria);
+    (!estado.categoria || a.destaque === estado.categoria) &&
+    (!estado.soDups || a.dup);
   const f1 = lista.filter((a) => passaAbrangencia(a));
   const ocultosSetor = estado.rodovias ? lista.filter((a) => !a._rod && passaAbrangencia(a, true)).length : 0;
   const passaTipo = (a) => (!estado.tipos.size || estado.tipos.has(a.tipoNome)) && !estado.tiposFora.has(a.tipoNome);
   const passaOrgao = (a) => !estado.orgao || a._org === estado.orgao;
+  const passaConc = (a) => !estado.concessao || a.concessao === estado.concessao;
   const passaPeriodo = (a) => (!estado.de || (a.ano || 0) >= estado.de) && (!estado.ate || (a.ano || 0) <= estado.ate);
 
-  const paraAno = f1.filter((a) => passaTipo(a) && passaOrgao(a));
+  const paraAno = f1.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
   const f2 = f1.filter(passaPeriodo);
-  const paraTipo = f2.filter(passaOrgao);
-  const paraOrgao = f2.filter(passaTipo);
-  const final = f2.filter((a) => passaTipo(a) && passaOrgao(a));
+  const paraTipo = f2.filter((a) => passaOrgao(a) && passaConc(a));
+  const paraOrgao = f2.filter((a) => passaTipo(a) && passaConc(a));
+  const paraConc = f2.filter((a) => passaTipo(a) && passaOrgao(a));
+  const final = f2.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
 
   const ordem = estado.ordem === 'auto' ? (consulta.vazia ? 'recentes' : 'relevancia') : estado.ordem;
   const porData = (x, y) => (y._dt || '').localeCompare(x._dt || '') || (y.numero || 0) - (x.numero || 0);
@@ -262,7 +272,7 @@ function aplicar() {
   else final.sort((x, y) => -porData(x, y));
 
   ultimo = { final, consulta };
-  desenharTudo({ final, consulta, paraAno, paraTipo, paraOrgao, ocultosSetor, ordem });
+  desenharTudo({ final, consulta, paraAno, paraTipo, paraOrgao, paraConc, ocultosSetor, ordem });
   salvarUrl();
 }
 
@@ -271,6 +281,7 @@ function desenharTudo(ctx) {
   desenharKpis(ctx.final);
   desenharTemas();
   desenharFacetas(ctx.paraTipo, ctx.paraOrgao);
+  desenharConcessoes(ctx.paraConc);
   desenharGraficoAno(ctx.paraAno);
   desenharGraficoTipo(ctx.paraTipo);
   desenharCabecalho(ctx);
@@ -326,6 +337,23 @@ function desenharFacetas(paraTipo, paraOrgao) {
     cat.innerHTML = `<option value="">Todas</option>` + cats.map((c) => `<option value="${escapar(c)}">${escapar(c)}</option>`).join('');
   }
   cat.value = estado.categoria;
+}
+
+// Concessões: as marcadas como destaque em config/concessoes.json (ex.: Via Brasil) ficam sempre no topo
+function desenharConcessoes(paraConc) {
+  const cont = contar(paraConc, (a) => a.concessao);
+  const destaques = (META.concessoes || []).filter((c) => c.destaque).map((c) => c.nome);
+  const outras = Object.entries(cont).filter(([c]) => !destaques.includes(c)).sort((a, b) => b[1] - a[1]);
+  if (estado.concessao && !cont[estado.concessao] && !destaques.includes(estado.concessao)) outras.unshift([estado.concessao, 0]);
+  const opcao = (c, n, estrela) => `<option value="${escapar(c)}" ${c === estado.concessao ? 'selected' : ''}>${estrela ? '★ ' : ''}${escapar(c)} (${compacto(n)})</option>`;
+  $('#f-concessao').innerHTML =
+    `<option value="">Todas</option>` +
+    destaques.map((c) => opcao(c, cont[c] || 0, true)).join('') +
+    (destaques.length && outras.length ? '<option disabled>──────────</option>' : '') +
+    outras.map(([c, n]) => opcao(c, n, false)).join('');
+  $('#atalho-destaque').innerHTML = destaques
+    .map((c) => `<button type="button" class="link-botao" data-concessao="${escapar(c)}">${estado.concessao === c ? 'ver todas as concessões' : `só ${escapar(c)}`}</button>`)
+    .join(' ');
 }
 
 function contar(lista, fn) {
@@ -451,6 +479,8 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
   for (const t of estado.tipos) chips.push([`tipo:${t}`, t]);
   for (const t of estado.tiposFora) chips.push([`fora:${t}`, `Sem ${t}`]);
   if (estado.orgao) chips.push(['orgao', `Órgão: ${estado.orgao}`]);
+  if (estado.concessao) chips.push(['concessao', `Concessão: ${estado.concessao}`]);
+  if (estado.soDups) chips.push(['soDups', 'Só DUPs']);
   if (estado.categoria) chips.push(['categoria', `gov.br: ${estado.categoria}`]);
   if (estado.de || estado.ate) chips.push(['periodo', estado.de === estado.ate ? `Ano: ${estado.de}` : `Período: ${estado.de || '…'}–${estado.ate || '…'}`]);
   if (estado.vigentes) chips.push(['vigentes', 'Sem revogados']);
@@ -489,8 +519,24 @@ function destacar(texto, termos) {
   return out + escapar(texto.slice(pos));
 }
 
+function fichaDup(d, termos) {
+  const linhas = [
+    ['Concessionária', d.concessionaria],
+    ['Obra', d.obra],
+    ['Rodovia', (d.rodovias || []).join(', ')],
+    ['Trecho', (d.kms || []).join('; ')],
+    ['Município', (d.municipios || []).join(', ')],
+    ['Processo SEI', d.processo],
+    ['Urgência', d.urgencia ? 'autorizada (imissão na posse)' : ''],
+    ['DOU', d.dou ? dataBR(d.dou) : ''],
+  ].filter(([, v]) => v);
+  if (!linhas.length) return '';
+  return `<dl class="ficha-dup"><div class="ficha-titulo">Ficha da DUP</div>${linhas.map(([k, v]) => `<div><dt>${k}</dt><dd>${destacar(v, termos)}</dd></div>`).join('')}</dl>`;
+}
+
 function cartaoAto(a, termos, extra = '') {
   const sit = a.situacao ? `<span class="selo ${a._sit}"><span class="ponto" aria-hidden="true"></span>${escapar(a.situacao)}</span>` : '';
+  const conc = a.concessao ? `<span class="selo concessao${CONCESSOES_DESTAQUE.has(a.concessao) ? ' fixa' : ''}" title="Concessão">${escapar(a.concessao)}</span>` : '';
   const dest = a.destaque ? `<span class="selo destaque" title="Listado nas páginas de normativos de rodovias do gov.br">★ ${escapar(a.destaque)}</span>` : '';
   const setores = (a.setores || []).filter((s) => s !== 'G' && s !== 'R').map((s) => `<span class="selo">${SETORES[s]}</span>`).join('');
   const temas = (a.temas || []).map((t) => TEMA_POR_ID.get(t)).filter(Boolean).map((t) => `<button type="button" data-tema="${t.id}" title="Ver todos os atos do tema">${escapar(t.nome)}</button>`).join('');
@@ -501,11 +547,12 @@ function cartaoAto(a, termos, extra = '') {
     : [a.tipo === 'GOV' ? a.orgao : a.orgao?.replace(/\/ANTT.*$/, ''), a.data ? `ato de ${dataBR(a.data)}` : a.ano, a.publicado && a.publicado !== a.data ? `publicado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ');
   const origem = rel ? 'Abrir relatório' : a.tipo === 'GOV' ? 'Abrir documento' : 'Abrir no ANTTlegis';
   return `<li class="ato" data-id="${escapar(a.id)}">
-    <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${sit}${dest}${setores}${extra}</div>
+    <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${a.dup ? '<span class="selo dup">DUP</span>' : ''}${conc}${sit}${dest}${setores}${extra}</div>
     <h3><a href="${escapar(url)}" target="_blank" rel="noopener">${destacar(a.titulo || a.id, termos)}</a></h3>
     <div class="meta">${escapar(meta)}</div>
     ${a.ementa ? `<p class="ementa">${destacar(a.ementa, termos)}</p>` : ''}
     ${a.nota ? `<p class="nota"><strong>gov.br:</strong> ${destacar(a.nota, termos)}</p>` : ''}
+    ${a.dup ? fichaDup(a.dup, termos) : ''}
     <div class="rodape-ato">
       <div class="temas-ato">${temas}</div>
       <div class="acoes">
@@ -539,6 +586,8 @@ function salvarUrl() {
   if (estado.tiposFora.size) p.set('sem', [...estado.tiposFora].join('|'));
   if (estado.conteudo !== 'tudo') p.set('conteudo', estado.conteudo);
   if (estado.orgao) p.set('orgao', estado.orgao);
+  if (estado.concessao) p.set('concessao', estado.concessao);
+  if (estado.soDups) p.set('dups', '1');
   if (estado.categoria) p.set('gov', estado.categoria);
   if (estado.de) p.set('de', estado.de);
   if (estado.ate) p.set('ate', estado.ate);
@@ -558,6 +607,8 @@ function lerUrl() {
   estado.tiposFora = new Set((p.get('sem') || '').split('|').filter(Boolean));
   estado.conteudo = ['normas', 'relatorios'].includes(p.get('conteudo')) ? p.get('conteudo') : 'tudo';
   estado.orgao = p.get('orgao') || '';
+  estado.concessao = p.get('concessao') || '';
+  estado.soDups = p.get('dups') === '1';
   estado.categoria = p.get('gov') || '';
   estado.de = +p.get('de') || null;
   estado.ate = +p.get('ate') || null;
@@ -573,6 +624,7 @@ function sincronizarControles() {
   for (const r of document.querySelectorAll('#f-conteudo input')) r.checked = r.value === estado.conteudo;
   $('#f-vigentes').checked = estado.vigentes;
   $('#f-destaque').checked = estado.destaque;
+  $('#f-dups').checked = estado.soDups;
   $('#f-de').value = estado.de || '';
   $('#f-ate').value = estado.ate || '';
 }
@@ -581,11 +633,13 @@ function sincronizarControles() {
 function exportarCsv() {
   const lista = ultimo.final;
   if (!lista.length) return toast('Não há resultados para exportar');
-  const cab = ['Tipo', 'Número', 'Ano', 'Título', 'Ementa', 'Situação', 'Data do ato', 'Publicação', 'Órgão', 'Temas', 'Destaque gov.br', 'Link'];
+  const cab = ['Tipo', 'Número', 'Ano', 'Título', 'Ementa', 'Situação', 'Data do ato', 'Publicação', 'Órgão', 'Concessão', 'Temas', 'Destaque gov.br', 'DUP: concessionária', 'DUP: obra', 'DUP: rodovias', 'DUP: km', 'DUP: municípios', 'DUP: processo', 'DUP: urgência', 'DUP: DOU', 'Link'];
   const cel = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const linhas = lista.map((a) => [
     a.tipoNome, a.numero ?? '', a.ano ?? '', a.titulo, a.ementa, a.situacao, dataBR(a.data), dataBR(a.publicado), a.orgao,
-    (a.temas || []).map((t) => TEMA_POR_ID.get(t)?.nome).filter(Boolean).join(', '), a.destaque || '', urlDoAto(a),
+    a.concessao || '', (a.temas || []).map((t) => TEMA_POR_ID.get(t)?.nome).filter(Boolean).join(', '), a.destaque || '',
+    ...(a.dup ? [a.dup.concessionaria || '', a.dup.obra || '', (a.dup.rodovias || []).join(', '), (a.dup.kms || []).join('; '), (a.dup.municipios || []).join(', '), a.dup.processo || '', a.dup.urgencia ? 'sim' : 'não', dataBR(a.dup.dou)] : ['', '', '', '', '', '', '', '']),
+    urlDoAto(a),
   ].map(cel).join(';'));
   const csv = '﻿' + [cab.map(cel).join(';'), ...linhas].join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -684,10 +738,12 @@ function ligarEventos() {
     aplicar();
   });
   $('#f-orgao').addEventListener('change', (e) => { estado.orgao = e.target.value; executar(); });
+  $('#f-concessao').addEventListener('change', (e) => { estado.concessao = e.target.value; executar(); });
+  $('#f-dups').addEventListener('change', (e) => { estado.soDups = e.target.checked; executar(); });
   $('#f-categoria').addEventListener('change', (e) => { estado.categoria = e.target.value; executar(); });
   $('#ordem').addEventListener('change', (e) => { estado.ordem = e.target.value; executar(); });
   $('#limpar').addEventListener('click', () => {
-    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
+    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', concessao: '', soDups: false, orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
     sincronizarControles();
     executar();
   });
@@ -710,6 +766,8 @@ function ligarEventos() {
       else if (k.startsWith('fora:')) estado.tiposFora.delete(k.slice(5));
       else if (k === 'conteudo') estado.conteudo = 'tudo';
       else if (k === 'orgao') estado.orgao = '';
+      else if (k === 'concessao') estado.concessao = '';
+      else if (k === 'soDups') estado.soDups = false;
       else if (k === 'categoria') estado.categoria = '';
       else if (k === 'periodo') { estado.de = null; estado.ate = null; }
       else if (k === 'vigentes') estado.vigentes = false;
@@ -736,6 +794,8 @@ function ligarEventos() {
       executar();
       return;
     }
+    const atalho = e.target.closest('[data-concessao]');
+    if (atalho) { estado.concessao = estado.concessao === atalho.dataset.concessao ? '' : atalho.dataset.concessao; executar(); return; }
     const barraTipo = e.target.closest('#g-tipo [data-tipo]');
     if (barraTipo) {
       const t = barraTipo.dataset.tipo;

@@ -266,6 +266,18 @@ button, input, select { font: inherit; color: inherit; }
 .selo.revogado .ponto { background: var(--critical); }
 .selo.alteracao .ponto { background: var(--warning); }
 .selo.destaque { border: 1px solid var(--accent); background: transparent; color: var(--ink); }
+.selo.dup { background: var(--ink); color: var(--surface); font-weight: 700; letter-spacing: 0.03em; }
+.selo.concessao { background: var(--surface-3); color: var(--ink); }
+.selo.concessao.fixa { box-shadow: inset 0 0 0 1px var(--accent); }
+.selo.concessao.fixa::before { content: "★"; color: var(--accent); }
+.atalho-destaque { margin-top: 4px; }
+.ficha-dup {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px 16px; margin: 10px 0 0; padding: 10px 12px;
+  background: var(--surface-2); border-radius: 8px; font-size: 13px;
+}
+.ficha-dup .ficha-titulo { grid-column: 1 / -1; font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.ficha-dup dt { font-size: 11.5px; color: var(--ink-3); }
+.ficha-dup dd { margin: 0; color: var(--ink); }
 .ato h3 { font-size: 16px; line-height: 1.35; margin: 2px 0 2px; font-weight: 650; }
 .ato h3 a { color: var(--ink); text-decoration: none; }
 .ato h3 a:hover { color: var(--link); text-decoration: underline; }

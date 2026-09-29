@@ -17,6 +17,7 @@ import { coletarGovBr } from './lib/govbr.mjs';
 import { coletarRelatorios, tipoDoRelatorio } from './lib/relatorios.mjs';
 import { setoresDoAto, ehAtoDePessoal, ehAdministrativo, nomeDoTipo, compilarTemas, temasPorPalavras } from './lib/classificar.mjs';
 import { normalizar } from './lib/texto.mjs';
+import { ehDup, fichaDaDup } from './lib/dup.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR_DADOS = path.join(RAIZ, 'site', 'data');
@@ -38,13 +39,16 @@ const ANO_MINIMO = COMPLETO ? 0 : ANO_ATUAL - 1;
 const lerJSON = (arq) => JSON.parse(fs.readFileSync(arq, 'utf8'));
 const cfgFontes = lerJSON(path.join(RAIZ, 'config', 'fontes.json')).anttlegis;
 const cfgTemas = lerJSON(path.join(RAIZ, 'config', 'temas.json')).temas;
+const cfgConcessoes = lerJSON(path.join(RAIZ, 'config', 'concessoes.json')).concessoes.map((c) => ({ ...c, re: new RegExp(c.padroes.join('|')) }));
+const SEM_DUPS = opt('sem-dups');
+const MAX_DUPS = +valor('max-dups') || 2500;
 const temasCompilados = compilarTemas(cfgTemas);
 
 const inicio = Date.now();
 const log = (...m) => console.log(`[${((Date.now() - inicio) / 1000).toFixed(0).padStart(4)}s]`, ...m);
 
 // ---------- formato compacto em disco ----------
-const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota' };
+const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', cc: 'concessao' };
 const CHAVES_INV = Object.fromEntries(Object.entries(CHAVES).map(([k, v]) => [v, k]));
 
 function paraDisco(a) {
@@ -313,11 +317,48 @@ async function etapaRelatorios() {
   log(`   ${r.itens.length} arquivos em ${r.concessoes.length} concessões${r.erros.length ? `, ${r.erros.length} erro(s)` : ''}`);
 }
 
+// ---------- 5. fichas das DUPs (texto integral no ANTTlegis) ----------
+// Lê só as DUPs que ainda não têm ficha; a ficha fica guardada na base para as próximas execuções.
+async function etapaDups() {
+  const pendentes = [...atos.values()].filter((a) => !TIPOS_EXTERNOS.has(a.tipo) && !a.dup && ehDup(a));
+  const lote = pendentes.sort((x, y) => (y.data || '').localeCompare(x.data || '')).slice(0, MAX_DUPS);
+  log(`ANTTlegis: fichas de DUP — ${lote.length} a ler${pendentes.length > lote.length ? ` (de ${pendentes.length}; o restante fica para a próxima execução)` : ''}`);
+  if (!lote.length) return;
+  const sessao = criarSessaoLegis({ pausaMs: 250 });
+  let ok = 0;
+  for (const [i, a] of lote.entries()) {
+    try {
+      a.dup = await fichaDaDup(sessao, a);
+      ok++;
+    } catch (e) {
+      erros.push(`DUP ${a.id}: ${e.message}`);
+    }
+    if ((i + 1) % 100 === 0) log(`   ${i + 1}/${lote.length}`);
+  }
+  log(`   ${ok} ficha(s) de DUP extraída(s)`);
+}
+
+function concessaoDoAto(a) {
+  if (a.tipo === 'REL') {
+    const n = normalizar(a.orgao);
+    return (cfgConcessoes.find((c) => c.re.test(n)) || {}).nome || a.orgao;
+  }
+  const d = a.dup || {};
+  // a concessionária citada na DUP vale mais que menções soltas na ementa
+  for (const txt of [d.concessionaria, d.rodoviaNome, `${a.titulo} ${a.ementa} ${a.nota || ''}`, (d.rodovias || []).join(' ')]) {
+    if (!txt) continue;
+    const c = cfgConcessoes.find((c) => c.re.test(normalizar(txt)));
+    if (c) return c.nome;
+  }
+  return null;
+}
+
 // ---------- execução ----------
 async function principal() {
   log(`Modo ${COMPLETO ? 'COMPLETO' : 'incremental'} — base existente: ${anteriores.size} atos`);
   if (!(FILTRO_FONTES && FILTRO_FONTES.includes('nenhuma'))) await etapaListagens();
   if (!SEM_TEMAS) await etapaTemas();
+  if (!SEM_DUPS) await etapaDups();
   if (!SEM_GOVBR) {
     try {
       await etapaGovBr();
@@ -353,6 +394,9 @@ async function principal() {
     if (!TIPOS_EXTERNOS.has(a.tipo)) a.tipoNome = nomeDoTipo(a);
     a.setores = setoresDoAto(a);
     a.temas = unir(temasPorPalavras(a, temasCompilados), a.temasBusca || []).sort();
+    a.concessao = concessaoDoAto(a);
+    if (a.dup && !ehDup(a)) delete a.dup;
+    if (a.dup && !a.temas.includes('desapropriacao')) a.temas = [...a.temas, 'desapropriacao'].sort();
     if (a.url && !TIPOS_EXTERNOS.has(a.tipo)) delete a.url;
   }
 
@@ -378,6 +422,10 @@ async function principal() {
       { id: 'govbr', nome: 'gov.br/antt — Normativos de Rodovias', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias' },
       { id: 'relatorios', nome: 'gov.br/antt — Relatórios das concessões (monitoração, verificador, obras, financeiros)', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias' },
     ],
+    concessoes: cfgConcessoes
+      .map((c) => ({ nome: c.nome, destaque: !!c.destaque, total: lista.filter((a) => a.concessao === c.nome).length, dups: lista.filter((a) => a.concessao === c.nome && a.dup).length }))
+      .filter((c) => c.total),
+    totalDups: lista.filter((a) => a.dup).length,
     temas: cfgTemas.map((t) => ({ id: t.id, nome: t.nome, descricao: t.descricao, sinonimos: t.sinonimos, busca: t.busca, total: lista.filter((a) => a.temas.includes(t.id)).length })),
     erros,
   };
