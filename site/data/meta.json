@@ -1,13 +1,13 @@
 {
-  "atualizadoEm": "2026-09-28T22:21:04.812Z",
+  "atualizadoEm": "2026-09-29T16:41:10.916Z",
   "ultimaColetaCompleta": "2026-09-28T22:21:04.812Z",
-  "modo": "completo",
-  "duracaoSegundos": 778,
-  "total": 31988,
+  "modo": "incremental",
+  "duracaoSegundos": 378,
+  "total": 32000,
   "porTipo": {
-    "Decisão": 4529,
-    "Deliberação": 11007,
-    "Portaria": 7208,
+    "Decisão": 4538,
+    "Deliberação": 11011,
+    "Portaria": 7207,
     "Comunicado": 23,
     "Voto": 1630,
     "Resolução": 6369,
@@ -38,16 +38,16 @@
     "Plano de Fiscalização": 4
   },
   "porSetor": {
-    "R": 13163,
-    "G": 12911,
-    "F": 2366,
-    "C": 1755,
+    "R": 13175,
+    "C": 1756,
+    "G": 12912,
+    "F": 2363,
     "P": 3116
   },
   "porFonte": {
-    "dcsrod": 4371,
-    "dlb": 11007,
-    "busca": 11638,
+    "dcsrod": 4381,
+    "dlb": 11011,
+    "busca": 11711,
     "por": 6774,
     "porrod": 3941,
     "res": 6356,
@@ -159,7 +159,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1853
+      "total": 1855
     },
     {
       "id": "faixa-dominio",
@@ -177,7 +177,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 6479
+      "total": 6295
     },
     {
       "id": "ocupacao-faixa",
@@ -295,7 +295,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3695
+      "total": 3761
     },
     {
       "id": "pedagio",
@@ -334,7 +334,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1540
+      "total": 1542
     },
     {
       "id": "penalidades",
@@ -372,7 +372,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1515
+      "total": 1525
     },
     {
       "id": "seguranca",
@@ -423,7 +423,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 120
+      "total": 121
     },
     {
       "id": "bens-reversiveis",
