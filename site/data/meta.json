@@ -1,36 +1,38 @@
 {
-  "atualizadoEm": "2026-09-30T12:48:01.544Z",
+  "atualizadoEm": "2026-09-30T14:13:45.664Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 24,
-  "total": 40173,
+  "duracaoSegundos": 153,
+  "total": 41602,
   "porTipo": {
     "Decisão": 4539,
     "Deliberação": 11011,
-    "Portaria": 7210,
+    "Portaria": 7528,
     "Comunicado": 27,
     "Voto": 1637,
-    "Resolução": 6369,
+    "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 127,
     "Aviso": 159,
     "Audiência Pública": 229,
     "Tomada de Subsídio": 100,
-    "Instrução Normativa": 48,
+    "Instrução Normativa": 63,
     "Consulta Pública": 35,
     "Portaria Conjunta": 26,
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Leilão / Concessão": 7,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 34,
+    "Documento": 435,
+    "Manual": 162,
     "PT7": 1,
     "Instrução de Serviço": 51,
-    "Decreto": 4,
-    "Súmula": 1,
+    "Decreto": 6,
+    "Súmula": 3,
     "Nota Técnica": 3,
     "Portaria Complementar": 16,
-    "Lei": 12,
+    "Lei": 14,
+    "Norma Técnica": 760,
     "Relatório de Obras": 2619,
     "Relatório de Monitoração": 1297,
     "Relatório do Verificador": 10,
@@ -38,8 +40,6 @@
     "Relatório do Verificador (mensal)": 18,
     "Relatório de Concessão": 45,
     "Ofício Circular": 2,
-    "Norma Técnica": 250,
-    "Manual": 61,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
     "Termo de arrolamento": 222,
@@ -49,14 +49,15 @@
     "Planejamento de obras": 820,
     "Revisões e reajustes": 1772,
     "Pesquisa e desenvolvimento (RDT)": 46,
-    "Processo de licitação": 154
+    "Processo de licitação": 154,
+    "Recomendação": 1
   },
   "porSetor": {
-    "R": 21122,
-    "C": 1758,
-    "G": 13132,
-    "F": 2369,
-    "P": 3116
+    "R": 21301,
+    "C": 1768,
+    "G": 14369,
+    "F": 2378,
+    "P": 3118
   },
   "porFonte": {
     "dcsrod": 4381,
@@ -71,6 +72,7 @@
     "aud": 229,
     "inm": 48,
     "cpb": 48,
+    "dnit": 1429,
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
@@ -151,6 +153,11 @@
       "id": "govbr",
       "nome": "gov.br/antt — Normativos de Rodovias",
       "url": "https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias"
+    },
+    {
+      "id": "dnit",
+      "nome": "DNIT (gov.br) — atos normativos, faixa de domínio, manuais e normas técnicas do IPR",
+      "url": "https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos"
     },
     {
       "id": "relatorios",
@@ -463,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1855
+      "total": 1860
     },
     {
       "id": "faixa-dominio",
@@ -481,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7480
+      "total": 7495
     },
     {
       "id": "ocupacao-faixa",
@@ -505,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3743
+      "total": 3749
     },
     {
       "id": "acessos",
@@ -524,7 +531,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 2056
+      "total": 2057
     },
     {
       "id": "publicidade",
@@ -580,7 +587,7 @@
         "remanejamento de interferências",
         "acordos com terceiros"
       ],
-      "total": 257
+      "total": 258
     },
     {
       "id": "obras",
@@ -599,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3854
+      "total": 3865
     },
     {
       "id": "pedagio",
@@ -638,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1573
+      "total": 1576
     },
     {
       "id": "penalidades",
@@ -676,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1932
+      "total": 1953
     },
     {
       "id": "seguranca",
@@ -694,7 +701,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 704
+      "total": 736
     },
     {
       "id": "pesagem",
@@ -712,7 +719,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 266
+      "total": 267
     },
     {
       "id": "ppd",

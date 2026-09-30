@@ -29,7 +29,7 @@ function tituloPagina(html) {
   const h1 = html.match(/<h1[^>]*documentFirstHeading[^>]*>([\s\S]*?)<\/h1>/i);
   if (h1) return textoPuro(h1[1]);
   const t = html.match(/<title>([\s\S]*?)<\/title>/i);
-  return t ? textoPuro(t[1]).replace(/\s*[—-]\s*Ag[eê]ncia Nacional.*$/i, '') : '';
+  return t ? textoPuro(t[1]).replace(/\s*[—-]\s*(Ag[eê]ncia Nacional|Departamento Nacional).*$/i, '') : '';
 }
 
 function descricaoPagina(html) {
@@ -49,8 +49,8 @@ function normalizarUrl(href, base) {
   }
 }
 
-function ehPaginaDaSecao(url) {
-  return url.startsWith(RAIZ_GOVBR + '/') && !EXT_ARQUIVO.test(url) && !/\/(@@|view$|image|resolveuid)/.test(url);
+function ehPaginaDaSecao(url, raiz = RAIZ_GOVBR) {
+  return url.startsWith(raiz + '/') && !EXT_ARQUIVO.test(url) && !/\/(@@|view$|image|resolveuid)/.test(url);
 }
 
 function limparDescricao(s) {
@@ -69,13 +69,22 @@ function limparDescricao(s) {
 function itensDeTabelas(html, paginaUrl) {
   const itens = [];
   for (const tr of html.match(/<tr[\s\S]*?<\/tr>/gi) || []) {
-    const tds = [...tr.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((m) => m[1]);
-    if (tds.length < 2) continue;
-    const titulo = textoPuro(tds[0]);
-    const desc = textoPuro(tds.slice(1).join(' '));
-    if (!titulo || titulo.length > 200) continue;
-    const href = (tr.match(/<a\s[^>]*href="([^"]+)"/i) || [])[1];
-    itens.push({ titulo, descricao: limparDescricao(desc), url: (href && normalizarUrl(href, paginaUrl)) || paginaUrl });
+    const celulas = [...tr.matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi)].map((m) => m[1]);
+    if (celulas.length < 2) continue;
+    const link = tr.match(/<a\s[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
+    const url = link && normalizarUrl(link[1], paginaUrl);
+    if (url && !/^(mailto|javascript):/i.test(link[1])) {
+      // linha com documento (ex.: "629 | [Defensas rodoviárias]"): o texto do link é o título
+      const titulo = textoPuro(link[2]);
+      const resto = celulas.map(textoPuro).filter((c) => c && c !== titulo).join(' · ');
+      if (titulo && titulo.length <= 250) itens.push({ titulo, descricao: limparDescricao(resto), url });
+      continue;
+    }
+    // linha sem link (ex.: "Referência | Descrição" das normas das OIAs)
+    const titulo = textoPuro(celulas[0]);
+    const desc = textoPuro(celulas.slice(1).join(' '));
+    if (!titulo || titulo.length > 200 || /^(publica[çc][ãa]o|t[íi]tulo|refer[êe]ncia|descri[çc][ãa]o)$/i.test(titulo)) continue;
+    itens.push({ titulo, descricao: limparDescricao(desc), url: paginaUrl });
   }
   return itens;
 }
@@ -106,7 +115,13 @@ function itensDeLinks(html, paginaUrl) {
       if (principal && !principal.descricao && /obje(to|tivo)/i.test(depois)) principal.descricao = limparDescricao(depois);
       continue;
     }
-    const ehAlteracao = principal && (/altera[çc](ão|ões|ao|oes)\s*:?\s*$/i.test(p.antes) || /^\s*(e|,|;)\s*$/.test(p.antes));
+    // "Alteração: [link]", "- Alterada pela [link]", ", pela [link] e pela [link]" pertencem ao item anterior
+    const ehAlteracao =
+      principal &&
+      (/altera[çc](ão|ões|ao|oes)\s*:?\s*$/i.test(p.antes) ||
+        /(alterad|revogad|complementad)[ao]s?\s+pel[ao]s?\s*$/i.test(p.antes) ||
+        /^\s*(,|e|;)?\s*(e\s+)?pel[ao]s?\s*$/i.test(p.antes) ||
+        /^\s*(e|,|;)\s*$/.test(p.antes));
     const item = { titulo: p.texto, url, descricao: '', alteraDe: null };
     if (ehAlteracao) {
       item.alteraDe = principal.titulo;
@@ -126,7 +141,7 @@ function tipoPorTitulo(titulo, categoria) {
   const regras = [
     [/^resolu/, 'Resolução'], [/^delibera/, 'Deliberação'], [/^portaria/, 'Portaria'], [/^instru[cç][aã]o normativa/, 'Instrução Normativa'],
     [/^decis/, 'Decisão'], [/^s[uú]mula/, 'Súmula'], [/^of[ií]cio/, 'Ofício Circular'], [/^manual/, 'Manual'], [/^lei /, 'Lei'],
-    [/^decreto/, 'Decreto'], [/^norma|abnt|nbr|^dnit\b/, 'Norma Técnica'], [/regulamento/, 'Regulamento'], [/^nota t[eé]cnica/, 'Nota Técnica'],
+    [/^decreto/, 'Decreto'], [/^norma|abnt|nbr|^dnit\b|^dner\b/, 'Norma Técnica'], [/^recomenda/, 'Recomendação'], [/^publica[çc][ãa]o ipr|^ipr\b/, 'Manual'], [/regulamento/, 'Regulamento'], [/^nota t[eé]cnica/, 'Nota Técnica'],
   ];
   for (const [re, tipo] of regras) if (re.test(t)) return tipo;
   const c = normalizar(categoria);
@@ -137,16 +152,20 @@ function tipoPorTitulo(titulo, categoria) {
   return 'Documento';
 }
 
-/** Rastreia a seção de normativos de rodovias no gov.br. */
-export async function coletarGovBr({ maxPaginas = 80, log = console.log } = {}) {
-  const sessao = new Sessao({ charset: 'utf-8', pausaMs: 500 });
-  const fila = [{ url: RAIZ_GOVBR, nivel: 0, categoria: '' }];
+/**
+ * Rastreia seções do gov.br (por padrão, "Normativos de Rodovias" da ANTT).
+ * raizes: páginas iniciais; cada uma só segue links para dentro de si mesma.
+ * paginasComoItem: subpáginas de 2º nível viram itens (útil na ANTT; no DNIT as subpáginas são pastas de ano).
+ */
+export async function coletarGovBr({ raizes = [RAIZ_GOVBR], maxPaginas = 80, paginasComoItem = true, pausaMs = 500, log = console.log } = {}) {
+  const sessao = new Sessao({ charset: 'utf-8', pausaMs });
+  const fila = raizes.map((raiz) => ({ url: raiz, raiz, nivel: 0, categoria: '' }));
   const visitadas = new Set();
   const itens = new Map();
   const erros = [];
 
   while (fila.length && visitadas.size < maxPaginas) {
-    const { url, nivel, categoria } = fila.shift();
+    const { url, raiz, nivel, categoria } = fila.shift();
     if (visitadas.has(url)) continue;
     visitadas.add(url);
     let html;
@@ -163,13 +182,13 @@ export async function coletarGovBr({ maxPaginas = 80, log = console.log } = {}) 
     // Subpáginas da seção: rastrear
     for (const m of conteudo.matchAll(/<a\s[^>]*href="([^"]*)"/gi)) {
       const u = normalizarUrl(m[1], url);
-      if (u && ehPaginaDaSecao(u.replace(/\/$/, '')) && !visitadas.has(u.replace(/\/$/, ''))) {
-        fila.push({ url: u.replace(/\/$/, ''), nivel: nivel + 1, categoria: cat });
+      if (u && ehPaginaDaSecao(u.replace(/\/$/, ''), raiz) && !visitadas.has(u.replace(/\/$/, ''))) {
+        fila.push({ url: u.replace(/\/$/, ''), raiz, nivel: nivel + 1, categoria: cat });
       }
     }
 
     // Páginas de 2º nível ou mais (ex.: um manual específico) viram itens próprios
-    if (nivel >= 2) {
+    if (paginasComoItem && nivel >= 2) {
       const corpo = textoPuro(conteudo).replace(titulo, '').slice(0, 600);
       const desc = descricaoPagina(html) || corpo;
       itens.set(url, { titulo, url, descricao: limparDescricao(desc), categoria: cat, pagina: url });
@@ -177,7 +196,8 @@ export async function coletarGovBr({ maxPaginas = 80, log = console.log } = {}) 
 
     const tabelas = itensDeTabelas(conteudo, url);
     conteudo = conteudo.replace(/<table[\s\S]*?<\/table>/gi, ' ');
-    const links = itensDeLinks(conteudo, url).filter((it) => !ehPaginaDaSecao(it.url.replace(/\/$/, '')));
+    // links para subpáginas só viram itens quando vêm com descrição (ex.: "Resolução nº 11/2022 - Dispõe sobre...")
+    const links = itensDeLinks(conteudo, url).filter((it) => !ehPaginaDaSecao(it.url.replace(/\/$/, ''), raiz) || (!paginasComoItem && it.descricao));
     for (const it of links) {
       // "arquivo.pdf", "Nota Explicativa", "Revisão nº 01": nomeia pelo título da página
       if (EXT_ARQUIVO.test(it.titulo)) it.titulo = `${titulo} (${it.titulo.match(EXT_ARQUIVO)[1].toUpperCase()})`;
@@ -193,7 +213,7 @@ export async function coletarGovBr({ maxPaginas = 80, log = console.log } = {}) 
       }
       itens.set(chave, { ...it, categoria: cat, pagina: url });
     }
-    log(`   gov.br: ${titulo} (${links.length + tabelas.length} itens)`);
+    log(`   ${titulo} (${links.length + tabelas.length} itens)`);
   }
 
   const resultado = [...itens.values()].map((it) => {

@@ -39,7 +39,7 @@
   <div class="wrap">
     <section class="hero">
       <h1>Encontre normas da ANTT por assunto</h1>
-      <p class="sub">Resoluções, deliberações, portarias, instruções normativas, decisões, documentos e relatórios das concessões de rodovias — reunidos do ANTTlegis e do gov.br e <span id="frase-atualizacao">atualizados automaticamente</span>.</p>
+      <p class="sub">Resoluções, deliberações, portarias, instruções normativas, decisões, documentos das concessões e normas do DNIT/IPR — reunidos do ANTTlegis e do gov.br e <span id="frase-atualizacao">atualizados automaticamente</span>.</p>
       <form class="caixa-busca" role="search" id="form-busca">
         <svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg>
         <label for="q" class="sr-only">Buscar normativos</label>
@@ -59,6 +59,8 @@
         <button type="button">RMA</button>
         <button type="button">DUP Via Brasil</button>
         <button type="button">PIT Via Brasil</button>
+        <button type="button">Resolução 7/2021 DNIT</button>
+        <button type="button">IPR 712</button>
       </div>
       <div id="alerta-atualizacao"></div>
     </section>
@@ -81,10 +83,11 @@
           <legend>Conteúdo</legend>
           <div class="segmentado" role="radiogroup" aria-label="Conteúdo" id="f-conteudo">
             <label><input type="radio" name="conteudo" value="tudo" checked><span>Tudo</span></label>
-            <label><input type="radio" name="conteudo" value="normas"><span>Normas e atos</span></label>
-            <label><input type="radio" name="conteudo" value="relatorios"><span>Docs. das concessões</span></label>
+            <label><input type="radio" name="conteudo" value="normas"><span>ANTT</span></label>
+            <label><input type="radio" name="conteudo" value="relatorios"><span>Docs. concessões</span></label>
+            <label><input type="radio" name="conteudo" value="dnit"><span>DNIT</span></label>
           </div>
-          <p class="dica-filtro">Docs. das concessões: relatórios (monitoração, verificador, obras, financeiros), contrato e PER, licenças ambientais, atas, revisões e reajustes publicados nas páginas de cada concessão.</p>
+          <p class="dica-filtro">DNIT: resoluções, INs, portarias, faixa de domínio, manuais (publicações IPR) e normas técnicas DNER/DNIT, com o PDF. Docs. concessões: relatórios (monitoração, verificador, obras, financeiros), contrato e PER, licenças ambientais, atas, revisões e reajustes publicados nas páginas de cada concessão.</p>
         </fieldset>
 
         <fieldset>

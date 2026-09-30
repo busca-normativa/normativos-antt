@@ -10,6 +10,7 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 | **ANTTlegis**, busca no texto integral | Para cada tema (ex.: desapropriação), os atos em que o termo aparece **no texto completo**, não só na ementa |
 | **gov.br/antt**, "Normativos de Rodovias" | Destaques curados (RCR, POPs, INs, manuais, PAF, ofícios circulares, portarias do Ministério dos Transportes, normas das OIAs) |
 | **gov.br/antt**, páginas de cada concessão | Relatórios (monitoração, verificador independente, obras, financeiros), documentos de gestão (contrato e PER, planejamento de obras, licenças ambientais, termo de arrolamento, atas das reuniões tripartite) e revisões/reajustes — título, concessão, ano e link |
+| **DNIT** (gov.br/dnit) | Atos normativos (resoluções, instruções normativas, portarias, manuais, recomendações, revogados), a regulamentação de faixa de domínio (ex.: Resolução nº 7/2021) e as coletâneas do IPR (manuais/publicações IPR e normas técnicas DNER/DNIT), com link para o PDF |
 | **ANTTlegis**, "Decisões por concessionária" | Lista oficial que liga cada decisão à sua concessão (inclusive PITs e DUPs cuja ementa não cita a concessionária) |
 | **ANTTlegis**, texto integral das DUPs e autorizações de uso da faixa | Fichas com concessionária, obra/objeto, rodovia, km, município, processo SEI, urgência, CPEU, DOU e anexo |
 
@@ -27,7 +28,7 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 ## Como usar o painel
 
 - **Busca**: digite o assunto, um número de ato ou uma expressão. Ao reconhecer um tema (ex.: *desapropriação*, *faixa de domínio*, *pedágio*), o painel inclui os atos do tema encontrados no texto integral.
-- **Conteúdo**: escolha entre tudo, só normas e atos, ou só os relatórios das concessões. Combine com o filtro "Órgão ou concessão" para ver os relatórios de uma concessão específica (ex.: *monitoração faixa de domínio* + Via Brasil).
+- **Conteúdo**: escolha entre tudo, só ANTT, só os documentos das concessões ou só o **DNIT** (resoluções, manuais IPR, normas técnicas — o botão "Abrir PDF" abre o arquivo para baixar). Busque, por exemplo, *Resolução 7/2021 DNIT* ou *IPR 712*. Combine com o filtro "Órgão ou concessão" para ver os relatórios de uma concessão específica (ex.: *monitoração faixa de domínio* + Via Brasil).
 - **DUPs**: cada Declaração de Utilidade Pública ganha uma *ficha* extraída do texto integral: concessionária, obra, rodovia, trecho (km), município, processo SEI, urgência e data do DOU. Marque **"Só DUPs"** ou busque, por exemplo, *DUP Via Brasil* ou o nome de um município. A planilha exportada traz essas colunas.
 - **Uso da faixa (PIT, ocupações, acessos)**: as autorizações também ganham ficha — interessado, objeto, tipo de uso (acesso, rede elétrica, fibra, água/esgoto, gás, travessia, publicidade…), rodovia, km, pista/lado, município, concessionária, processo e exigência de CPEU. Use **"Só uso da faixa"** e o filtro **"Tipo de uso da faixa"**.
 - **Anexo e SEI**: a ficha traz o link do anexo com o quadro de coordenadas (quando publicado em PDF) e o botão **"Consultar processo no SEI"**, que copia o número e abre a pesquisa pública do SEI da ANTT (lá é preciso resolver o captcha).

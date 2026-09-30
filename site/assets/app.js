@@ -138,7 +138,7 @@ async function carregar() {
     a._ti = semMilhar(normalizar(a.titulo));
     a._sit = classeSituacao(a.situacao);
     a._rod = a.setores.includes('R') || a.setores.includes('G');
-    a._org = a.tipo === 'GOV' || a.tipo === 'REL' ? a.orgao || 'gov.br' : (a.orgao || '').split('/')[0];
+    a._org = a.tipo === 'GOV' || a.tipo === 'REL' || a.tipo === 'DNIT' ? a.orgao || 'gov.br' : (a.orgao || '').split('/')[0];
     a._dt = a.data || a.publicado || (a.ano ? `${a.ano}-01-01` : '');
     return a;
   });
@@ -251,7 +251,10 @@ function atosDaConsulta() {
 function aplicar() {
   const { lista, consulta } = atosDaConsulta();
   const passaAbrangencia = (a, ignorarRodovias = false) =>
-    (estado.conteudo === 'tudo' || (estado.conteudo === 'relatorios') === (a.tipo === 'REL')) &&
+    (estado.conteudo === 'tudo' ||
+      (estado.conteudo === 'relatorios' && a.tipo === 'REL') ||
+      (estado.conteudo === 'dnit' && a.tipo === 'DNIT') ||
+      (estado.conteudo === 'normas' && a.tipo !== 'REL' && a.tipo !== 'DNIT')) &&
     (ignorarRodovias || !estado.rodovias || a._rod) &&
     (!estado.vigentes || a._sit !== 'revogado') &&
     (!estado.destaque || a.destaque) &&
@@ -491,7 +494,7 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
 
   // filtros ativos
   const chips = [];
-  if (estado.conteudo !== 'tudo') chips.push(['conteudo', estado.conteudo === 'relatorios' ? 'Só docs. das concessões' : 'Só normas e atos']);
+  if (estado.conteudo !== 'tudo') chips.push(['conteudo', { relatorios: 'Só docs. das concessões', dnit: 'Só DNIT', normas: 'Só ANTT' }[estado.conteudo]]);
   if (estado.tema) chips.push(['tema', `Tema: ${TEMA_POR_ID.get(estado.tema)?.nome}`]);
   for (const t of estado.tipos) chips.push([`tipo:${t}`, t]);
   for (const t of estado.tiposFora) chips.push([`fora:${t}`, `Sem ${t}`]);
@@ -593,7 +596,8 @@ function cartaoAto(a, termos, extra = '') {
   const meta = rel
     ? [a.orgao, a.ano, a.publicado ? `atualizado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ')
     : [a.tipo === 'GOV' ? a.orgao : a.orgao?.replace(/\/ANTT.*$/, ''), a.data ? `ato de ${dataBR(a.data)}` : a.ano, a.publicado && a.publicado !== a.data ? `publicado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ');
-  const origem = rel ? 'Abrir relatório' : a.tipo === 'GOV' ? 'Abrir documento' : 'Abrir no ANTTlegis';
+  const pdf = /\.pdf($|[/?#@])/i.test(a.url || '');
+  const origem = rel ? 'Abrir relatório' : a.tipo === 'GOV' || a.tipo === 'DNIT' ? (pdf ? 'Abrir PDF' : 'Abrir página') : 'Abrir no ANTTlegis';
   return `<li class="ato" data-id="${escapar(a.id)}">
     <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${a.dup ? '<span class="selo dup">DUP</span>' : ''}${a.faixa ? `<span class="selo dup faixa">${/interesse de terceiro/i.test(a.ementa) ? 'PIT' : 'FAIXA'}</span>` : ''}${conc}${sit}${dest}${setores}${extra}</div>
     <h3><a href="${escapar(url)}" target="_blank" rel="noopener">${destacar(a.titulo || a.id, termos)}</a></h3>
@@ -656,7 +660,7 @@ function lerUrl() {
   estado.tema = p.get('tema') || '';
   estado.tipos = new Set((p.get('tipo') || '').split('|').filter(Boolean));
   estado.tiposFora = new Set((p.get('sem') || '').split('|').filter(Boolean));
-  estado.conteudo = ['normas', 'relatorios'].includes(p.get('conteudo')) ? p.get('conteudo') : 'tudo';
+  estado.conteudo = ['normas', 'relatorios', 'dnit'].includes(p.get('conteudo')) ? p.get('conteudo') : 'tudo';
   estado.orgao = p.get('orgao') || '';
   estado.concessao = p.get('concessao') || '';
   estado.soDups = p.get('dups') === '1';

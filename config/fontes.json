@@ -14,5 +14,13 @@
     { "id": "cpb", "nome": "Consultas Públicas", "modulo": 419, "menu": 7157, "acao": "abrirResenhaAnoData" },
     { "id": "reu", "nome": "Reuniões Participativas", "modulo": 419, "menu": 7158, "acao": "abrirResenhaAnoData" },
     { "id": "tms", "nome": "Tomadas de Subsídios", "modulo": 419, "menu": 7159, "acao": "abrirResenhaAnoData" }
+  ],
+  "_comentario_dnit": "Páginas do DNIT no gov.br rastreadas em busca de documentos (PDFs): atos normativos (resoluções, INs, portarias, manuais, recomendações, revogados), faixa de domínio e as coletâneas de manuais e normas técnicas do IPR.",
+  "dnit": [
+    "https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/tipo",
+    "https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/decreto-10-139-2019-revisaco/revogadas",
+    "https://www.gov.br/dnit/pt-br/rodovias/operacoes-rodoviarias/faixa-de-dominio",
+    "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-manuais",
+    "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-normas"
   ]
 }

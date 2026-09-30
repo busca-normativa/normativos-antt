@@ -45,6 +45,7 @@ const cfgConcessoes = lerJSON(path.join(RAIZ, 'config', 'concessoes.json')).conc
 const SEM_FICHAS = opt('sem-fichas') || opt('sem-dups');
 const SEM_CONCESSOES = opt('sem-concessoes');
 const SEM_MAPA = opt('sem-mapa');
+const SEM_DNIT = opt('sem-dnit');
 const MAX_FICHAS = +valor('max-fichas') || 2500;
 const temasCompilados = compilarTemas(cfgTemas);
 
@@ -96,6 +97,7 @@ const fontesDaExecucao = new Set([
   ...(SEM_TEMAS ? [] : ['busca']),
   ...(SEM_GOVBR ? [] : ['govbr']),
   ...(SEM_RELATORIOS ? [] : ['relatorios']),
+  ...(SEM_DNIT ? [] : ['dnit']),
 ]);
 
 function copiaDoAnterior(id) {
@@ -287,7 +289,7 @@ async function etapaGovBr() {
 
 // ---------- 4. relatórios das concessões (gov.br) ----------
 // Tipos de registro que apontam para documentos fora do ANTTlegis (link próprio, tipo definido na coleta)
-const TIPOS_EXTERNOS = new Set(['GOV', 'REL']);
+const TIPOS_EXTERNOS = new Set(['GOV', 'REL', 'DNIT']);
 
 // Siglas usadas no dia a dia, acrescentadas à ementa para a busca encontrar
 const SIGLAS_RELATORIO = [
@@ -482,6 +484,53 @@ function gravarMapa(lista) {
 // Temas pelo tipo de uso da faixa
 const TEMA_DO_USO = { Acesso: 'acessos', Publicidade: 'publicidade' };
 
+// ---------- 8. DNIT (gov.br): atos normativos, faixa de domínio, manuais e normas do IPR ----------
+const cfgDnit = lerJSON(path.join(RAIZ, 'config', 'fontes.json')).dnit || [];
+
+function situacaoDnit(it) {
+  const t = normalizar(`${it.categoria} ${it.titulo} ${it.descricao}`);
+  if (/revogad|cancelad/.test(t)) return 'Revogado';
+  if (/regulamentacao atual|vigente/.test(t)) return 'Vigente';
+  return '';
+}
+
+async function etapaDnit() {
+  if (!cfgDnit.length) return;
+  log('DNIT: atos normativos, faixa de domínio e publicações do IPR');
+  const r = await coletarGovBr({ raizes: cfgDnit, maxPaginas: 900, paginasComoItem: false, pausaMs: 300, log: () => {} });
+  erros.push(...r.erros.map((e) => `DNIT ${e}`));
+  if (!r.erros.length) fontesOk.add('dnit');
+  const vistos = new Set();
+  for (const it of r.itens) {
+    if (!/gov\.br\/dnit|dnit\.gov\.br/.test(it.url)) continue; // links externos (DOU, outros órgãos) ficam de fora
+    let titulo = it.titulo;
+    // Manuais do IPR: o número da publicação só aparece no nome do arquivo (ex.: .../712_manual_ordenam_uso_solo.pdf)
+    const ipr = /\/ipr\//.test(it.url) && !/^publica/i.test(titulo) && (it.url.match(/\/(?:publicacao[_-]ipr[_-]|ipr[_-])?(\d{3})[_-][a-z]/i) || [])[1];
+    if (ipr && /manua/i.test(it.categoria)) titulo = `Publicação IPR ${ipr} — ${titulo}`;
+    // "Resolução nº 07/2021", "Portaria nº 2.987/2021", "Instrução Normativa nº 35, de 8/7/2021"
+    const num = titulo.match(/n[º°o.]?\s*0*(\d{1,3}(?:\.\d{3})*|\d+)\s*(?:\/|,?\s*de\s+[^/]*?)(\d{4})/i) || titulo.match(/\b0*(\d{1,4})\/(\d{4})\b/);
+    if (num) num[1] = num[1].replace(/\./g, '');
+    const id = `DNIT-${hash(it.url + '|' + titulo)}`;
+    vistos.add(id);
+    registrar({
+      id,
+      tipo: 'DNIT',
+      tipoNome: it.tipoNome === 'Documento' && /norma/i.test(it.categoria) ? 'Norma Técnica' : it.tipoNome,
+      orgao: /\/ipr\//.test(it.url) ? 'DNIT/IPR' : 'DNIT',
+      titulo,
+      ementa: [it.descricao, it.categoria].filter(Boolean).join(' · '),
+      numero: num ? +num[1] : undefined,
+      ano: num ? +num[2] : it.data ? +it.data.slice(0, 4) : (titulo.match(/\b(19[5-9]\d|20\d{2})\b/) || [])[1] ? +(titulo.match(/\b(19[5-9]\d|20\d{2})\b/) || [])[1] : null,
+      data: it.data,
+      situacao: situacaoDnit(it),
+      url: it.url,
+    }, 'dnit');
+  }
+  // documentos que saíram do site do DNIT deixam a base (só quando o rastreamento foi completo)
+  if (!r.erros.length && vistos.size) for (const [id, a] of atos) if (a.tipo === 'DNIT' && !vistos.has(id)) atos.delete(id);
+  log(`   ${vistos.size} documentos do DNIT em ${r.paginas} páginas`);
+}
+
 // ---------- execução ----------
 async function principal() {
   log(`Modo ${COMPLETO ? 'COMPLETO' : 'incremental'} — base existente: ${anteriores.size} atos`);
@@ -510,6 +559,14 @@ async function principal() {
     } catch (e) {
       erros.push(`gov.br: ${e.message}`);
       log('! gov.br:', e.message);
+    }
+  }
+  if (!SEM_DNIT) {
+    try {
+      await etapaDnit();
+    } catch (e) {
+      erros.push(`DNIT: ${e.message}`);
+      log('! DNIT:', e.message);
     }
   }
   if (!SEM_RELATORIOS) {
@@ -579,6 +636,7 @@ async function principal() {
       ...cfgFontes.map((f) => ({ id: f.id, nome: f.nome, url: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=${f.acao}&cod_modulo=${f.modulo}&cod_menu=${f.menu}` })),
       { id: 'busca', nome: 'Busca no texto integral do ANTTlegis (por tema)', url: 'https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirLegislacao&cod_modulo=161&cod_menu=5408' },
       { id: 'govbr', nome: 'gov.br/antt — Normativos de Rodovias', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias' },
+      { id: 'dnit', nome: 'DNIT (gov.br) — atos normativos, faixa de domínio, manuais e normas técnicas do IPR', url: 'https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos' },
       { id: 'relatorios', nome: 'gov.br/antt — Relatórios das concessões (monitoração, verificador, obras, financeiros)', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias' },
     ],
     concessoes: cfgConcessoes
