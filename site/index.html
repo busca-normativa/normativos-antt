@@ -29,6 +29,7 @@
       <nav aria-label="Links">
         <a href="https://anttlegis.antt.gov.br/" target="_blank" rel="noopener"><svg class="icone"><use href="#i-externo"/></svg><span>ANTTlegis</span></a>
         <a href="https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias" target="_blank" rel="noopener"><svg class="icone"><use href="#i-externo"/></svg><span>gov.br/ANTT</span></a>
+        <a href="mapa.html"><span>Mapa das DUPs</span></a>
         <a href="#sobre"><span>Sobre</span></a>
         <button class="botao-icone" id="alternar-tema" type="button" aria-label="Alternar tema claro/escuro"><svg class="icone"><use href="#i-lua"/></svg></button>
       </nav>
@@ -57,6 +58,7 @@
         <button type="button">monitoração faixa de domínio</button>
         <button type="button">RMA</button>
         <button type="button">DUP Via Brasil</button>
+        <button type="button">PIT Via Brasil</button>
       </div>
       <div id="alerta-atualizacao"></div>
     </section>
@@ -80,9 +82,9 @@
           <div class="segmentado" role="radiogroup" aria-label="Conteúdo" id="f-conteudo">
             <label><input type="radio" name="conteudo" value="tudo" checked><span>Tudo</span></label>
             <label><input type="radio" name="conteudo" value="normas"><span>Normas e atos</span></label>
-            <label><input type="radio" name="conteudo" value="relatorios"><span>Relatórios</span></label>
+            <label><input type="radio" name="conteudo" value="relatorios"><span>Docs. das concessões</span></label>
           </div>
-          <p class="dica-filtro">Relatórios: monitoração, verificador independente, obras e financeiros publicados nas páginas de cada concessão.</p>
+          <p class="dica-filtro">Docs. das concessões: relatórios (monitoração, verificador, obras, financeiros), contrato e PER, licenças ambientais, atas, revisões e reajustes publicados nas páginas de cada concessão.</p>
         </fieldset>
 
         <fieldset>
@@ -91,6 +93,13 @@
           <label class="opcao"><input type="checkbox" id="f-vigentes"> Ocultar revogados</label>
           <label class="opcao"><input type="checkbox" id="f-destaque"> Só destaques do gov.br</label>
           <label class="opcao"><input type="checkbox" id="f-dups"> Só DUPs (utilidade pública)</label>
+          <label class="opcao"><input type="checkbox" id="f-faixa"> Só uso da faixa (PIT, ocupações, acessos)</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tipo de uso da faixa</legend>
+          <label class="sr-only" for="f-uso">Tipo de uso da faixa</label>
+          <select id="f-uso"><option value="">Todos</option></select>
         </fieldset>
 
         <fieldset>

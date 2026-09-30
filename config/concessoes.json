@@ -1,45 +1,264 @@
 {
   "_comentario": "Concessões rodoviárias federais. 'padroes' são trechos (sem acento, minúsculos, aceitam expressão regular) procurados na concessionária da DUP, no título/ementa dos atos e no nome da concessão dos relatórios. 'destaque': true fixa a concessão no topo do filtro do painel. A ordem importa: a primeira que casar vence.",
   "concessoes": [
-    { "nome": "Via Brasil BR-163", "destaque": true, "padroes": ["via ?brasil", "br-?163 ?/ ?pa", "br-?230 ?/ ?pa"] },
-    { "nome": "Nova Rota do Oeste", "padroes": ["rota do oeste"] },
-    { "nome": "Motiva Pantanal (MSVia)", "padroes": ["sul-? ?matogrossense", "msvia", "motiva pantanal", "\\bpantanal\\b"] },
-    { "nome": "RioSP (Nova Dutra)", "padroes": ["rio ?-? ?sao paulo", "riosp", "rio sp", "nova dutra"] },
-    { "nome": "Autopista Fluminense", "padroes": ["autopista fluminense", "fluminense"] },
-    { "nome": "Autopista Litoral Sul", "padroes": ["litoral sul"] },
-    { "nome": "Autopista Planalto Sul", "padroes": ["planalto sul"] },
-    { "nome": "Autopista Régis Bittencourt", "padroes": ["regis bittencourt"] },
-    { "nome": "Autopista Fernão Dias", "padroes": ["fernao dias"] },
-    { "nome": "ViaCosteira", "padroes": ["via ?costeira", "catarinense de rodovias"] },
-    { "nome": "Concebra", "padroes": ["concebra", "rodovias centrais do brasil"] },
-    { "nome": "Concer", "padroes": ["\\bconcer\\b"] },
-    { "nome": "ViaBahia", "padroes": ["via ?bahia"] },
-    { "nome": "Via 040", "padroes": ["via ?040"] },
-    { "nome": "Ecovias Capixaba (Eco101)", "padroes": ["eco ?101", "ecovias capixaba"] },
-    { "nome": "Ecovias Minas Goiás (Eco050)", "padroes": ["eco ?050", "minas goias"] },
-    { "nome": "Ecovias Ponte (Ecoponte)", "padroes": ["ecoponte", "ecovias ponte"] },
-    { "nome": "Ecovias Rio Minas", "padroes": ["eco ?rio ?minas", "ecovias rio minas"] },
-    { "nome": "Ecovias do Araguaia", "padroes": ["araguaia"] },
-    { "nome": "Ecovias do Cerrado", "padroes": ["ecovias do cerrado", "ecovias cerrado"] },
-    { "nome": "Ecovias Sul (Ecosul)", "padroes": ["ecosul", "ecovias sul"] },
-    { "nome": "Transbrasiliana", "padroes": ["transbrasiliana"] },
-    { "nome": "Via Araucária", "padroes": ["araucaria"] },
-    { "nome": "ViaSul", "padroes": ["viasul", "via sul\\b"] },
-    { "nome": "PR Vias", "padroes": ["pr ?vias"] },
-    { "nome": "EPR Iguaçu", "padroes": ["iguacu"] },
-    { "nome": "EPR Litoral Pioneiro", "padroes": ["litoral pioneiro"] },
-    { "nome": "EPR Via Mineira", "padroes": ["via mineira"] },
-    { "nome": "Via Cristais", "padroes": ["via cristais"] },
-    { "nome": "Way-262", "padroes": ["way[- ]?262"] },
-    { "nome": "Nova 364", "padroes": ["nova 364"] },
-    { "nome": "Nova 381", "padroes": ["nova 381"] },
-    { "nome": "Rota Verde Goiás", "padroes": ["rota verde"] },
-    { "nome": "Rota Sertaneja", "padroes": ["rota sertaneja"] },
-    { "nome": "Rota Agro", "padroes": ["rota agro"] },
-    { "nome": "Elovias", "padroes": ["elovias"] },
-    { "nome": "Rodovia do Aço", "padroes": ["rodovia do aco"] },
-    { "nome": "Via Campos", "padroes": ["via campos"] },
-    { "nome": "Motiva Minas SP", "padroes": ["motiva minas"] },
-    { "nome": "EPR Paraná", "padroes": ["epr parana"] }
+    {
+      "nome": "Via Brasil BR-163",
+      "destaque": true,
+      "padroes": [
+        "\\bvia ?brasil",
+        "br-?163 ?/ ?pa",
+        "br-?230 ?/ ?pa"
+      ]
+    },
+    {
+      "nome": "Nova Rota do Oeste",
+      "padroes": [
+        "rota do oeste"
+      ]
+    },
+    {
+      "nome": "Motiva Pantanal (MSVia)",
+      "padroes": [
+        "sul-? ?matogrossense",
+        "msvia",
+        "motiva pantanal",
+        "\\bpantanal\\b"
+      ]
+    },
+    {
+      "nome": "RioSP (Nova Dutra)",
+      "padroes": [
+        "rio ?-? ?sao paulo",
+        "riosp",
+        "rio sp",
+        "nova dutra"
+      ]
+    },
+    {
+      "nome": "Autopista Fluminense",
+      "padroes": [
+        "autopista fluminense",
+        "fluminense"
+      ]
+    },
+    {
+      "nome": "Autopista Litoral Sul",
+      "padroes": [
+        "litoral sul"
+      ]
+    },
+    {
+      "nome": "Autopista Planalto Sul",
+      "padroes": [
+        "planalto sul"
+      ]
+    },
+    {
+      "nome": "Autopista Régis Bittencourt",
+      "padroes": [
+        "regis bittencourt"
+      ]
+    },
+    {
+      "nome": "Autopista Fernão Dias",
+      "padroes": [
+        "fernao dias"
+      ]
+    },
+    {
+      "nome": "ViaCosteira",
+      "padroes": [
+        "\\bvia ?costeira",
+        "catarinense de rodovias"
+      ]
+    },
+    {
+      "nome": "Concebra",
+      "padroes": [
+        "concebra",
+        "rodovias centrais do brasil"
+      ]
+    },
+    {
+      "nome": "Concer",
+      "padroes": [
+        "\\bconcer\\b"
+      ]
+    },
+    {
+      "nome": "ViaBahia",
+      "padroes": [
+        "\\bvia ?bahia"
+      ]
+    },
+    {
+      "nome": "Via 040",
+      "padroes": [
+        "\\bvia ?040"
+      ]
+    },
+    {
+      "nome": "Ecovias Capixaba (Eco101)",
+      "padroes": [
+        "eco ?101",
+        "ecovias capixaba"
+      ]
+    },
+    {
+      "nome": "Ecovias Minas Goiás (Eco050)",
+      "padroes": [
+        "eco ?050",
+        "minas goias"
+      ]
+    },
+    {
+      "nome": "Ecovias Ponte (Ecoponte)",
+      "padroes": [
+        "ecoponte",
+        "ecovias ponte"
+      ]
+    },
+    {
+      "nome": "Ecovias Rio Minas",
+      "padroes": [
+        "eco ?rio ?minas",
+        "ecovias rio minas"
+      ]
+    },
+    {
+      "nome": "Ecovias do Araguaia",
+      "padroes": [
+        "araguaia"
+      ]
+    },
+    {
+      "nome": "Ecovias do Cerrado",
+      "padroes": [
+        "ecovias do cerrado",
+        "ecovias cerrado"
+      ]
+    },
+    {
+      "nome": "Ecovias Sul (Ecosul)",
+      "padroes": [
+        "ecosul",
+        "ecovias sul"
+      ]
+    },
+    {
+      "nome": "Transbrasiliana",
+      "padroes": [
+        "transbrasiliana"
+      ]
+    },
+    {
+      "nome": "Via Araucária",
+      "padroes": [
+        "araucaria"
+      ]
+    },
+    {
+      "nome": "ViaSul",
+      "padroes": [
+        "\\bviasul",
+        "\\bvia sul\\b"
+      ]
+    },
+    {
+      "nome": "PR Vias",
+      "padroes": [
+        "pr ?vias"
+      ]
+    },
+    {
+      "nome": "EPR Iguaçu",
+      "padroes": [
+        "iguacu"
+      ]
+    },
+    {
+      "nome": "EPR Litoral Pioneiro",
+      "padroes": [
+        "litoral pioneiro"
+      ]
+    },
+    {
+      "nome": "EPR Via Mineira",
+      "padroes": [
+        "\\bvia mineira"
+      ]
+    },
+    {
+      "nome": "Via Cristais",
+      "padroes": [
+        "\\bvia cristais"
+      ]
+    },
+    {
+      "nome": "Way-262",
+      "padroes": [
+        "way[- ]?262"
+      ]
+    },
+    {
+      "nome": "Nova 364",
+      "padroes": [
+        "nova 364"
+      ]
+    },
+    {
+      "nome": "Nova 381",
+      "padroes": [
+        "nova 381"
+      ]
+    },
+    {
+      "nome": "Rota Verde Goiás",
+      "padroes": [
+        "rota verde"
+      ]
+    },
+    {
+      "nome": "Rota Sertaneja",
+      "padroes": [
+        "rota sertaneja"
+      ]
+    },
+    {
+      "nome": "Rota Agro",
+      "padroes": [
+        "rota agro"
+      ]
+    },
+    {
+      "nome": "Elovias",
+      "padroes": [
+        "elovias"
+      ]
+    },
+    {
+      "nome": "Rodovia do Aço",
+      "padroes": [
+        "rodovia do aco"
+      ]
+    },
+    {
+      "nome": "Via Campos",
+      "padroes": [
+        "\\bvia campos"
+      ]
+    },
+    {
+      "nome": "Motiva Minas SP",
+      "padroes": [
+        "motiva minas"
+      ]
+    },
+    {
+      "nome": "EPR Paraná",
+      "padroes": [
+        "epr parana"
+      ]
+    }
   ]
 }

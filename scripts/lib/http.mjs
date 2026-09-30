@@ -101,6 +101,30 @@ export class Sessao {
     throw erro;
   }
 
+  /** Baixa um arquivo binário (ex.: PDF) com as mesmas regras de pausa e repetição. */
+  async binario(url) {
+    let erro;
+    for (let t = 1; t <= this.tentativas; t++) {
+      try {
+        await this.esperarVez();
+        const resp = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(this.timeoutMs) });
+        this.total++;
+        if (resp.status >= 500 || resp.status === 429) throw new Error(`HTTP ${resp.status} em ${url}`);
+        if (!resp.ok) {
+          const e = new Error(`HTTP ${resp.status} em ${url}`);
+          e.definitivo = true;
+          throw e;
+        }
+        return new Uint8Array(await resp.arrayBuffer());
+      } catch (e) {
+        erro = e;
+        if (e.definitivo) break;
+        await dormir(1500 * t * t);
+      }
+    }
+    throw erro;
+  }
+
   async json(caminho, opcoes) {
     const t = await this.texto(caminho, opcoes);
     return JSON.parse(t);

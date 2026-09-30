@@ -128,6 +128,60 @@ export async function coletarListagem(sessao, fonte, { anoMinimo = 0, log = cons
 }
 
 /**
+ * "Decisões por concessionária" do canal RODOVIAS: lista curada pela ANTT que liga cada decisão/deliberação
+ * à sua concessão (inclusive PITs e DUPs cuja ementa não cita a concessionária).
+ * Devolve [{ nome, itens: [{ titulo, ementa, link }] }].
+ */
+export async function coletarDecisoesPorConcessionaria(sessao, { log = () => {} } = {}) {
+  sessao.limparCookies();
+  const menu = await sessao.texto(`${ACTION}?acao=categorias&cod_modulo=422&menuOpen=true`);
+  const listas = [...menu.matchAll(/href="\/action\/ActionDatalegis\.php\?acao=recuperarTematicasTitulo&cod_modulo=422&cod_menu=(\d+)"[^>]*>([^<]*)</g)]
+    .map((m) => ({ menu: m[1], nome: textoPuro(m[2]).replace(/\s*\([\d.]+\)\s*$/, '') }))
+    .filter((l) => !/aplica[çc][ãa]o geral|s[úu]mulas/i.test(l.nome));
+  const resultado = [];
+  const erros = [];
+  for (const l of listas) {
+    try {
+      const capa = await sessao.texto(`${ACTION}?acao=recuperarTematicasTitulo&cod_modulo=422&cod_menu=${l.menu}`);
+      // abas: anos + "RELAÇÃO GERAL" (todas); o link da página traz outro cod_modulo, que precisa ser o 422
+      const abas = [...capa.matchAll(/href="([^"]*acao=recuperarTematicasTitulo[^"]*letra=([^"&]*)[^"]*)"/g)].map((m) => ({
+        url: decodificarEntidades(m[1]).replace(/cod_modulo=\d+/, 'cod_modulo=422'),
+        rotulo: decodificarEntidades(m[2]),
+      }));
+      const geral = abas.find((a) => /rela[çc][ãa]o geral/i.test(a.rotulo));
+      const paginas = geral ? [geral.url] : abas.map((a) => a.url);
+      const itens = new Map();
+      for (const url of paginas.length ? paginas : [null]) {
+        const html = url ? await sessao.texto(url) : capa;
+        for (const art of html.match(/<article class="ato">[\s\S]*?<\/article>/gi) || []) {
+          const a = art.match(/href='([^']+)'[^>]*>\s*<strong>([\s\S]*?)<\/strong>\s*<p>([\s\S]*?)<\/p>/i);
+          if (!a) continue;
+          const titulo = desduplicarTitulo(textoPuro(a[2]));
+          itens.set(titulo, { titulo, ementa: textoPuro(a[3]), link: BASE_LEGIS + decodificarEntidades(a[1]) });
+        }
+      }
+      resultado.push({ nome: l.nome, itens: [...itens.values()] });
+      log(`   ${l.nome}: ${itens.size}`);
+    } catch (e) {
+      erros.push(`${l.nome}: ${e.message}`);
+    }
+  }
+  return { listas: resultado, erros };
+}
+
+/** "DECISÃO SUROD Nº 1.174, DE 21 DE AGOSTO DE 2026" -> { tipo: 'DCS', orgao: 'SUROD', numero: 1174, ano: 2026 } */
+export function chaveDoTitulo(titulo) {
+  const t = String(titulo).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+  const tipos = [[/^DECISAO/, 'DCS'], [/^DELIBERACAO/, 'DLB'], [/^RESOLUCAO/, 'RES'], [/^PORTARIA/, 'POR'], [/^INSTRUCAO NORMATIVA/, 'INM'], [/^VOTO/, 'VTO']];
+  const tipo = (tipos.find(([re]) => re.test(t.trim())) || [])[1];
+  const num = t.match(/N[O°º.]*\s*([\d.]+)/);
+  const ano = t.match(/(?:DE\s+\d{1,2}[O°º]?\s+DE\s+[A-Z]+\s+(?:DE\s+)?|\/)(\d{4})/);
+  if (!tipo || !num || !ano) return null;
+  const orgao = (t.match(/^(?:DECISAO|PORTARIA|VOTO)\s+(SUROD|SUINF|SUFIS|SUEXE|SUFER|DG|DDB|DGS)\b/) || [])[1] || null;
+  return { tipo, orgao, numero: parseInt(num[1].replace(/\./g, ''), 10), ano: +ano[1] };
+}
+
+/**
  * Busca no texto integral do ANTTlegis (mesma busca da "Busca Livre").
  * exato = true procura a expressão exata.
  */

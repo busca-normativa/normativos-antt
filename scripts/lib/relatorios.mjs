@@ -55,20 +55,27 @@ function anoDoSegmento(seg) {
   return m ? +m[0] : null;
 }
 
+// Seções da página de cada concessão que guardam documentos
+const SECOES = [
+  ['relatorios', 'Relatórios'],
+  ['documentos-de-gestao', 'Documentos de gestão'],
+  ['revisoes-e-reajustes', 'Revisões e reajustes'],
+];
+
 /**
- * Rastreia /relatorios de uma concessão.
+ * Rastreia uma seção (ex.: /relatorios) da página de uma concessão.
  * anoMinimo: pula as pastas de anos anteriores (modo incremental).
  */
-async function rastrearConcessao(sessao, conc, { anoMinimo = 0, maxPaginas = 250 } = {}) {
-  const raiz = `${conc.url}/relatorios`;
+async function rastrearConcessao(sessao, conc, capa, [secao, nomeSecao], { anoMinimo = 0, maxPaginas = 250 } = {}) {
+  const raiz = `${conc.url}/${secao}`;
   const fila = [];
   const titulos = new Map(); // url da página -> título
   const vistas = new Set();
   const itens = [];
   const erros = [];
+  const arquivos = new Set();
 
-  // Pontos de entrada: links da página da concessão para dentro de /relatorios
-  const capa = await sessao.texto(conc.url);
+  // Pontos de entrada: links da página da concessão para dentro da seção
   for (const m of capa.matchAll(/href="([^"]+)"/gi)) {
     const u = limparUrl(m[1], conc.url);
     if (u && u.startsWith(raiz + '/') && !/\.(pdf|xlsx?|docx?|zip)(\/view)?$/i.test(u)) fila.push(u);
@@ -100,7 +107,22 @@ async function rastrearConcessao(sessao, conc, { anoMinimo = 0, maxPaginas = 250
       const t = titulos.get(`${raiz}/${segs.slice(0, i).join('/')}`);
       if (t && !caminho.includes(t)) caminho.push(t);
     }
-    const categoria = caminho.join(' › ') || 'Relatórios';
+    const categoria = caminho.join(' › ') || titulos.get(raiz) || nomeSecao;
+    const registrar = (titulo, u, byline = '') => {
+      const limpa = u.replace(/\/(view|@@download\/file)$/, '');
+      if (arquivos.has(limpa)) return;
+      arquivos.add(limpa);
+      itens.push({
+        titulo: titulo || decodeURIComponent(limpa.split('/').pop()),
+        url: limpa,
+        concessao: conc.nome,
+        encerrada: conc.encerrada,
+        secao: nomeSecao,
+        categoria,
+        ano,
+        modificado: dataBR(textoPuro(byline)),
+      });
+    };
 
     // Abas por ano carregadas por AJAX
     for (const m of c.matchAll(/data-url="([^"]+)"/gi)) {
@@ -116,24 +138,21 @@ async function rastrearConcessao(sessao, conc, { anoMinimo = 0, maxPaginas = 250
       if (!u) continue;
       if (/^file$/i.test(a[2]) || /\.(pdf|xlsx?|docx?|zip|rar)(\/view)?$/i.test(u)) {
         const byline = (art.match(/documentByLine[^>]*>([\s\S]*?)<\/span>/i) || [])[1] || '';
-        itens.push({
-          titulo: textoPuro(a[3]) || decodeURIComponent(u.split('/').filter((s) => s !== 'view').pop()),
-          url: u.replace(/\/view$/, ''),
-          concessao: conc.nome,
-          encerrada: conc.encerrada,
-          categoria,
-          ano,
-          modificado: dataBR(textoPuro(byline)),
-        });
+        registrar(textoPuro(a[3]), u, byline);
       } else if (u.startsWith(raiz + '/')) {
         fila.push(u);
       }
     }
 
-    // Outros links de páginas internas (ex.: Verificador › Acompanhamento Mensal)
-    for (const m of c.matchAll(/<a\s[^>]*href="([^"]+)"/gi)) {
+    // Arquivos citados no texto da página (fora da listagem) e outras páginas internas
+    for (const m of c.matchAll(/<a\s[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi)) {
       const u = limparUrl(m[1], url);
-      if (u && u.startsWith(raiz + '/') && !/\/view$|\.(pdf|xlsx?|docx?|zip|rar)$|@@|resolveuid/i.test(u) && !vistas.has(u)) fila.push(u);
+      if (!u || /facebook|twitter|linkedin|whatsapp|sharer/i.test(u)) continue;
+      if (/gov\.br\/antt/.test(u) && /\.(pdf|xlsx?|docx?|zip|rar)(\/view|\/@@download\/file)?$|\/@@download\/file$/i.test(u)) {
+        registrar(textoPuro(m[2]), u);
+      } else if (u.startsWith(raiz + '/') && !/\/view$|\.(pdf|xlsx?|docx?|zip|rar)$|@@|resolveuid/i.test(u) && !vistas.has(u)) {
+        fila.push(u);
+      }
     }
   }
   return { itens, erros, paginas: vistas.size };
@@ -141,6 +160,18 @@ async function rastrearConcessao(sessao, conc, { anoMinimo = 0, maxPaginas = 250
 
 /** Nome curto do tipo de relatório, a partir da categoria. */
 export function tipoDoRelatorio(categoria, titulo) {
+  const cat = normalizar(categoria);
+  const tit = normalizar(titulo);
+  if (/contrato/.test(cat) || /programa de exploracao|\bper\b|contrato do edital|contrato de concessao|termo aditivo|^anexo/.test(tit)) return 'Contrato e anexos (PER)';
+  if (/tripartite|\bata\b/.test(`${cat} ${tit}`)) return 'Reuniões';
+  if (/planejamento (de obras|anual)/.test(cat)) return 'Planejamento de obras';
+  if (/\brdt\b|pesquisa/.test(cat)) return 'Pesquisa e desenvolvimento (RDT)';
+  if (/outorga|edital|estudos|esclarecimentos|cronograma|english/.test(cat)) return 'Processo de licitação';
+  if (/licenciamento/.test(cat)) return 'Licenciamento ambiental';
+  if (/arrolamento/.test(cat)) return 'Termo de arrolamento';
+  if (/licitac/.test(cat)) return 'Processo de licitação';
+  if (/reunio/.test(cat)) return 'Reuniões';
+  if (/revis|reajuste/.test(cat)) return 'Revisões e reajustes';
   const c = normalizar(`${categoria} ${titulo}`);
   if (/verificador/.test(c) && /mensal/.test(c)) return 'Relatório do Verificador (mensal)';
   if (/verificador/.test(c)) return 'Relatório do Verificador';
@@ -158,10 +189,15 @@ export async function coletarRelatorios({ anoMinimo = 0, log = console.log, paus
   const erros = [];
   for (const conc of concessoes) {
     try {
-      const r = await rastrearConcessao(sessao, conc, { anoMinimo });
-      itens.push(...r.itens);
-      erros.push(...r.erros);
-      log(`   ${conc.nome}: ${r.itens.length} arquivo(s) em ${r.paginas} página(s)`);
+      const capa = await sessao.texto(conc.url);
+      let n = 0;
+      for (const secao of SECOES) {
+        const r = await rastrearConcessao(sessao, conc, capa, secao, { anoMinimo });
+        itens.push(...r.itens);
+        erros.push(...r.erros);
+        n += r.itens.length;
+      }
+      log(`   ${conc.nome}: ${n} arquivo(s)`);
     } catch (e) {
       erros.push(`${conc.nome}: ${e.message}`);
       log(`   ! ${conc.nome}: ${e.message}`);

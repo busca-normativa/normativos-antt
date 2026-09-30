@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa das DUPs</title>
+  <meta name="description" content="Mapa das poligonais das Declarações de Utilidade Pública (DUP) das concessões rodoviárias federais, a partir dos quadros de coordenadas publicados pela ANTT.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231351b4'/%3E%3Cpath d='M9 8h10l4 4v12H9z' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 15h8M12 19h8' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/mapa.css">
+  <script>
+    try { const t = localStorage.getItem('tema-visual'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body class="pagina-mapa">
+  <header class="topo">
+    <div class="wrap">
+      <a class="marca" href="./"><span class="marca-logo" aria-hidden="true">FD</span> Normativos ANTT · Rodovias</a>
+      <nav aria-label="Links">
+        <a href="./"><span>← Voltar ao painel</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mapa-layout">
+    <aside class="mapa-lateral" aria-label="DUPs no mapa">
+      <h1>Mapa das DUPs</h1>
+      <p class="mapa-sub" id="mapa-resumo">Carregando…</p>
+      <label class="sr-only" for="m-busca">Buscar</label>
+      <input id="m-busca" type="search" placeholder="Município, obra, km ou nº da decisão" autocomplete="off">
+      <div class="mapa-filtros">
+        <label>Concessão
+          <select id="m-concessao"></select>
+        </label>
+        <label>Ano
+          <select id="m-ano"><option value="">Todos</option></select>
+        </label>
+      </div>
+      <div class="mapa-legenda" id="m-legenda"></div>
+      <ol class="mapa-lista" id="m-lista"></ol>
+    </aside>
+    <div id="mapa" class="mapa" role="region" aria-label="Mapa"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="assets/mapa.js"></script>
+</body>
+</html>

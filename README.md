@@ -9,7 +9,9 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 | **ANTTlegis** (anttlegis.antt.gov.br), listagens por ano | Resoluções, Deliberações, Instruções Normativas, Portarias (SUROD, SUINF, SUFIS, DG…), Portarias Conjuntas, Decisões SUROD, Notas Técnicas, Instruções de Serviço, Audiências e Consultas Públicas, Tomadas de Subsídios |
 | **ANTTlegis**, busca no texto integral | Para cada tema (ex.: desapropriação), os atos em que o termo aparece **no texto completo**, não só na ementa |
 | **gov.br/antt**, "Normativos de Rodovias" | Destaques curados (RCR, POPs, INs, manuais, PAF, ofícios circulares, portarias do Ministério dos Transportes, normas das OIAs) |
-| **gov.br/antt**, páginas de cada concessão | Relatórios de Monitoração, do Verificador Independente (inclusive o acompanhamento mensal), de Acompanhamento das Principais Obras e financeiros — título, concessão, ano e link do PDF |
+| **gov.br/antt**, páginas de cada concessão | Relatórios (monitoração, verificador independente, obras, financeiros), documentos de gestão (contrato e PER, planejamento de obras, licenças ambientais, termo de arrolamento, atas das reuniões tripartite) e revisões/reajustes — título, concessão, ano e link |
+| **ANTTlegis**, "Decisões por concessionária" | Lista oficial que liga cada decisão à sua concessão (inclusive PITs e DUPs cuja ementa não cita a concessionária) |
+| **ANTTlegis**, texto integral das DUPs e autorizações de uso da faixa | Fichas com concessionária, obra/objeto, rodovia, km, município, processo SEI, urgência, CPEU, DOU e anexo |
 
 > Não é um canal oficial da ANTT. Confira sempre o texto vigente no ANTTlegis ou no DOU.
 
@@ -27,6 +29,10 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 - **Busca**: digite o assunto, um número de ato ou uma expressão. Ao reconhecer um tema (ex.: *desapropriação*, *faixa de domínio*, *pedágio*), o painel inclui os atos do tema encontrados no texto integral.
 - **Conteúdo**: escolha entre tudo, só normas e atos, ou só os relatórios das concessões. Combine com o filtro "Órgão ou concessão" para ver os relatórios de uma concessão específica (ex.: *monitoração faixa de domínio* + Via Brasil).
 - **DUPs**: cada Declaração de Utilidade Pública ganha uma *ficha* extraída do texto integral: concessionária, obra, rodovia, trecho (km), município, processo SEI, urgência e data do DOU. Marque **"Só DUPs"** ou busque, por exemplo, *DUP Via Brasil* ou o nome de um município. A planilha exportada traz essas colunas.
+- **Uso da faixa (PIT, ocupações, acessos)**: as autorizações também ganham ficha — interessado, objeto, tipo de uso (acesso, rede elétrica, fibra, água/esgoto, gás, travessia, publicidade…), rodovia, km, pista/lado, município, concessionária, processo e exigência de CPEU. Use **"Só uso da faixa"** e o filtro **"Tipo de uso da faixa"**.
+- **Anexo e SEI**: a ficha traz o link do anexo com o quadro de coordenadas (quando publicado em PDF) e o botão **"Consultar processo no SEI"**, que copia o número e abre a pesquisa pública do SEI da ANTT (lá é preciso resolver o captcha).
+- **Mapa das DUPs** (`mapa.html`, link no topo do painel): as poligonais de cada DUP, lidas do quadro de coordenadas (PDF anexo ou tabela no próprio ato, SIRGAS 2000/UTM) e convertidas para latitude/longitude, sobre imagem de satélite ou mapa de ruas. Filtros por concessão (Via Brasil primeiro), ano e busca por município/obra/km; cada área abre a ficha com links para o ato, o PDF e o painel. Na ficha da DUP, o link **"Ver no mapa"** leva direto à área.
+- **Avisos de novidades**: a cada atualização, os atos novos das concessões listadas em `config/alertas.json` (hoje, a Via Brasil) viram um aviso (*issue*) no GitHub, com e-mail para quem está em `mencionar` e para quem acompanha o repositório (botão **Watch**).
 - **Concessão**: filtro próprio, com as concessões marcadas como destaque em `config/concessoes.json` (hoje, a Via Brasil) sempre no topo. Nos resultados parecidos, os itens da concessão em destaque aparecem primeiro.
 - **Temas**: os cartões no topo filtram por assunto. Os temas ficam em `config/temas.json` e são editáveis.
 - **Filtros**: tipo de ato, órgão (SUROD, DG, SUINF…), período, "ocultar revogados", "só destaques do gov.br". Por padrão ficam ocultos atos exclusivos de ferrovias, passageiros ou cargas (o painel avisa quantos e permite mostrar).
@@ -37,7 +43,7 @@ A base é montada automaticamente a partir de fontes públicas e é atualizada t
 
 ## Rodar no computador
 
-Requer [Node.js](https://nodejs.org) 20 ou mais recente (não há `npm install`: o projeto não usa bibliotecas externas).
+Requer [Node.js](https://nodejs.org) 20 ou mais recente. Rode `npm install` uma vez: a única biblioteca externa é a `pdfjs-dist`, usada para ler os quadros de coordenadas das DUPs (sem ela, o resto da coleta funciona normalmente e o mapa usa só os quadros publicados no texto dos atos).
 
 ```bash
 npm start
@@ -55,7 +61,9 @@ npm run coletar
 | `npm run coletar:completo` | Recoleta todos os anos (capta revogações de atos antigos) | 15 a 25 min |
 | `npm run coletar:rapido` | Incremental sem a busca por temas | 1 a 2 min |
 
-Outras opções: `--sem-relatorios` pula os relatórios das concessões; `--sem-govbr` pula as páginas curadas do gov.br.
+Outras opções: `--sem-relatorios` pula os documentos das concessões; `--sem-govbr` pula as páginas curadas do gov.br; `--sem-concessoes` pula a lista "Decisões por concessionária"; `--sem-fichas` não lê o texto integral das DUPs/autorizações; `--max-fichas=N` limita quantas fichas novas são lidas por execução (padrão 2.500); `--refazer-dups` relê as fichas de DUP já existentes; `--sem-mapa` pula a leitura dos quadros de coordenadas.
+
+Para testar os avisos localmente: `node scripts/novidades.mjs --saida=novidades.md` (compara a base atual com a última versão gravada no Git).
 
 ## Publicar no GitHub (recomendado)
 
@@ -74,6 +82,19 @@ Outras opções: `--sem-relatorios` pula os relatórios das concessões; `--sem-
 A partir daí o painel se atualiza sozinho todo dia às 07:30 (Brasília).
 
 **Se a coleta falhar no GitHub** (os servidores do GitHub ficam fora do Brasil e sites do governo às vezes bloqueiam acessos estrangeiros), o painel continua no ar com a última base e mostra um aviso. Alternativas: rodar `npm run coletar` em um computador da rede e fazer `git push`, ou cadastrar um *self-hosted runner* do GitHub Actions numa máquina no Brasil (troque `runs-on: ubuntu-latest` por `runs-on: self-hosted`).
+
+## E-mail de novidades
+
+Os atos novos das concessões de `config/alertas.json` são enviados por e-mail para os endereços em `"emails"` (hoje, faixadedominio@viabrasilbr163.com.br). O envio usa uma conta de e-mail remetente (SMTP), cadastrada **uma vez** no repositório, em **Settings → Secrets and variables → Actions → New repository secret**:
+
+| Secret | Exemplo (Gmail) | Exemplo (Microsoft 365) |
+|---|---|---|
+| `SMTP_SERVIDOR` | `smtp.gmail.com` | `smtp.office365.com` |
+| `SMTP_PORTA` | `465` | `587` |
+| `SMTP_USUARIO` | a conta remetente | a conta remetente |
+| `SMTP_SENHA` | *senha de app* da conta Google | senha da conta (o SMTP autenticado precisa estar liberado pela TI) |
+
+Sem esses Secrets, a automação continua criando o aviso no GitHub, só não envia o e-mail. Para testar, rode o workflow manualmente (Actions → Atualizar normativos → Run workflow) num dia com novidades.
 
 ## Personalizar
 

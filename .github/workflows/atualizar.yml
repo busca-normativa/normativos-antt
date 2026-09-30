@@ -20,6 +20,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: atualizar-normativos
@@ -39,6 +40,11 @@ jobs:
         with:
           node-version: 22
 
+      # pdfjs-dist: leitura dos quadros de coordenadas das DUPs (mapa)
+      - name: Instalar dependências
+        if: github.event_name != 'push'
+        run: npm ci --no-audit --no-fund
+
       - name: Coletar normativos
         if: github.event_name != 'push'
         run: |
@@ -47,6 +53,46 @@ jobs:
           else
             node scripts/coletar.mjs
           fi
+
+      # Compara com a versão anterior (ainda no Git) e avisa por issue/e-mail os atos novos das concessões acompanhadas
+      - name: Verificar novidades
+        if: github.event_name != 'push'
+        run: node scripts/novidades.mjs --saida=novidades.md
+
+      - name: Avisar novidades
+        if: github.event_name != 'push' && hashFiles('novidades.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create novidades --color 1351b4 --description "Atos novos das concessões acompanhadas" --force
+          gh issue create --title "$(cat novidades.md.titulo)" --body-file novidades.md --label novidades
+
+      # E-mail direto para os endereços de config/alertas.json. Só roda se os Secrets SMTP_* estiverem configurados
+      # (Settings → Secrets and variables → Actions): SMTP_SERVIDOR, SMTP_PORTA, SMTP_USUARIO, SMTP_SENHA.
+      - name: Preparar e-mail
+        id: email
+        if: github.event_name != 'push' && hashFiles('novidades.md') != ''
+        env:
+          SMTP_USUARIO: ${{ secrets.SMTP_USUARIO }}
+        run: |
+          echo "para=$(node -e "console.log((require('./config/alertas.json').emails||[]).join(','))")" >> "$GITHUB_OUTPUT"
+          echo "assunto=$(cat novidades.md.titulo)" >> "$GITHUB_OUTPUT"
+          if [ -n "$SMTP_USUARIO" ]; then echo "ativo=sim" >> "$GITHUB_OUTPUT"; else echo "Secrets SMTP não configurados: e-mail não enviado (o aviso no GitHub foi criado)."; fi
+
+      - name: Enviar e-mail
+        if: steps.email.outputs.ativo == 'sim' && steps.email.outputs.para != ''
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVIDOR }}
+          server_port: ${{ secrets.SMTP_PORTA }}
+          secure: ${{ secrets.SMTP_PORTA == '465' }}
+          username: ${{ secrets.SMTP_USUARIO }}
+          password: ${{ secrets.SMTP_SENHA }}
+          from: Painel Normativos ANTT <${{ secrets.SMTP_USUARIO }}>
+          to: ${{ steps.email.outputs.para }}
+          subject: ${{ steps.email.outputs.assunto }}
+          html_body: file://novidades.md
+          convert_markdown: true
 
       - name: Salvar dados no repositório
         if: github.event_name != 'push'

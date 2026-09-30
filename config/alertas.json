@@ -1,0 +1,11 @@
+{
+  "_comentario": "Avisos de novidades: a cada atualização, os atos NOVOS dessas concessões (e as DUPs/usos da faixa delas) viram um aviso (issue) no GitHub e um e-mail para os endereços em 'emails' (o envio de e-mail exige os Secrets SMTP_* configurados no repositório). 'mencionar' são usuários do GitHub avisados pela issue. Deixe 'concessoes' vazio para não gerar avisos.",
+  "concessoes": [
+    "Via Brasil BR-163"
+  ],
+  "emails": [],
+  "mencionar": [
+    "carloseduardosnp01-art"
+  ],
+  "maxItens": 60
+}

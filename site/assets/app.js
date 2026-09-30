@@ -7,7 +7,7 @@ const LEGIS = 'https://anttlegis.antt.gov.br/action/ActionDatalegis.php';
 const BUSCA_LIVRE = `${LEGIS}?acao=abrirLegislacao&cod_modulo=161&cod_menu=5408`;
 const POR_PAGINA = 50;
 
-const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', cc: 'concessao' };
+const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', fa: 'faixa', cc: 'concessao', mp: 'noMapa' };
 const SETORES = { R: 'Rodovias', F: 'Ferrovias', P: 'Passageiros', C: 'Cargas', G: 'Geral' };
 const STOP = new Set('de da do das dos e o a os as em no na nos nas para por com sobre ao aos um uma que se ou sem sob pelo pela pelos pelas n'.split(' '));
 const SUFIXOS = ['acoes', 'icoes', 'mentos', 'mento', 'acao', 'icao', 'ados', 'adas', 'idos', 'idas', 'ado', 'ada', 'ido', 'ida', 'ares', 'eres', 'ires', 'ar', 'er', 'ir', 'oes', 'aes', 'ais', 'eis', 'es', 's'];
@@ -92,6 +92,8 @@ const estado = {
   conteudo: 'tudo', // tudo | normas | relatorios
   concessao: '',
   soDups: false,
+  soFaixa: false,
+  uso: '',
   orgao: '',
   categoria: '',
   de: null,
@@ -127,7 +129,11 @@ async function carregar() {
     a.temas = a.temas || [];
     a.setores = a.setores || ['G'];
     const d = a.dup;
-    const ficha = d ? [d.concessionaria, d.obra, d.processo, ...(d.rodovias || []), ...(d.kms || []), ...(d.municipios || []), 'DUP declaração de utilidade pública'] : [];
+    const fx = a.faixa;
+    const ficha = [
+      ...(d ? [d.concessionaria, d.obra, d.processo, ...(d.rodovias || []), ...(d.kms || []), ...(d.municipios || []), 'DUP declaração de utilidade pública'] : []),
+      ...(fx ? [fx.interessado, fx.objeto, fx.concessionaria, fx.processo, ...(fx.usos || []), ...(fx.rodovias || []), ...(fx.kms || []), ...(fx.municipios || []), 'uso da faixa de domínio', /interesse de terceiro/i.test(a.ementa) ? 'PIT' : ''] : []),
+    ];
     a._h = semMilhar(normalizar([a.titulo, a.ementa, a.nota, a.tipoNome, a.orgao, a.destaque, a.concessao, ...ficha].filter(Boolean).join(' · ')));
     a._ti = semMilhar(normalizar(a.titulo));
     a._sit = classeSituacao(a.situacao);
@@ -250,20 +256,22 @@ function aplicar() {
     (!estado.vigentes || a._sit !== 'revogado') &&
     (!estado.destaque || a.destaque) &&
     (!estado.categoria || a.destaque === estado.categoria) &&
-    (!estado.soDups || a.dup);
+    (!(estado.soDups || estado.soFaixa) || (estado.soDups && a.dup) || (estado.soFaixa && a.faixa));
   const f1 = lista.filter((a) => passaAbrangencia(a));
   const ocultosSetor = estado.rodovias ? lista.filter((a) => !a._rod && passaAbrangencia(a, true)).length : 0;
   const passaTipo = (a) => (!estado.tipos.size || estado.tipos.has(a.tipoNome)) && !estado.tiposFora.has(a.tipoNome);
   const passaOrgao = (a) => !estado.orgao || a._org === estado.orgao;
   const passaConc = (a) => !estado.concessao || a.concessao === estado.concessao;
+  const passaUso = (a) => !estado.uso || (a.faixa?.usos || []).includes(estado.uso);
   const passaPeriodo = (a) => (!estado.de || (a.ano || 0) >= estado.de) && (!estado.ate || (a.ano || 0) <= estado.ate);
 
   const paraAno = f1.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
   const f2 = f1.filter(passaPeriodo);
   const paraTipo = f2.filter((a) => passaOrgao(a) && passaConc(a));
   const paraOrgao = f2.filter((a) => passaTipo(a) && passaConc(a));
-  const paraConc = f2.filter((a) => passaTipo(a) && passaOrgao(a));
-  const final = f2.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
+  const paraConc = f2.filter((a) => passaTipo(a) && passaOrgao(a) && passaUso(a));
+  const paraUso = f2.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
+  const final = f2.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a) && passaUso(a));
 
   const ordem = estado.ordem === 'auto' ? (consulta.vazia ? 'recentes' : 'relevancia') : estado.ordem;
   const porData = (x, y) => (y._dt || '').localeCompare(x._dt || '') || (y.numero || 0) - (x.numero || 0);
@@ -272,7 +280,7 @@ function aplicar() {
   else final.sort((x, y) => -porData(x, y));
 
   ultimo = { final, consulta };
-  desenharTudo({ final, consulta, paraAno, paraTipo, paraOrgao, paraConc, ocultosSetor, ordem });
+  desenharTudo({ final, consulta, paraAno, paraTipo, paraOrgao, paraConc, paraUso, ocultosSetor, ordem });
   salvarUrl();
 }
 
@@ -282,6 +290,7 @@ function desenharTudo(ctx) {
   desenharTemas();
   desenharFacetas(ctx.paraTipo, ctx.paraOrgao);
   desenharConcessoes(ctx.paraConc);
+  desenharUsos(ctx.paraUso);
   desenharGraficoAno(ctx.paraAno);
   desenharGraficoTipo(ctx.paraTipo);
   desenharCabecalho(ctx);
@@ -354,6 +363,14 @@ function desenharConcessoes(paraConc) {
   $('#atalho-destaque').innerHTML = destaques
     .map((c) => `<button type="button" class="link-botao" data-concessao="${escapar(c)}">${estado.concessao === c ? 'ver todas as concessões' : `só ${escapar(c)}`}</button>`)
     .join(' ');
+}
+
+function desenharUsos(paraUso) {
+  const cont = {};
+  for (const a of paraUso) for (const u of a.faixa?.usos || []) cont[u] = (cont[u] || 0) + 1;
+  const usos = Object.entries(cont).sort((a, b) => b[1] - a[1]);
+  if (estado.uso && !cont[estado.uso]) usos.unshift([estado.uso, 0]);
+  $('#f-uso').innerHTML = `<option value="">Todos</option>` + usos.map(([u, n]) => `<option value="${escapar(u)}" ${u === estado.uso ? 'selected' : ''}>${escapar(u)} (${compacto(n)})</option>`).join('');
 }
 
 function contar(lista, fn) {
@@ -474,13 +491,15 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
 
   // filtros ativos
   const chips = [];
-  if (estado.conteudo !== 'tudo') chips.push(['conteudo', estado.conteudo === 'relatorios' ? 'Só relatórios' : 'Só normas e atos']);
+  if (estado.conteudo !== 'tudo') chips.push(['conteudo', estado.conteudo === 'relatorios' ? 'Só docs. das concessões' : 'Só normas e atos']);
   if (estado.tema) chips.push(['tema', `Tema: ${TEMA_POR_ID.get(estado.tema)?.nome}`]);
   for (const t of estado.tipos) chips.push([`tipo:${t}`, t]);
   for (const t of estado.tiposFora) chips.push([`fora:${t}`, `Sem ${t}`]);
   if (estado.orgao) chips.push(['orgao', `Órgão: ${estado.orgao}`]);
   if (estado.concessao) chips.push(['concessao', `Concessão: ${estado.concessao}`]);
   if (estado.soDups) chips.push(['soDups', 'Só DUPs']);
+  if (estado.soFaixa) chips.push(['soFaixa', 'Só uso da faixa']);
+  if (estado.uso) chips.push(['uso', `Uso: ${estado.uso}`]);
   if (estado.categoria) chips.push(['categoria', `gov.br: ${estado.categoria}`]);
   if (estado.de || estado.ate) chips.push(['periodo', estado.de === estado.ate ? `Ano: ${estado.de}` : `Período: ${estado.de || '…'}–${estado.ate || '…'}`]);
   if (estado.vigentes) chips.push(['vigentes', 'Sem revogados']);
@@ -519,8 +538,23 @@ function destacar(texto, termos) {
   return out + escapar(texto.slice(pos));
 }
 
+const SEI_PESQUISA = 'https://sei.antt.gov.br/sei/modulos/pesquisa/md_pesq_processo_pesquisar.php?acao_externa=protocolo_pesquisar&acao_origem_externa=protocolo_pesquisar&id_orgao_acesso_externo=0';
+
+function montarFicha(titulo, linhas, f, termos) {
+  const itens = linhas.filter(([, v]) => v);
+  if (!itens.length) return '';
+  const acoes = [
+    f.mapaId ? `<a class="link-botao" href="mapa.html#${encodeURIComponent(f.mapaId)}">Ver no mapa</a>` : '',
+    f.anexo ? `<a class="link-botao" href="${escapar(f.anexo)}" target="_blank" rel="noopener">Anexo — quadro de coordenadas (PDF) ↗</a>` : '',
+    f.processo ? `<button type="button" class="link-botao" data-sei="${escapar(f.processo)}" title="Copia o número e abre a pesquisa pública do SEI da ANTT">Consultar processo no SEI ↗</button>` : '',
+    f.quadroNoTexto ? '<span class="nota-ficha">Quadro de coordenadas no próprio texto do ato</span>' : '',
+    f.anexoDivergente ? `<span class="nota-ficha alerta-ficha">⚠ O anexo publicado cita outro processo (${escapar(f.anexoDivergente)}) — possível erro de publicação; confira no ANTTlegis</span>` : '',
+  ].filter(Boolean);
+  return `<dl class="ficha-dup"><div class="ficha-titulo">${titulo}</div>${itens.map(([k, v]) => `<div><dt>${k}</dt><dd>${destacar(v, termos)}</dd></div>`).join('')}${acoes.length ? `<div class="ficha-acoes">${acoes.join('')}</div>` : ''}</dl>`;
+}
+
 function fichaDup(d, termos) {
-  const linhas = [
+  return montarFicha('Ficha da DUP', [
     ['Concessionária', d.concessionaria],
     ['Obra', d.obra],
     ['Rodovia', (d.rodovias || []).join(', ')],
@@ -529,9 +563,23 @@ function fichaDup(d, termos) {
     ['Processo SEI', d.processo],
     ['Urgência', d.urgencia ? 'autorizada (imissão na posse)' : ''],
     ['DOU', d.dou ? dataBR(d.dou) : ''],
-  ].filter(([, v]) => v);
-  if (!linhas.length) return '';
-  return `<dl class="ficha-dup"><div class="ficha-titulo">Ficha da DUP</div>${linhas.map(([k, v]) => `<div><dt>${k}</dt><dd>${destacar(v, termos)}</dd></div>`).join('')}</dl>`;
+  ], d, termos);
+}
+
+function fichaFaixa(f, termos) {
+  return montarFicha('Ficha do uso da faixa', [
+    ['Interessado', f.interessado],
+    ['Objeto', f.objeto],
+    ['Tipo de uso', (f.usos || []).join(', ')],
+    ['Rodovia', (f.rodovias || []).join(', ')],
+    ['Trecho', (f.kms || []).join('; ')],
+    ['Lado / pista', f.lado],
+    ['Município', (f.municipios || []).join(', ')],
+    ['Concessionária', f.concessionaria],
+    ['Processo SEI', f.processo],
+    ['CPEU', f.cpeu ? 'exige Contrato de Permissão Especial de Uso' : ''],
+    ['DOU', f.dou ? dataBR(f.dou) : ''],
+  ], f, termos);
 }
 
 function cartaoAto(a, termos, extra = '') {
@@ -547,12 +595,13 @@ function cartaoAto(a, termos, extra = '') {
     : [a.tipo === 'GOV' ? a.orgao : a.orgao?.replace(/\/ANTT.*$/, ''), a.data ? `ato de ${dataBR(a.data)}` : a.ano, a.publicado && a.publicado !== a.data ? `publicado em ${dataBR(a.publicado)}` : ''].filter(Boolean).join(' · ');
   const origem = rel ? 'Abrir relatório' : a.tipo === 'GOV' ? 'Abrir documento' : 'Abrir no ANTTlegis';
   return `<li class="ato" data-id="${escapar(a.id)}">
-    <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${a.dup ? '<span class="selo dup">DUP</span>' : ''}${conc}${sit}${dest}${setores}${extra}</div>
+    <div class="linha1"><span class="selo tipo">${escapar(a.tipoNome || a.tipo)}</span>${a.dup ? '<span class="selo dup">DUP</span>' : ''}${a.faixa ? `<span class="selo dup faixa">${/interesse de terceiro/i.test(a.ementa) ? 'PIT' : 'FAIXA'}</span>` : ''}${conc}${sit}${dest}${setores}${extra}</div>
     <h3><a href="${escapar(url)}" target="_blank" rel="noopener">${destacar(a.titulo || a.id, termos)}</a></h3>
     <div class="meta">${escapar(meta)}</div>
     ${a.ementa ? `<p class="ementa">${destacar(a.ementa, termos)}</p>` : ''}
     ${a.nota ? `<p class="nota"><strong>gov.br:</strong> ${destacar(a.nota, termos)}</p>` : ''}
-    ${a.dup ? fichaDup(a.dup, termos) : ''}
+    ${a.dup ? fichaDup({ ...a.dup, mapaId: a.noMapa ? a.id : null }, termos) : ''}
+    ${a.faixa ? fichaFaixa(a.faixa, termos) : ''}
     <div class="rodape-ato">
       <div class="temas-ato">${temas}</div>
       <div class="acoes">
@@ -588,6 +637,8 @@ function salvarUrl() {
   if (estado.orgao) p.set('orgao', estado.orgao);
   if (estado.concessao) p.set('concessao', estado.concessao);
   if (estado.soDups) p.set('dups', '1');
+  if (estado.soFaixa) p.set('faixa', '1');
+  if (estado.uso) p.set('uso', estado.uso);
   if (estado.categoria) p.set('gov', estado.categoria);
   if (estado.de) p.set('de', estado.de);
   if (estado.ate) p.set('ate', estado.ate);
@@ -609,6 +660,8 @@ function lerUrl() {
   estado.orgao = p.get('orgao') || '';
   estado.concessao = p.get('concessao') || '';
   estado.soDups = p.get('dups') === '1';
+  estado.soFaixa = p.get('faixa') === '1';
+  estado.uso = p.get('uso') || '';
   estado.categoria = p.get('gov') || '';
   estado.de = +p.get('de') || null;
   estado.ate = +p.get('ate') || null;
@@ -625,20 +678,31 @@ function sincronizarControles() {
   $('#f-vigentes').checked = estado.vigentes;
   $('#f-destaque').checked = estado.destaque;
   $('#f-dups').checked = estado.soDups;
+  $('#f-faixa').checked = estado.soFaixa;
   $('#f-de').value = estado.de || '';
   $('#f-ate').value = estado.ate || '';
 }
 
 // ---------------------------------------------------------------- exportação
+function linhaFicha(a) {
+  const f = a.dup || a.faixa;
+  if (!f) return Array(11).fill('');
+  return [
+    a.dup ? 'DUP' : 'Uso da faixa', f.concessionaria || '', f.interessado || '', f.obra || f.objeto || '', (f.usos || []).join(', '),
+    (f.rodovias || []).join(', '), (f.kms || []).join('; '), (f.municipios || []).join(', '), f.processo || '',
+    a.dup ? (f.urgencia ? 'sim' : 'não') : '', dataBR(f.dou),
+  ];
+}
+
 function exportarCsv() {
   const lista = ultimo.final;
   if (!lista.length) return toast('Não há resultados para exportar');
-  const cab = ['Tipo', 'Número', 'Ano', 'Título', 'Ementa', 'Situação', 'Data do ato', 'Publicação', 'Órgão', 'Concessão', 'Temas', 'Destaque gov.br', 'DUP: concessionária', 'DUP: obra', 'DUP: rodovias', 'DUP: km', 'DUP: municípios', 'DUP: processo', 'DUP: urgência', 'DUP: DOU', 'Link'];
+  const cab = ['Tipo', 'Número', 'Ano', 'Título', 'Ementa', 'Situação', 'Data do ato', 'Publicação', 'Órgão', 'Concessão', 'Temas', 'Destaque gov.br', 'Ficha', 'Concessionária', 'Interessado', 'Obra / objeto', 'Tipo de uso', 'Rodovias', 'km', 'Municípios', 'Processo SEI', 'Urgência', 'DOU', 'Link'];
   const cel = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const linhas = lista.map((a) => [
     a.tipoNome, a.numero ?? '', a.ano ?? '', a.titulo, a.ementa, a.situacao, dataBR(a.data), dataBR(a.publicado), a.orgao,
     a.concessao || '', (a.temas || []).map((t) => TEMA_POR_ID.get(t)?.nome).filter(Boolean).join(', '), a.destaque || '',
-    ...(a.dup ? [a.dup.concessionaria || '', a.dup.obra || '', (a.dup.rodovias || []).join(', '), (a.dup.kms || []).join('; '), (a.dup.municipios || []).join(', '), a.dup.processo || '', a.dup.urgencia ? 'sim' : 'não', dataBR(a.dup.dou)] : ['', '', '', '', '', '', '', '']),
+    ...linhaFicha(a),
     urlDoAto(a),
   ].map(cel).join(';'));
   const csv = '﻿' + [cab.map(cel).join(';'), ...linhas].join('\r\n');
@@ -740,10 +804,12 @@ function ligarEventos() {
   $('#f-orgao').addEventListener('change', (e) => { estado.orgao = e.target.value; executar(); });
   $('#f-concessao').addEventListener('change', (e) => { estado.concessao = e.target.value; executar(); });
   $('#f-dups').addEventListener('change', (e) => { estado.soDups = e.target.checked; executar(); });
+  $('#f-faixa').addEventListener('change', (e) => { estado.soFaixa = e.target.checked; executar(); });
+  $('#f-uso').addEventListener('change', (e) => { estado.uso = e.target.value; executar(); });
   $('#f-categoria').addEventListener('change', (e) => { estado.categoria = e.target.value; executar(); });
   $('#ordem').addEventListener('change', (e) => { estado.ordem = e.target.value; executar(); });
   $('#limpar').addEventListener('click', () => {
-    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', concessao: '', soDups: false, orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
+    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', concessao: '', soDups: false, soFaixa: false, uso: '', orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
     sincronizarControles();
     executar();
   });
@@ -768,6 +834,8 @@ function ligarEventos() {
       else if (k === 'orgao') estado.orgao = '';
       else if (k === 'concessao') estado.concessao = '';
       else if (k === 'soDups') estado.soDups = false;
+      else if (k === 'soFaixa') estado.soFaixa = false;
+      else if (k === 'uso') estado.uso = '';
       else if (k === 'categoria') estado.categoria = '';
       else if (k === 'periodo') { estado.de = null; estado.ate = null; }
       else if (k === 'vigentes') estado.vigentes = false;
@@ -792,6 +860,13 @@ function ligarEventos() {
       if (estado.de === ano && estado.ate === ano) { estado.de = null; estado.ate = null; } else { estado.de = ano; estado.ate = ano; }
       sincronizarControles();
       executar();
+      return;
+    }
+    const sei = e.target.closest('[data-sei]');
+    if (sei) {
+      await copiar(sei.dataset.sei);
+      window.open(SEI_PESQUISA, '_blank', 'noopener');
+      toast(`Processo ${sei.dataset.sei} copiado — cole no campo "Nº do processo" do SEI`);
       return;
     }
     const atalho = e.target.closest('[data-concessao]');

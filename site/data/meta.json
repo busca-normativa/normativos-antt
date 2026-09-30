@@ -1,9 +1,9 @@
 {
-  "atualizadoEm": "2026-09-29T19:22:49.510Z",
+  "atualizadoEm": "2026-09-30T12:48:01.544Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 672,
-  "total": 34297,
+  "duracaoSegundos": 24,
+  "total": 40173,
   "porTipo": {
     "Decisão": 4539,
     "Deliberação": 11011,
@@ -31,22 +31,30 @@
     "Nota Técnica": 3,
     "Portaria Complementar": 16,
     "Lei": 12,
-    "Relatório de Obras": 950,
+    "Relatório de Obras": 2619,
     "Relatório de Monitoração": 1297,
-    "Relatório do Verificador": 6,
-    "Relatório Financeiro": 8,
+    "Relatório do Verificador": 10,
+    "Relatório Financeiro": 352,
     "Relatório do Verificador (mensal)": 18,
-    "Relatório de Concessão": 3,
+    "Relatório de Concessão": 45,
     "Ofício Circular": 2,
     "Norma Técnica": 250,
     "Manual": 61,
     "Regulamento": 9,
-    "Plano de Fiscalização": 4
+    "Plano de Fiscalização": 4,
+    "Termo de arrolamento": 222,
+    "Licenciamento ambiental": 393,
+    "Contrato e anexos (PER)": 196,
+    "Reuniões": 214,
+    "Planejamento de obras": 820,
+    "Revisões e reajustes": 1772,
+    "Pesquisa e desenvolvimento (RDT)": 46,
+    "Processo de licitação": 154
   },
   "porSetor": {
-    "R": 15463,
-    "C": 1756,
-    "G": 12916,
+    "R": 21122,
+    "C": 1758,
+    "G": 13132,
     "F": 2369,
     "P": 3116
   },
@@ -66,7 +74,7 @@
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
-    "relatorios": 2282
+    "relatorios": 8158
   },
   "fontes": [
     {
@@ -154,245 +162,286 @@
     {
       "nome": "Via Brasil BR-163",
       "destaque": true,
-      "total": 157,
-      "dups": 20
+      "total": 224,
+      "dups": 20,
+      "faixa": 15
     },
     {
       "nome": "Nova Rota do Oeste",
       "destaque": false,
-      "total": 519,
-      "dups": 65
+      "total": 810,
+      "dups": 65,
+      "faixa": 185
     },
     {
       "nome": "Motiva Pantanal (MSVia)",
       "destaque": false,
-      "total": 334,
-      "dups": 24
+      "total": 583,
+      "dups": 24,
+      "faixa": 217
     },
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 429,
-      "dups": 55
+      "total": 846,
+      "dups": 57,
+      "faixa": 233
     },
     {
       "nome": "Autopista Fluminense",
       "destaque": false,
-      "total": 316,
-      "dups": 25
+      "total": 716,
+      "dups": 28,
+      "faixa": 146
     },
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 673,
-      "dups": 22
+      "total": 1527,
+      "dups": 29,
+      "faixa": 862
     },
     {
       "nome": "Autopista Planalto Sul",
       "destaque": false,
-      "total": 313,
-      "dups": 6
+      "total": 626,
+      "dups": 7,
+      "faixa": 157
     },
     {
       "nome": "Autopista Régis Bittencourt",
       "destaque": false,
-      "total": 494,
-      "dups": 10
+      "total": 841,
+      "dups": 11,
+      "faixa": 256
     },
     {
       "nome": "Autopista Fernão Dias",
       "destaque": false,
-      "total": 528,
-      "dups": 18
+      "total": 584,
+      "dups": 19,
+      "faixa": 391
     },
     {
       "nome": "ViaCosteira",
       "destaque": false,
-      "total": 291,
-      "dups": 80
+      "total": 423,
+      "dups": 83,
+      "faixa": 43
     },
     {
       "nome": "Concebra",
       "destaque": false,
-      "total": 335,
-      "dups": 6
+      "total": 636,
+      "dups": 7,
+      "faixa": 276
     },
     {
       "nome": "Concer",
       "destaque": false,
-      "total": 610,
-      "dups": 0
+      "total": 1000,
+      "dups": 0,
+      "faixa": 219
     },
     {
       "nome": "ViaBahia",
       "destaque": false,
-      "total": 344,
-      "dups": 15
+      "total": 842,
+      "dups": 26,
+      "faixa": 295
     },
     {
       "nome": "Via 040",
       "destaque": false,
-      "total": 228,
-      "dups": 7
+      "total": 479,
+      "dups": 8,
+      "faixa": 244
     },
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 278,
-      "dups": 22
+      "total": 614,
+      "dups": 22,
+      "faixa": 128
     },
     {
       "nome": "Ecovias Minas Goiás (Eco050)",
       "destaque": false,
-      "total": 274,
-      "dups": 38
+      "total": 468,
+      "dups": 39,
+      "faixa": 98
     },
     {
       "nome": "Ecovias Ponte (Ecoponte)",
       "destaque": false,
-      "total": 147,
-      "dups": 0
+      "total": 358,
+      "dups": 4,
+      "faixa": 25
     },
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 277,
-      "dups": 52
+      "total": 423,
+      "dups": 52,
+      "faixa": 88
     },
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 294,
-      "dups": 15
+      "total": 368,
+      "dups": 18,
+      "faixa": 48
     },
     {
       "nome": "Ecovias do Cerrado",
       "destaque": false,
-      "total": 261,
-      "dups": 34
+      "total": 471,
+      "dups": 35,
+      "faixa": 88
     },
     {
       "nome": "Ecovias Sul (Ecosul)",
       "destaque": false,
-      "total": 388,
-      "dups": 1
+      "total": 871,
+      "dups": 1,
+      "faixa": 343
     },
     {
       "nome": "Transbrasiliana",
       "destaque": false,
-      "total": 429,
-      "dups": 18
+      "total": 617,
+      "dups": 18,
+      "faixa": 152
     },
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 143,
-      "dups": 22
+      "total": 232,
+      "dups": 23,
+      "faixa": 109
     },
     {
       "nome": "ViaSul",
       "destaque": false,
-      "total": 240,
-      "dups": 24
+      "total": 533,
+      "dups": 60,
+      "faixa": 66
     },
     {
       "nome": "PR Vias",
       "destaque": false,
-      "total": 104,
-      "dups": 24
+      "total": 156,
+      "dups": 25,
+      "faixa": 91
     },
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 341,
-      "dups": 3
+      "total": 547,
+      "dups": 10,
+      "faixa": 410
     },
     {
       "nome": "EPR Litoral Pioneiro",
       "destaque": false,
-      "total": 208,
-      "dups": 43
+      "total": 303,
+      "dups": 43,
+      "faixa": 72
     },
     {
       "nome": "EPR Via Mineira",
       "destaque": false,
-      "total": 76,
-      "dups": 3
+      "total": 119,
+      "dups": 3,
+      "faixa": 7
     },
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 45,
-      "dups": 6
+      "total": 80,
+      "dups": 6,
+      "faixa": 21
     },
     {
       "nome": "Way-262",
       "destaque": false,
-      "total": 21,
-      "dups": 0
+      "total": 35,
+      "dups": 0,
+      "faixa": 7
     },
     {
       "nome": "Nova 364",
       "destaque": false,
-      "total": 15,
-      "dups": 1
+      "total": 41,
+      "dups": 1,
+      "faixa": 14
     },
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 66,
-      "dups": 2
+      "total": 82,
+      "dups": 2,
+      "faixa": 10
     },
     {
       "nome": "Rota Verde Goiás",
       "destaque": false,
-      "total": 36,
-      "dups": 0
+      "total": 45,
+      "dups": 0,
+      "faixa": 15
     },
     {
       "nome": "Rota Sertaneja",
       "destaque": false,
-      "total": 11,
-      "dups": 0
+      "total": 13,
+      "dups": 0,
+      "faixa": 3
     },
     {
       "nome": "Rota Agro",
       "destaque": false,
-      "total": 11,
-      "dups": 0
+      "total": 13,
+      "dups": 0,
+      "faixa": 2
     },
     {
       "nome": "Elovias",
       "destaque": false,
-      "total": 20,
-      "dups": 1
+      "total": 35,
+      "dups": 1,
+      "faixa": 7
     },
     {
       "nome": "Rodovia do Aço",
       "destaque": false,
-      "total": 161,
-      "dups": 2
+      "total": 427,
+      "dups": 6,
+      "faixa": 53
     },
     {
       "nome": "Via Campos",
       "destaque": false,
       "total": 3,
-      "dups": 0
+      "dups": 0,
+      "faixa": 0
     },
     {
       "nome": "Motiva Minas SP",
       "destaque": false,
-      "total": 3,
-      "dups": 0
+      "total": 160,
+      "dups": 0,
+      "faixa": 0
     },
     {
       "nome": "EPR Paraná",
       "destaque": false,
-      "total": 14,
-      "dups": 0
+      "total": 21,
+      "dups": 0,
+      "faixa": 3
     }
   ],
   "totalDups": 1028,
+  "totalFaixa": 6161,
   "temas": [
     {
       "id": "desapropriacao",
@@ -432,7 +481,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 6548
+      "total": 7480
     },
     {
       "id": "ocupacao-faixa",
@@ -456,7 +505,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 2950
+      "total": 3743
     },
     {
       "id": "acessos",
@@ -475,7 +524,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 1810
+      "total": 2056
     },
     {
       "id": "publicidade",
@@ -496,7 +545,7 @@
         "placas publicitárias",
         "outdoor"
       ],
-      "total": 121
+      "total": 136
     },
     {
       "id": "receitas",
@@ -550,7 +599,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3816
+      "total": 3854
     },
     {
       "id": "pedagio",
@@ -570,7 +619,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1464
+      "total": 1476
     },
     {
       "id": "reequilibrio",
@@ -589,7 +638,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1542
+      "total": 1573
     },
     {
       "id": "penalidades",
@@ -609,7 +658,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1193
+      "total": 1194
     },
     {
       "id": "ambiental",
@@ -627,7 +676,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1531
+      "total": 1932
     },
     {
       "id": "seguranca",
@@ -645,7 +694,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 703
+      "total": 704
     },
     {
       "id": "pesagem",
@@ -663,7 +712,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 263
+      "total": 266
     },
     {
       "id": "ppd",
@@ -678,7 +727,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 121
+      "total": 126
     },
     {
       "id": "bens-reversiveis",
@@ -695,7 +744,7 @@
         "inventário de bens",
         "desvinculação de bens"
       ],
-      "total": 125
+      "total": 129
     },
     {
       "id": "encerramento",
@@ -713,7 +762,7 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 638
+      "total": 1039
     },
     {
       "id": "verificador",
@@ -729,7 +778,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 124
+      "total": 128
     },
     {
       "id": "rcr",

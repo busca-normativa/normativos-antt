@@ -12,12 +12,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { criarSessaoLegis, coletarListagem, buscarTextoIntegral, idAto } from './lib/anttlegis.mjs';
+import { criarSessaoLegis, coletarListagem, buscarTextoIntegral, idAto, urlAto, coletarDecisoesPorConcessionaria, chaveDoTitulo } from './lib/anttlegis.mjs';
 import { coletarGovBr } from './lib/govbr.mjs';
 import { coletarRelatorios, tipoDoRelatorio } from './lib/relatorios.mjs';
 import { setoresDoAto, ehAtoDePessoal, ehAdministrativo, nomeDoTipo, compilarTemas, temasPorPalavras } from './lib/classificar.mjs';
 import { normalizar } from './lib/texto.mjs';
-import { ehDup, fichaDaDup } from './lib/dup.mjs';
+import { ehDup, ehUsoDaFaixa, fichaDaDup, fichaDaFaixa } from './lib/fichas.mjs';
+import { carregarPdfjs, linhasDoPdf, linhasDoHtml, interpretarQuadro, poligonosValidados } from './lib/poligonais.mjs';
+import { Sessao } from './lib/http.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR_DADOS = path.join(RAIZ, 'site', 'data');
@@ -40,15 +42,17 @@ const lerJSON = (arq) => JSON.parse(fs.readFileSync(arq, 'utf8'));
 const cfgFontes = lerJSON(path.join(RAIZ, 'config', 'fontes.json')).anttlegis;
 const cfgTemas = lerJSON(path.join(RAIZ, 'config', 'temas.json')).temas;
 const cfgConcessoes = lerJSON(path.join(RAIZ, 'config', 'concessoes.json')).concessoes.map((c) => ({ ...c, re: new RegExp(c.padroes.join('|')) }));
-const SEM_DUPS = opt('sem-dups');
-const MAX_DUPS = +valor('max-dups') || 2500;
+const SEM_FICHAS = opt('sem-fichas') || opt('sem-dups');
+const SEM_CONCESSOES = opt('sem-concessoes');
+const SEM_MAPA = opt('sem-mapa');
+const MAX_FICHAS = +valor('max-fichas') || 2500;
 const temasCompilados = compilarTemas(cfgTemas);
 
 const inicio = Date.now();
 const log = (...m) => console.log(`[${((Date.now() - inicio) / 1000).toFixed(0).padStart(4)}s]`, ...m);
 
 // ---------- formato compacto em disco ----------
-const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', cc: 'concessao' };
+const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', fa: 'faixa', cc: 'concessao', cl: 'concessaoLegis', mp: 'noMapa' };
 const CHAVES_INV = Object.fromEntries(Object.entries(CHAVES).map(([k, v]) => [v, k]));
 
 function paraDisco(a) {
@@ -295,7 +299,9 @@ const SIGLAS_RELATORIO = [
 
 async function etapaRelatorios() {
   log(`gov.br: relatórios das concessões${COMPLETO ? ' (todos os anos)' : ` (desde ${ANO_MINIMO})`}`);
-  const r = await coletarRelatorios({ anoMinimo: ANO_MINIMO, log: () => {} });
+  // --relatorios-de=arquivo.json: usa uma coleta feita antes (ex.: em paralelo) em vez de rastrear de novo
+  const arq = valor('relatorios-de');
+  const r = arq ? lerJSON(arq) : await coletarRelatorios({ anoMinimo: ANO_MINIMO, log: () => {} });
   erros.push(...r.erros);
   if (!r.erros.length) fontesOk.add('relatorios');
   for (const it of r.itens) {
@@ -317,25 +323,67 @@ async function etapaRelatorios() {
   log(`   ${r.itens.length} arquivos em ${r.concessoes.length} concessões${r.erros.length ? `, ${r.erros.length} erro(s)` : ''}`);
 }
 
-// ---------- 5. fichas das DUPs (texto integral no ANTTlegis) ----------
-// Lê só as DUPs que ainda não têm ficha; a ficha fica guardada na base para as próximas execuções.
-async function etapaDups() {
-  const pendentes = [...atos.values()].filter((a) => !TIPOS_EXTERNOS.has(a.tipo) && !a.dup && ehDup(a));
-  const lote = pendentes.sort((x, y) => (y.data || '').localeCompare(x.data || '')).slice(0, MAX_DUPS);
-  log(`ANTTlegis: fichas de DUP — ${lote.length} a ler${pendentes.length > lote.length ? ` (de ${pendentes.length}; o restante fica para a próxima execução)` : ''}`);
+// ---------- 5. "Decisões por concessionária" do ANTTlegis ----------
+// Lista curada pela ANTT: é a fonte mais confiável para ligar uma decisão à concessão.
+function nomeDaConcessao(nomeLista) {
+  const c = cfgConcessoes.find((c) => c.re.test(normalizar(nomeLista)));
+  if (c) return c.nome;
+  return nomeLista.replace(/^(contrato encerrado|caducidade declarada)\s*-\s*/i, '').toLowerCase().replace(/(^|\s)\S/g, (l) => l.toUpperCase());
+}
+
+async function etapaConcessoesLegis() {
+  log('ANTTlegis: decisões por concessionária');
+  const sessao = criarSessaoLegis({ pausaMs: 300 });
+  const r = await coletarDecisoesPorConcessionaria(sessao);
+  erros.push(...r.erros);
+  const indice = new Map();
+  for (const a of atos.values()) {
+    if (TIPOS_EXTERNOS.has(a.tipo)) continue;
+    const k = `${a.tipo}|${a.numero}|${a.ano}`;
+    if (!indice.has(k)) indice.set(k, []);
+    indice.get(k).push(a);
+  }
+  if (!r.erros.length && r.listas.length) for (const a of atos.values()) delete a.concessaoLegis;
+  let ligados = 0;
+  let semPar = 0;
+  for (const lista of r.listas) {
+    const nome = nomeDaConcessao(lista.nome);
+    for (const it of lista.itens) {
+      const k = chaveDoTitulo(it.titulo);
+      const cand = k ? (indice.get(`${k.tipo}|${k.numero}|${k.ano}`) || []).filter((a) => (k.orgao ? a.orgao.startsWith(k.orgao + '/') : /^(DG|DC)\//.test(a.orgao))) : [];
+      if (cand.length === 1) {
+        cand[0].concessaoLegis = nome;
+        ligados++;
+      } else semPar++;
+    }
+  }
+  log(`   ${r.listas.length} concessões, ${ligados} atos ligados${semPar ? `, ${semPar} sem correspondência na base` : ''}`);
+}
+
+// ---------- 6. fichas do texto integral: DUPs e autorizações de uso da faixa ----------
+// Lê só os atos que ainda não têm ficha; a ficha fica guardada na base para as próximas execuções.
+async function etapaFichas() {
+  // --refazer-dups: relê as DUPs já processadas (ex.: após melhorar o extrator)
+  if (opt('refazer-dups')) for (const a of atos.values()) delete a.dup;
+  const pendentes = [...atos.values()]
+    .filter((a) => !TIPOS_EXTERNOS.has(a.tipo) && ((!a.dup && ehDup(a)) || (!a.faixa && ehUsoDaFaixa(a))))
+    .sort((x, y) => (y.data || '').localeCompare(x.data || ''));
+  const lote = pendentes.slice(0, MAX_FICHAS);
+  log(`ANTTlegis: fichas (DUP e uso da faixa) — ${lote.length} a ler${pendentes.length > lote.length ? ` (de ${pendentes.length}; o restante fica para a próxima execução)` : ''}`);
   if (!lote.length) return;
   const sessao = criarSessaoLegis({ pausaMs: 250 });
   let ok = 0;
   for (const [i, a] of lote.entries()) {
     try {
-      a.dup = await fichaDaDup(sessao, a);
+      if (ehDup(a)) a.dup = await fichaDaDup(sessao, a, cfgConcessoes);
+      else a.faixa = await fichaDaFaixa(sessao, a, cfgConcessoes);
       ok++;
     } catch (e) {
-      erros.push(`DUP ${a.id}: ${e.message}`);
+      erros.push(`Ficha ${a.id}: ${e.message}`);
     }
-    if ((i + 1) % 100 === 0) log(`   ${i + 1}/${lote.length}`);
+    if ((i + 1) % 200 === 0) log(`   ${i + 1}/${lote.length}`);
   }
-  log(`   ${ok} ficha(s) de DUP extraída(s)`);
+  log(`   ${ok} ficha(s) extraída(s)`);
 }
 
 function concessaoDoAto(a) {
@@ -343,22 +391,119 @@ function concessaoDoAto(a) {
     const n = normalizar(a.orgao);
     return (cfgConcessoes.find((c) => c.re.test(n)) || {}).nome || a.orgao;
   }
-  const d = a.dup || {};
-  // a concessionária citada na DUP vale mais que menções soltas na ementa
-  for (const txt of [d.concessionaria, d.rodoviaNome, `${a.titulo} ${a.ementa} ${a.nota || ''}`, (d.rodovias || []).join(' ')]) {
-    if (!txt) continue;
-    const c = cfgConcessoes.find((c) => c.re.test(normalizar(txt)));
-    if (c) return c.nome;
-  }
-  return null;
+  // Ordem de confiança: concessionária citada no texto integral (ficha) > ementa/título > lista curada do ANTTlegis
+  // (que tem erros: ex. DUPs da Via Brasil listadas na Via Araucária) > nome/rodovia citados na ficha.
+  const f = a.dup || a.faixa || {};
+  const achar = (txt) => (txt ? cfgConcessoes.find((c) => c.re.test(normalizar(txt)))?.nome : null);
+  return (
+    achar(f.concessionaria) ||
+    f.concessao ||
+    achar(`${a.titulo} ${a.ementa} ${a.nota || ''}`) ||
+    a.concessaoLegis ||
+    achar(f.rodoviaNome) ||
+    achar((f.rodovias || []).join(' ')) ||
+    null
+  );
 }
+
+// ---------- 7. poligonais das DUPs (mapa) ----------
+// Lê o quadro de coordenadas (PDF anexo ou tabela no texto) das DUPs ainda não processadas.
+// O resultado fica em site/data/poligonais.json (cache) e o mapa usa site/data/mapa.json.
+const ARQ_POLIGONAIS = path.join(DIR_DADOS, 'poligonais.json');
+const ARQ_MAPA = path.join(DIR_DADOS, 'mapa.json');
+let poligonais = {};
+try {
+  poligonais = lerJSON(ARQ_POLIGONAIS).itens || {};
+} catch {
+  poligonais = {};
+}
+
+async function etapaPoligonais() {
+  const pdf = await carregarPdfjs();
+  // erros de rede (ex.: PDF ainda não publicado) são sempre tentados de novo; --refazer-mapa tenta também os não reconhecidos
+  const refazer = (st) => st === 'erro' || (opt('refazer-mapa') && st !== 'ok');
+  const pendentes = [...atos.values()].filter((a) => a.dup && (a.dup.anexo || a.dup.quadroNoTexto) && (!poligonais[a.id] || refazer(poligonais[a.id].st)));
+  const lote = pendentes.sort((x, y) => (y.data || '').localeCompare(x.data || '')).slice(0, MAX_FICHAS);
+  log(`Mapa: quadros de coordenadas — ${lote.length} a ler${pdf ? '' : ' (pdfjs-dist não instalado: só os quadros no texto do ato)'}`);
+  if (!lote.length) return;
+  const sessaoLegis = criarSessaoLegis({ pausaMs: 250 });
+  const sessaoPdf = new Sessao({ pausaMs: 250 });
+  let ok = 0;
+  for (const [i, a] of lote.entries()) {
+    try {
+      let linhas;
+      if (a.dup.anexo) {
+        if (!pdf) continue;
+        linhas = await linhasDoPdf(await sessaoPdf.binario(a.dup.anexo));
+      } else {
+        const html = await sessaoLegis.texto(urlAto(a));
+        linhas = linhasDoHtml(html.slice(Math.max(0, html.indexOf('id="conteudo"'))));
+      }
+      const q = interpretarQuadro(linhas);
+      // anexo de outro processo E de outra rodovia (erro de publicação): não entra no mapa
+      const outraRodovia = q.rodovias.length && a.dup.rodovias?.length && !q.rodovias.some((r) => a.dup.rodovias.includes(r));
+      if (q.referencia && a.dup.processo && q.referencia !== a.dup.processo && outraRodovia) {
+        poligonais[a.id] = { st: 'divergente', ref: q.referencia };
+        continue;
+      }
+      // UFs citadas no ato (rodovias "BR-163/PA" e municípios "Itaituba/PA") para conferir o fuso informado no anexo
+      const ufs = [...new Set([...(a.dup.rodovias || []), ...(a.dup.municipios || [])].map((x) => (x.match(/\/([A-Z]{2})$/) || [])[1]).filter(Boolean))];
+      const v = poligonosValidados(q, ufs);
+      poligonais[a.id] = v.poligonos.length
+        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso } : {}) }
+        : { st: v.foraDaUf ? 'fora-da-uf' : 'sem', fu: q.fuso };
+      if (v.poligonos.length) ok++;
+    } catch (e) {
+      poligonais[a.id] = { st: 'erro', msg: String(e.message).slice(0, 120) };
+    }
+    if ((i + 1) % 100 === 0) log(`   ${i + 1}/${lote.length}`);
+  }
+  log(`   ${ok} DUP(s) com poligonal no mapa`);
+}
+
+function gravarMapa(lista) {
+  fs.writeFileSync(ARQ_POLIGONAIS, JSON.stringify({ atualizadoEm: new Date().toISOString(), itens: poligonais }) + '\n');
+  const itens = [];
+  for (const a of lista) {
+    const pg = poligonais[a.id];
+    if (!a.dup || !pg || pg.st !== 'ok') continue;
+    const d = a.dup;
+    itens.push({
+      i: a.id, ti: a.titulo, cc: a.concessao || '', ob: d.obra || '', mu: (d.municipios || []).join(', '), ro: (d.rodovias || []).join(', '),
+      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined,
+      u: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=${a.tipo}&numeroAto=${String(a.numero).padStart(8, '0')}&seqAto=${a.seq || '000'}&valorAno=${a.ano}&orgao=${a.orgao}&cod_modulo=161&cod_menu=5408`,
+      p: pg.p,
+    });
+  }
+  fs.writeFileSync(ARQ_MAPA, JSON.stringify({ atualizadoEm: new Date().toISOString(), concessoes: cfgConcessoes.filter((c) => c.destaque).map((c) => c.nome), itens }) + '\n');
+  return itens.length;
+}
+
+// Temas pelo tipo de uso da faixa
+const TEMA_DO_USO = { Acesso: 'acessos', Publicidade: 'publicidade' };
 
 // ---------- execução ----------
 async function principal() {
   log(`Modo ${COMPLETO ? 'COMPLETO' : 'incremental'} — base existente: ${anteriores.size} atos`);
   if (!(FILTRO_FONTES && FILTRO_FONTES.includes('nenhuma'))) await etapaListagens();
   if (!SEM_TEMAS) await etapaTemas();
-  if (!SEM_DUPS) await etapaDups();
+  if (!SEM_CONCESSOES) {
+    try {
+      await etapaConcessoesLegis();
+    } catch (e) {
+      erros.push(`decisões por concessionária: ${e.message}`);
+      log('! decisões por concessionária:', e.message);
+    }
+  }
+  if (!SEM_FICHAS) await etapaFichas();
+  if (!SEM_MAPA) {
+    try {
+      await etapaPoligonais();
+    } catch (e) {
+      erros.push(`mapa: ${e.message}`);
+      log('! mapa:', e.message);
+    }
+  }
   if (!SEM_GOVBR) {
     try {
       await etapaGovBr();
@@ -394,15 +539,29 @@ async function principal() {
     if (!TIPOS_EXTERNOS.has(a.tipo)) a.tipoNome = nomeDoTipo(a);
     a.setores = setoresDoAto(a);
     a.temas = unir(temasPorPalavras(a, temasCompilados), a.temasBusca || []).sort();
-    a.concessao = concessaoDoAto(a);
     if (a.dup && !ehDup(a)) delete a.dup;
-    if (a.dup && !a.temas.includes('desapropriacao')) a.temas = [...a.temas, 'desapropriacao'].sort();
+    if (a.faixa && !ehUsoDaFaixa(a)) delete a.faixa;
+    a.concessao = concessaoDoAto(a);
+    const extras = [];
+    if (a.dup) extras.push('desapropriacao');
+    if (a.faixa) {
+      extras.push('faixa-dominio');
+      for (const u of a.faixa.usos || []) extras.push(TEMA_DO_USO[u] || (u === 'Outros' || u === 'Equipamentos e dispositivos' ? null : 'ocupacao-faixa'));
+    }
+    a.temas = unir(a.temas, extras.filter(Boolean)).sort();
+    a.noMapa = poligonais[a.id]?.st === 'ok' ? 1 : undefined;
+    if (a.dup) {
+      if (poligonais[a.id]?.st === 'divergente') a.dup.anexoDivergente = poligonais[a.id].ref;
+      else delete a.dup.anexoDivergente;
+    }
     if (a.url && !TIPOS_EXTERNOS.has(a.tipo)) delete a.url;
   }
 
   const lista = [...atos.values()].sort((x, y) => (y.data || '').localeCompare(x.data || '') || (y.numero || 0) - (x.numero || 0));
   fs.mkdirSync(DIR_DADOS, { recursive: true });
   // um ato por linha: facilita ver no Git o que mudou a cada atualização
+  const noMapa = gravarMapa(lista);
+  log(`Mapa: ${noMapa} DUP(s) com poligonal`);
   fs.writeFileSync(ARQ_ATOS, '[\n' + lista.map((a) => JSON.stringify(paraDisco(a))).join(',\n') + '\n]\n');
 
   const contar = (fn) => lista.reduce((acc, a) => { for (const k of [].concat(fn(a))) if (k) acc[k] = (acc[k] || 0) + 1; return acc; }, {});
@@ -423,9 +582,16 @@ async function principal() {
       { id: 'relatorios', nome: 'gov.br/antt — Relatórios das concessões (monitoração, verificador, obras, financeiros)', url: 'https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias' },
     ],
     concessoes: cfgConcessoes
-      .map((c) => ({ nome: c.nome, destaque: !!c.destaque, total: lista.filter((a) => a.concessao === c.nome).length, dups: lista.filter((a) => a.concessao === c.nome && a.dup).length }))
+      .map((c) => ({
+        nome: c.nome,
+        destaque: !!c.destaque,
+        total: lista.filter((a) => a.concessao === c.nome).length,
+        dups: lista.filter((a) => a.concessao === c.nome && a.dup).length,
+        faixa: lista.filter((a) => a.concessao === c.nome && a.faixa).length,
+      }))
       .filter((c) => c.total),
     totalDups: lista.filter((a) => a.dup).length,
+    totalFaixa: lista.filter((a) => a.faixa).length,
     temas: cfgTemas.map((t) => ({ id: t.id, nome: t.nome, descricao: t.descricao, sinonimos: t.sinonimos, busca: t.busca, total: lista.filter((a) => a.temas.includes(t.id)).length })),
     erros,
   };

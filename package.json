@@ -12,5 +12,8 @@
     "coletar": "node scripts/coletar.mjs",
     "coletar:completo": "node scripts/coletar.mjs --completo",
     "coletar:rapido": "node scripts/coletar.mjs --sem-temas"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.3.289"
   }
 }
