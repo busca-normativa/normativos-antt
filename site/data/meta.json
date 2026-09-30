@@ -1,19 +1,19 @@
 {
-  "atualizadoEm": "2026-09-30T14:13:45.664Z",
+  "atualizadoEm": "2026-09-30T17:12:34.530Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 153,
-  "total": 41602,
+  "duracaoSegundos": 2679,
+  "total": 41627,
   "porTipo": {
-    "Decisão": 4539,
+    "Aviso": 160,
+    "Decisão": 4569,
     "Deliberação": 11011,
-    "Portaria": 7528,
+    "Portaria": 7521,
     "Comunicado": 27,
     "Voto": 1637,
     "Resolução": 6446,
     "Voto Vista": 40,
-    "Reunião Participativa": 127,
-    "Aviso": 159,
+    "Reunião Participativa": 128,
     "Audiência Pública": 229,
     "Tomada de Subsídio": 100,
     "Instrução Normativa": 63,
@@ -23,7 +23,7 @@
     "Licitação - Concessão": 1,
     "Leilão / Concessão": 7,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 435,
+    "Documento": 406,
     "Manual": 162,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -32,7 +32,7 @@
     "Nota Técnica": 3,
     "Portaria Complementar": 16,
     "Lei": 14,
-    "Norma Técnica": 760,
+    "Norma Técnica": 789,
     "Relatório de Obras": 2619,
     "Relatório de Monitoração": 1297,
     "Relatório do Verificador": 10,
@@ -53,21 +53,21 @@
     "Recomendação": 1
   },
   "porSetor": {
-    "R": 21301,
-    "C": 1768,
+    "R": 21335,
+    "C": 1766,
     "G": 14369,
-    "F": 2378,
-    "P": 3118
+    "P": 3118,
+    "F": 2369
   },
   "porFonte": {
-    "dcsrod": 4381,
+    "reu": 187,
+    "dcsrod": 4412,
     "dlb": 11011,
-    "busca": 11731,
+    "busca": 11754,
     "por": 6774,
     "porrod": 3941,
     "res": 6356,
     "govbr": 504,
-    "reu": 185,
     "tms": 165,
     "aud": 229,
     "inm": 48,
@@ -183,7 +183,7 @@
     {
       "nome": "Motiva Pantanal (MSVia)",
       "destaque": false,
-      "total": 583,
+      "total": 585,
       "dups": 24,
       "faixa": 217
     },
@@ -197,7 +197,7 @@
     {
       "nome": "Autopista Fluminense",
       "destaque": false,
-      "total": 716,
+      "total": 717,
       "dups": 28,
       "faixa": 146
     },
@@ -232,7 +232,7 @@
     {
       "nome": "ViaCosteira",
       "destaque": false,
-      "total": 423,
+      "total": 425,
       "dups": 83,
       "faixa": 43
     },
@@ -267,15 +267,15 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 614,
-      "dups": 22,
+      "total": 615,
+      "dups": 23,
       "faixa": 128
     },
     {
       "nome": "Ecovias Minas Goiás (Eco050)",
       "destaque": false,
-      "total": 468,
-      "dups": 39,
+      "total": 469,
+      "dups": 40,
       "faixa": 98
     },
     {
@@ -295,7 +295,7 @@
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 368,
+      "total": 369,
       "dups": 18,
       "faixa": 48
     },
@@ -324,13 +324,13 @@
       "nome": "Via Araucária",
       "destaque": false,
       "total": 232,
-      "dups": 23,
+      "dups": 24,
       "faixa": 109
     },
     {
       "nome": "ViaSul",
       "destaque": false,
-      "total": 533,
+      "total": 534,
       "dups": 60,
       "faixa": 66
     },
@@ -344,28 +344,28 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 547,
+      "total": 569,
       "dups": 10,
-      "faixa": 410
+      "faixa": 433
     },
     {
       "nome": "EPR Litoral Pioneiro",
       "destaque": false,
-      "total": 303,
+      "total": 304,
       "dups": 43,
       "faixa": 72
     },
     {
       "nome": "EPR Via Mineira",
       "destaque": false,
-      "total": 119,
+      "total": 120,
       "dups": 3,
       "faixa": 7
     },
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 80,
+      "total": 81,
       "dups": 6,
       "faixa": 21
     },
@@ -379,9 +379,9 @@
     {
       "nome": "Nova 364",
       "destaque": false,
-      "total": 41,
+      "total": 46,
       "dups": 1,
-      "faixa": 14
+      "faixa": 19
     },
     {
       "nome": "Nova 381",
@@ -447,8 +447,8 @@
       "faixa": 3
     }
   ],
-  "totalDups": 1028,
-  "totalFaixa": 6161,
+  "totalDups": 1031,
+  "totalFaixa": 6189,
   "temas": [
     {
       "id": "desapropriacao",
@@ -470,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1860
+      "total": 1864
     },
     {
       "id": "faixa-dominio",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7495
+      "total": 7431
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3749
+      "total": 3750
     },
     {
       "id": "acessos",
@@ -570,7 +570,7 @@
         "receitas acessórias",
         "projetos associados"
       ],
-      "total": 218
+      "total": 219
     },
     {
       "id": "terceiros",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3865
+      "total": 3602
     },
     {
       "id": "pedagio",
@@ -645,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1576
+      "total": 1577
     },
     {
       "id": "penalidades",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1953
+      "total": 1907
     },
     {
       "id": "seguranca",
@@ -734,7 +734,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 126
+      "total": 127
     },
     {
       "id": "bens-reversiveis",
@@ -751,7 +751,7 @@
         "inventário de bens",
         "desvinculação de bens"
       ],
-      "total": 129
+      "total": 130
     },
     {
       "id": "encerramento",
@@ -769,7 +769,7 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 1039
+      "total": 1038
     },
     {
       "id": "verificador",
@@ -799,7 +799,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 202
+      "total": 203
     }
   ],
   "erros": []
