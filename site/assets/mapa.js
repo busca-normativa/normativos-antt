@@ -13,6 +13,7 @@ let DADOS = { itens: [], concessoes: [] };
 let camadas = new Map(); // id -> polígonos Leaflet
 let mapa;
 let grupo;
+let marcadores;
 
 function iniciarMapa() {
   const ruas = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -27,6 +28,8 @@ function iniciarMapa() {
   L.control.layers({ 'Satélite': satelite, 'Mapa': ruas }, null, { position: 'topright' }).addTo(mapa);
   L.control.scale({ imperial: false }).addTo(mapa);
   grupo = L.featureGroup().addTo(mapa);
+  marcadores = L.featureGroup().addTo(mapa);
+  mapa.on('zoomend', ajustarMarcadores);
 }
 
 function popup(it) {
@@ -56,21 +59,44 @@ function filtrados() {
   });
 }
 
+function pontoSobreADup(areas) {
+  const pts = areas.flat();
+  const c = L.latLngBounds(pts).getCenter();
+  let melhor = pts[0];
+  let menor = Infinity;
+  for (const q of pts) {
+    const d = (q[0] - c.lat) ** 2 + (q[1] - c.lng) ** 2;
+    if (d < menor) { menor = d; melhor = q; }
+  }
+  return melhor;
+}
+
+// Marcadores só com o mapa afastado; aproximado, as próprias áreas já aparecem e os pontos só atrapalham
+const ZOOM_SEM_MARCADORES = 14;
+function ajustarMarcadores() {
+  if (mapa.getZoom() >= ZOOM_SEM_MARCADORES) marcadores.remove();
+  else if (!mapa.hasLayer(marcadores)) marcadores.addTo(mapa);
+}
+
 function desenhar(ajustar = true) {
   const lista = filtrados();
   grupo.clearLayers();
+  marcadores.clearLayers();
   camadas = new Map();
   const destaque = new Set(DADOS.concessoes);
   for (const it of lista) {
     const cor = destaque.has(it.cc) ? COR_DESTAQUE : COR_OUTRAS;
     const polys = it.p.map((p) => L.polygon(p, { color: cor, weight: 3, fillColor: cor, fillOpacity: 0.3 }));
-    // marcador no centro da DUP: as áreas são pequenas demais para aparecer com o mapa afastado
-    const centro = L.latLngBounds(it.p.flat()).getCenter();
-    const marcador = L.circleMarker(centro, { radius: 6, color: '#ffffff', weight: 2, fillColor: cor, fillOpacity: 1 });
-    const g = L.featureGroup([...polys, marcador]).bindPopup(popup(it), { maxWidth: 360 });
+    const g = L.featureGroup(polys).bindPopup(popup(it), { maxWidth: 360 });
     g.on('click', () => marcarNaLista(it.i));
     g.addTo(grupo);
     camadas.set(it.i, g);
+    // marcador para achar a DUP com o mapa afastado (as áreas são pequenas demais para aparecer). Fica SOBRE a
+    // poligonal — no vértice mais próximo do centro da obra —, nunca no centro do retângulo, que numa obra longa
+    // ou com áreas espalhadas cai fora da rodovia.
+    const marcador = L.circleMarker(pontoSobreADup(it.p), { radius: 6, color: '#ffffff', weight: 2, fillColor: cor, fillOpacity: 1 });
+    marcador.on('click', () => focar(it.i));
+    marcador.addTo(marcadores);
   }
   $('#m-lista').innerHTML = lista
     .slice(0, 400)
@@ -79,6 +105,7 @@ function desenhar(ajustar = true) {
   const areas = lista.reduce((s, it) => s + it.p.length, 0);
   $('#mapa-resumo').textContent = `${NF.format(lista.length)} DUP(s) no mapa · ${NF.format(areas)} área(s)`;
   if (ajustar && lista.length) mapa.fitBounds(grupo.getBounds(), { padding: [30, 30], maxZoom: 16 });
+  ajustarMarcadores();
 }
 
 function marcarNaLista(id) {
