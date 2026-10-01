@@ -110,7 +110,7 @@ jobs:
 
       # Carimba a versão nos links de CSS/JS para o navegador nunca usar um arquivo antigo do cache
       - name: Versionar arquivos do site
-        run: sed -i "s/?v=[A-Za-z0-9]*\"/?v=${GITHUB_SHA::8}\"/g" site/*.html
+        run: sed -i "s/?v=[A-Za-z0-9]*\"/?v=${GITHUB_SHA::8}\"/g" site/*.html site/assets/*.js
 
       - uses: actions/configure-pages@v5
 

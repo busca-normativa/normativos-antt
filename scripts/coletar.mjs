@@ -18,7 +18,7 @@ import { coletarRelatorios, tipoDoRelatorio } from './lib/relatorios.mjs';
 import { setoresDoAto, ehAtoDePessoal, ehAdministrativo, nomeDoTipo, compilarTemas, temasPorPalavras } from './lib/classificar.mjs';
 import { normalizar } from './lib/texto.mjs';
 import { ehDup, ehUsoDaFaixa, fichaDaDup, fichaDaFaixa } from './lib/fichas.mjs';
-import { carregarPdfjs, linhasDoPdf, linhasDoHtml, linkDoAnexo, interpretarQuadro, poligonosValidados } from './lib/poligonais.mjs';
+import { carregarPdfjs, linhasDoPdf, linhasDoHtml, linkDoAnexo, interpretarQuadro, poligonosValidados, avisoDeMunicipio } from './lib/poligonais.mjs';
 import { Sessao } from './lib/http.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -420,6 +420,14 @@ try {
   poligonais = {};
 }
 
+// Sedes municipais (IBGE): { "lucas do rio verde/mt": [lat, lon] }
+let MUNICIPIOS = {};
+try {
+  MUNICIPIOS = lerJSON(path.join(RAIZ, 'config', 'municipios.json')).municipios;
+} catch {
+  MUNICIPIOS = {};
+}
+
 async function etapaPoligonais() {
   const pdf = await carregarPdfjs();
   // erros de rede (ex.: PDF ainda não publicado) são sempre tentados de novo; --refazer-mapa tenta também os não reconhecidos
@@ -467,9 +475,12 @@ async function etapaPoligonais() {
       }
       // UFs citadas no ato (rodovias "BR-163/PA" e municípios "Itaituba/PA") para conferir o fuso informado no anexo
       const ufs = [...new Set([...(a.dup.rodovias || []), ...(a.dup.municipios || [])].map((x) => (x.match(/\/([A-Z]{2})$/) || [])[1]).filter(Boolean))];
-      const v = poligonosValidados(q, ufs);
+      // sedes dos municípios citados ("Lucas do Rio Verde/MT"), para conferir o fuso em estados que atravessam dois fusos
+      const reconhecidos = (a.dup.municipios || []).filter((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
+      const sedes = reconhecidos.map((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
+      const v = poligonosValidados(q, ufs, sedes);
       poligonais[a.id] = v.poligonos.length
-        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso || 'nenhum' } : {}), ...(q.descartados ? { dv: q.descartados } : {}) }
+        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso || 'nenhum' } : {}), ...(q.descartados ? { dv: q.descartados } : {}), ...(avisoDeMunicipio(v.poligonos, reconhecidos, sedes) ? { al: avisoDeMunicipio(v.poligonos, reconhecidos, sedes) } : {}) }
         : { st: v.foraDaUf ? 'fora-da-uf' : 'sem', fu: q.fuso };
       if (v.poligonos.length) ok++;
     } catch (e) {
@@ -489,7 +500,7 @@ function gravarMapa(lista) {
     const d = a.dup;
     itens.push({
       i: a.id, ti: a.titulo, cc: a.concessao || '', ob: d.obra || '', mu: (d.municipios || []).join(', '), ro: (d.rodovias || []).join(', '),
-      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined, dv: pg.dv || undefined,
+      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined, dv: pg.dv || undefined, al: pg.al || undefined,
       u: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=${a.tipo}&numeroAto=${String(a.numero).padStart(8, '0')}&seqAto=${a.seq || '000'}&valorAno=${a.ano}&orgao=${a.orgao}&cod_modulo=161&cod_menu=5408`,
       p: pg.p,
     });

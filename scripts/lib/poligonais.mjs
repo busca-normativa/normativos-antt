@@ -223,7 +223,59 @@ function naUf([lat, lon], ufs) {
  * estado certo; se não, testa os outros fusos (erro comum de digitação no anexo) e usa o que acertar a UF.
  * Devolve { poligonos, fuso, fusoCorrigido }.
  */
-export function poligonosValidados(q, ufs = []) {
+export function poligonosValidados(q, ufs = [], sedes = []) {
+  const r = validarPelaUf(q, ufs);
+  return validarPeloMunicipio(q, r, sedes);
+}
+
+// Distância em km (aproximação plana, suficiente para comparar dezenas/centenas de km)
+function km([a, b], [c, d]) {
+  const rad = Math.PI / 180;
+  return Math.hypot((d - b) * rad * Math.cos(((a + c) / 2) * rad), (c - a) * rad) * 6371;
+}
+
+/**
+ * Confere pelo município citado na DUP: a UF não basta em estados largos que atravessam dois fusos (MT, PA, BA, MG).
+ * Se a área cair a mais de 150 km de todas as sedes citadas e outro fuso a puser a menos de 100 km (e 3x mais perto),
+ * usa esse fuso. Municípios enormes (Altamira, Itaituba) têm a sede longe da rodovia: aí nenhum fuso aproxima e
+ * nada muda.
+ */
+function validarPeloMunicipio(q, r, sedes) {
+  if (!sedes.length) return r;
+  const distancia = (polys) => (polys.length ? Math.min(...sedes.map((s) => km(L_centro(polys.flat()), s))) : Infinity);
+  const d0 = distancia(r.poligonos);
+  if (r.poligonos.length && d0 <= 150) return r;
+  let melhor = null;
+  for (let f = 18; f <= 25; f++) {
+    if (f === r.fuso) continue;
+    const p = poligonosLatLon({ ...q, fuso: f });
+    const d = distancia(p);
+    if (d < 100 && d * 3 < d0 && (!melhor || d < melhor.d)) melhor = { d, poligonos: p, fuso: f };
+  }
+  if (!melhor) return r;
+  return { poligonos: melhor.poligonos, fuso: melhor.fuso, fusoCorrigido: true, foraDaUf: false };
+}
+
+// Distância "normal" entre uma obra e a sede do município, conforme o tamanho típico dos municípios da UF
+// (Altamira/PA e Itaituba/PA chegam a centenas de km da sede; no Sul/Sudeste, raramente passam de ~100 km).
+const TOLERANCIA_UF = { AM: 800, PA: 800, RR: 500, AP: 400, AC: 400, RO: 300, MT: 300, TO: 250, MA: 250, MS: 250, PI: 200, BA: 200, GO: 180, MG: 150 };
+
+/**
+ * Quando a área fica longe demais da sede de todos os municípios citados no ato, devolve um aviso
+ * (anexo com coordenadas de outro lugar ou município errado no texto). Sem município reconhecido, não avisa.
+ */
+export function avisoDeMunicipio(poligonos, municipios = [], sedes = []) {
+  if (!poligonos.length || !sedes.length) return null;
+  const c = L_centro(poligonos.flat());
+  const dists = sedes.map((s) => km(c, s));
+  const d = Math.min(...dists);
+  const nome = municipios[dists.indexOf(d)] || municipios[0] || '';
+  const uf = (nome.match(/\/([A-Z]{2})$/) || [])[1];
+  if (d <= (TOLERANCIA_UF[uf] || 120)) return null;
+  return `A área fica a ${Math.round(d)} km da sede de ${nome}, município citado no ato — confira no PDF se o anexo (coordenadas) e o município do texto estão corretos.`;
+}
+
+function validarPelaUf(q, ufs) {
   const conhecidas = ufs.filter((u) => UF_BBOX[u]);
   const tentar = (fuso) => poligonosLatLon({ ...q, fuso });
   const centro = (polys) => L_centro(polys.flat());

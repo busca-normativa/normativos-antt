@@ -1,6 +1,8 @@
 // Mapa das DUPs: desenha as poligonais (site/data/mapa.json) com Leaflet.
 /* global L */
 
+import { caixaDeBusca } from "./combobox.js?v=dev";
+
 const $ = (s) => document.querySelector(s);
 const NF = new Intl.NumberFormat('pt-BR');
 const COR_DESTAQUE = '#2f80ff';
@@ -35,7 +37,8 @@ function iniciarMapa() {
 function popup(it) {
   const linhas = [
     ['Concessão', it.cc], ['Obra', it.ob], ['Rodovia', it.ro], ['Trecho', it.km], ['Município', it.mu],
-    ['Área total', it.at], ['Processo', it.pr], ['DOU', dataBR(it.dou)], ['Fuso UTM', it.fu ? `${it.fu} S (SIRGAS 2000)${it.fa === 'nenhum' ? ' — deduzido pela UF (o anexo não informa o fuso)' : it.fa ? ` — corrigido: o anexo informa fuso ${it.fa}, incompatível com a UF` : ''}` : ''],
+    ['Área total', it.at], ['Processo', it.pr], ['DOU', dataBR(it.dou)], ['Fuso UTM', it.fu ? `${it.fu} S (SIRGAS 2000)${it.fa === 'nenhum' ? ' — deduzido pela UF (o anexo não informa o fuso)' : it.fa ? ` — corrigido: o anexo informa fuso ${it.fa}, que joga a área longe do município/UF citados no ato` : ''}` : ''],
+    ['⚠ Atenção', it.al || ''],
     ['Observação', it.dv ? `${it.dv} vértice(s) do anexo descartado(s) por inconsistência (ponto fora da sequência — confira no PDF)` : ''],
   ].filter(([, v]) => v);
   const numero = (it.ti.match(/N[º°]\s*([\d.]+)/) || [])[1] || '';
@@ -148,6 +151,7 @@ async function iniciar() {
     return;
   }
   preencherFiltros();
+  caixaDeBusca($('#m-concessao'), { placeholder: 'Todas · digite aqui' });
   const alvo = decodeURIComponent(location.hash.slice(1));
   const itemAlvo = alvo && DADOS.itens.find((it) => it.i === alvo);
   if (itemAlvo) $('#m-concessao').value = itemAlvo.cc || '';

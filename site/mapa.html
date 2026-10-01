@@ -30,12 +30,14 @@
       <label class="sr-only" for="m-busca">Buscar</label>
       <input id="m-busca" type="search" placeholder="Município, obra, km ou nº da decisão" autocomplete="off">
       <div class="mapa-filtros">
-        <label>Concessão
+        <div>
+          <label for="m-concessao">Concessão</label>
           <select id="m-concessao"></select>
-        </label>
-        <label>Ano
+        </div>
+        <div>
+          <label for="m-ano">Ano</label>
           <select id="m-ano"><option value="">Todos</option></select>
-        </label>
+        </div>
       </div>
       <div class="mapa-legenda" id="m-legenda"></div>
       <ol class="mapa-lista" id="m-lista"></ol>

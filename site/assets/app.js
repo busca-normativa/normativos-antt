@@ -1,6 +1,8 @@
 // Painel de Normativos ANTT — Rodovias
 // Busca local (sem servidor) sobre site/data/atos.json, com temas, filtros, gráficos e exportação.
 
+import { caixaDeBusca } from "./combobox.js?v=dev";
+
 const $ = (s, el = document) => el.querySelector(s);
 const NF = new Intl.NumberFormat('pt-BR');
 const LEGIS = 'https://anttlegis.antt.gov.br/action/ActionDatalegis.php';
@@ -323,19 +325,24 @@ function desenharTemas() {
   for (const b of el.querySelectorAll('.tema')) b.setAttribute('aria-pressed', String(b.dataset.tema === estado.tema));
 }
 
+let ultimasFacetas = [[], []];
 function desenharFacetas(paraTipo, paraOrgao) {
+  ultimasFacetas = [paraTipo, paraOrgao];
   const contTipo = contar(paraTipo, (a) => a.tipoNome);
-  const tipos = [...new Set([...Object.keys(contTipo), ...estado.tipos, ...estado.tiposFora])].sort((x, y) => (contTipo[y] || 0) - (contTipo[x] || 0) || x.localeCompare(y));
+  const todos = [...new Set([...Object.keys(contTipo), ...estado.tipos, ...estado.tiposFora])].sort((x, y) => (contTipo[y] || 0) - (contTipo[x] || 0) || x.localeCompare(y));
+  // caixa "Filtrar tipos": digitando, mostra todos os tipos que batem (sem o limite de 8)
+  const filtroTipo = normalizar($('#f-tipos-busca').value).trim();
+  const tipos = filtroTipo ? todos.filter((t) => normalizar(t).includes(filtroTipo)) : todos;
   const el = $('#f-tipos');
-  const expandido = el.dataset.expandido === '1';
+  const expandido = el.dataset.expandido === '1' || !!filtroTipo;
   const visiveis = expandido ? tipos : tipos.slice(0, 8);
   el.innerHTML =
     visiveis.map((t) => {
       const fora = estado.tiposFora.has(t);
       return `<div class="linha-tipo${fora ? ' fora' : ''}"><label class="opcao${contTipo[t] ? '' : ' zero'}"><input type="checkbox" value="${escapar(t)}" ${estado.tipos.has(t) ? 'checked' : ''}> <span class="nome-tipo">${escapar(t)}</span><span class="n">${compacto(contTipo[t] || 0)}</span></label><button type="button" class="ocultar-tipo" data-fora="${escapar(t)}" title="${fora ? 'Mostrar' : 'Ocultar'} ${escapar(t)} (mantém todos os outros tipos)" aria-pressed="${fora}">${fora ? 'mostrar' : 'ocultar'}</button></div>`;
     }).join('') +
-    (tipos.length > 8 ? `<button type="button" class="link-botao" id="ver-tipos">${expandido ? 'ver menos' : `ver todos (${tipos.length})`}</button>` : '') +
-    (!tipos.length ? '<div class="opcao zero">Nenhum</div>' : '');
+    (tipos.length > 8 && !filtroTipo ? `<button type="button" class="link-botao" id="ver-tipos">${expandido ? 'ver menos' : `ver todos (${tipos.length})`}</button>` : '') +
+    (!tipos.length ? `<div class="opcao zero">${filtroTipo ? 'Nenhum tipo com esse nome' : 'Nenhum'}</div>` : '');
 
   const contOrg = contar(paraOrgao, (a) => a._org);
   const sel = $('#f-orgao');
@@ -805,6 +812,7 @@ function ligarEventos() {
     el.dataset.expandido = el.dataset.expandido === '1' ? '0' : '1';
     aplicar();
   });
+  $('#f-tipos-busca').addEventListener('input', () => desenharFacetas(...ultimasFacetas));
   $('#f-orgao').addEventListener('change', (e) => { estado.orgao = e.target.value; executar(); });
   $('#f-concessao').addEventListener('change', (e) => { estado.concessao = e.target.value; executar(); });
   $('#f-dups').addEventListener('change', (e) => { estado.soDups = e.target.checked; executar(); });
@@ -935,6 +943,11 @@ async function iniciar() {
   lerUrl();
   sincronizarControles();
   ligarEventos();
+  // filtros de lista longa viram caixas onde dá para digitar (ex.: "rota" → Nova Rota do Oeste)
+  caixaDeBusca($('#f-concessao'), { placeholder: 'Todas · digite aqui' });
+  caixaDeBusca($('#f-orgao'), { placeholder: 'Todos · digite aqui' });
+  caixaDeBusca($('#f-uso'), { placeholder: 'Todos · digite aqui' });
+  caixaDeBusca($('#f-categoria'), { placeholder: 'Todas · digite aqui' });
   detectarServidor();
   try {
     await carregar();

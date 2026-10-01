@@ -197,6 +197,39 @@ button, input, select { font: inherit; color: inherit; }
 .periodo input, .filtros select {
   width: 100%; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
 }
+.busca-filtro {
+  width: 100%; min-width: 0; padding: 5px 8px; margin: 0 0 6px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); font-size: 13px;
+}
+
+/* ---------- filtro com busca digitável (combobox.js) ---------- */
+select.combobox-original {
+  position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0 !important; opacity: 0; pointer-events: none;
+}
+.combobox { min-width: 0; }
+.combobox-linha { position: relative; }
+.combobox-campo {
+  width: 100%; min-width: 0; padding: 6px 28px 6px 8px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); text-overflow: ellipsis;
+}
+.combobox-campo::placeholder { color: var(--ink-3); }
+.combobox-campo:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.combobox.com-valor .combobox-campo { border-color: var(--accent); font-weight: 600; }
+.combobox-seta {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 28px; border: 0; background: none; color: var(--ink-3);
+  cursor: pointer; font-size: 12px; padding: 0;
+}
+.combobox-lista {
+  list-style: none; margin: 4px 0 0; padding: 4px; max-height: 280px; overflow: auto; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); font-size: 13px;
+}
+.combobox-lista li { padding: 6px 8px; border-radius: 6px; cursor: pointer; line-height: 1.3; }
+.combobox-lista li:hover, .combobox-lista li.ativo { background: var(--accent-soft); }
+.combobox-lista li.atual { font-weight: 650; }
+.combobox-lista li.vazio { color: var(--ink-3); cursor: default; background: none; }
+.combobox-lista mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0; }
+
 .link-botao { background: none; border: 0; color: var(--link); cursor: pointer; font-size: 13px; padding: 2px 0; text-decoration: underline; }
 .abrir-filtros { display: none; }
 
