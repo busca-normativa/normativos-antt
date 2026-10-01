@@ -1,6 +1,8 @@
-# Normativos ANTT · Rodovias
+# Sistema de Busca Normativa · Rodovias
 
-Painel web para **encontrar normas da ANTT por assunto**. Digite, por exemplo, *desapropriação* e ele traz, de uma vez, resoluções, deliberações, portarias, instruções normativas, decisões e documentos relacionados, com filtros, gráficos e exportação para planilha.
+**Acesse:** https://busca-normativa.github.io/normativos-antt/ · **Mapa das DUPs:** https://busca-normativa.github.io/normativos-antt/mapa.html
+
+Sistema de busca de normas e documentos de rodovias (ANTT, DNIT, DUPs, uso da faixa de domínio, documentos das concessões). Digite, por exemplo, *desapropriação* e ele traz, de uma vez, resoluções, deliberações, portarias, instruções normativas, decisões e documentos relacionados, com filtros, gráficos e exportação para planilha.
 
 A base é montada automaticamente a partir de fontes públicas e é atualizada todo dia:
 
