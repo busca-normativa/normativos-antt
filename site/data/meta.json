@@ -1,8 +1,8 @@
 {
-  "atualizadoEm": "2026-10-01T17:45:32.339Z",
+  "atualizadoEm": "2026-10-01T20:10:19.356Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 2419,
+  "duracaoSegundos": 4,
   "total": 41639,
   "porTipo": {
     "Aviso": 160,
@@ -183,14 +183,14 @@
     {
       "nome": "Motiva Pantanal (MSVia)",
       "destaque": false,
-      "total": 585,
+      "total": 587,
       "dups": 24,
       "faixa": 217
     },
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 846,
+      "total": 843,
       "dups": 57,
       "faixa": 233
     },
@@ -267,16 +267,16 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 616,
+      "total": 618,
       "dups": 24,
-      "faixa": 128
+      "faixa": 129
     },
     {
       "nome": "Ecovias Minas Goiás (Eco050)",
       "destaque": false,
-      "total": 469,
+      "total": 472,
       "dups": 40,
-      "faixa": 98
+      "faixa": 101
     },
     {
       "nome": "Ecovias Ponte (Ecoponte)",
@@ -323,22 +323,22 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 233,
-      "dups": 24,
-      "faixa": 109
+      "total": 231,
+      "dups": 23,
+      "faixa": 108
     },
     {
       "nome": "ViaSul",
       "destaque": false,
-      "total": 535,
-      "dups": 60,
-      "faixa": 67
+      "total": 536,
+      "dups": 62,
+      "faixa": 66
     },
     {
       "nome": "PR Vias",
       "destaque": false,
-      "total": 156,
-      "dups": 25,
+      "total": 155,
+      "dups": 24,
       "faixa": 91
     },
     {
@@ -358,9 +358,9 @@
     {
       "nome": "EPR Via Mineira",
       "destaque": false,
-      "total": 120,
+      "total": 118,
       "dups": 3,
-      "faixa": 7
+      "faixa": 5
     },
     {
       "nome": "Via Cristais",

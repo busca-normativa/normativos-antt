@@ -389,22 +389,68 @@ async function etapaFichas() {
   log(`   ${ok} ficha(s) extraída(s)`);
 }
 
+const acharConcessao = (txt) => (txt ? cfgConcessoes.find((c) => c.re.test(normalizar(txt)))?.nome : null);
+
+function rodoviasDoAto(a) {
+  const f = a.dup || a.faixa || {};
+  const s = new Set(f.rodovias || []);
+  for (const m of `${a.titulo || ''} ${a.ementa || ''}`.matchAll(/BR[-‐–\s]*(\d{3})\s*\/\s*([A-Z]{2})\b/g)) s.add(`BR-${m[1]}/${m[2]}`);
+  return [...s];
+}
+
+// Concessionária citada no próprio ato: no texto integral (ficha) ou no título/ementa
+function concessaoCitada(a) {
+  const f = a.dup || a.faixa || {};
+  return acharConcessao(f.concessionaria) || f.concessao || acharConcessao(`${a.titulo} ${a.ementa} ${a.nota || ''}`);
+}
+
+// Rodovias de cada concessão, aprendidas dos atos que citam a concessionária: "BR-101/ES" -> { Eco101: 182, ... }.
+// Servem para conferir a lista curada do ANTTlegis, que tem erros (DUPs da Via Brasil listadas na Via Araucária,
+// PIT da BR-101/ES na Via Araucária, da BR-163/MS na RioSP...).
+let PEGADA = new Map();
+function aprenderRodovias() {
+  PEGADA = new Map();
+  for (const a of atos.values()) {
+    if (TIPOS_EXTERNOS.has(a.tipo)) continue;
+    const c = concessaoCitada(a);
+    if (!c) continue;
+    for (const r of rodoviasDoAto(a)) {
+      if (!PEGADA.has(r)) PEGADA.set(r, new Map());
+      PEGADA.get(r).set(c, (PEGADA.get(r).get(c) || 0) + 1);
+    }
+  }
+}
+// A lista do ANTTlegis vale se a concessão já tem atos na rodovia citada (ou se não há como conferir)
+function listaConfere(a, rodovias) {
+  const conhecidas = rodovias.filter((r) => PEGADA.has(r));
+  return !conhecidas.length || conhecidas.some((r) => PEGADA.get(r).has(a.concessaoLegis));
+}
+// Dona da rodovia: a concessão com praticamente todos os atos nela (>= 90% e ao menos 5)
+function donaDaRodovia(rodovias) {
+  for (const r of rodovias) {
+    const m = [...(PEGADA.get(r) || new Map())].sort((x, y) => y[1] - x[1]);
+    const total = m.reduce((t, [, n]) => t + n, 0);
+    if (m.length && m[0][1] >= 5 && m[0][1] / total >= 0.9) return m[0][0];
+  }
+  return null;
+}
+
 function concessaoDoAto(a) {
   if (a.tipo === 'REL') {
     const n = normalizar(a.orgao);
     return (cfgConcessoes.find((c) => c.re.test(n)) || {}).nome || a.orgao;
   }
-  // Ordem de confiança: concessionária citada no texto integral (ficha) > ementa/título > lista curada do ANTTlegis
-  // (que tem erros: ex. DUPs da Via Brasil listadas na Via Araucária) > nome/rodovia citados na ficha.
+  // Ordem de confiança: concessionária citada no texto integral (ficha) > ementa/título > lista curada do ANTTlegis,
+  // se conferir com a rodovia > nome/rodovia citados na ficha > dona da rodovia (só quando a lista errou).
   const f = a.dup || a.faixa || {};
-  const achar = (txt) => (txt ? cfgConcessoes.find((c) => c.re.test(normalizar(txt)))?.nome : null);
+  const rodovias = rodoviasDoAto(a);
+  const lista = a.concessaoLegis && listaConfere(a, rodovias) ? a.concessaoLegis : null;
   return (
-    achar(f.concessionaria) ||
-    f.concessao ||
-    achar(`${a.titulo} ${a.ementa} ${a.nota || ''}`) ||
-    a.concessaoLegis ||
-    achar(f.rodoviaNome) ||
-    achar((f.rodovias || []).join(' ')) ||
+    concessaoCitada(a) ||
+    lista ||
+    acharConcessao(f.rodoviaNome) ||
+    acharConcessao((f.rodovias || []).join(' ')) ||
+    (a.concessaoLegis ? donaDaRodovia(rodovias) : null) ||
     null
   );
 }
@@ -643,6 +689,7 @@ async function principal() {
   }
 
   // Pós-processamento
+  aprenderRodovias();
   for (const [id, a] of atos) {
     if (!TIPOS_EXTERNOS.has(a.tipo) && ehAdministrativo(a)) {
       atos.delete(id);
