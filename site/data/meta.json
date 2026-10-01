@@ -1,18 +1,18 @@
 {
-  "atualizadoEm": "2026-10-01T14:47:14.647Z",
+  "atualizadoEm": "2026-10-01T17:45:32.339Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 3,
-  "total": 41627,
+  "duracaoSegundos": 2419,
+  "total": 41639,
   "porTipo": {
     "Aviso": 160,
-    "Decisão": 4569,
+    "Decisão": 4574,
     "Deliberação": 11011,
-    "Portaria": 7521,
+    "Portaria": 7528,
     "Comunicado": 27,
-    "Voto": 1637,
+    "Voto": 1638,
     "Resolução": 6446,
-    "Voto Vista": 40,
+    "Voto Vista": 39,
     "Reunião Participativa": 128,
     "Audiência Pública": 229,
     "Tomada de Subsídio": 100,
@@ -53,17 +53,17 @@
     "Recomendação": 1
   },
   "porSetor": {
-    "R": 21335,
-    "C": 1766,
+    "R": 21339,
+    "C": 1769,
     "G": 14369,
     "P": 3118,
-    "F": 2369
+    "F": 2377
   },
   "porFonte": {
     "reu": 187,
-    "dcsrod": 4412,
+    "dcsrod": 4416,
     "dlb": 11011,
-    "busca": 11754,
+    "busca": 11766,
     "por": 6774,
     "porrod": 3941,
     "res": 6356,
@@ -267,8 +267,8 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 615,
-      "dups": 23,
+      "total": 616,
+      "dups": 24,
       "faixa": 128
     },
     {
@@ -323,16 +323,16 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 232,
+      "total": 233,
       "dups": 24,
       "faixa": 109
     },
     {
       "nome": "ViaSul",
       "destaque": false,
-      "total": 534,
+      "total": 535,
       "dups": 60,
-      "faixa": 66
+      "faixa": 67
     },
     {
       "nome": "PR Vias",
@@ -344,15 +344,15 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 569,
+      "total": 570,
       "dups": 10,
       "faixa": 433
     },
     {
       "nome": "EPR Litoral Pioneiro",
       "destaque": false,
-      "total": 304,
-      "dups": 43,
+      "total": 305,
+      "dups": 44,
       "faixa": 72
     },
     {
@@ -447,8 +447,8 @@
       "faixa": 3
     }
   ],
-  "totalDups": 1031,
-  "totalFaixa": 6189,
+  "totalDups": 1033,
+  "totalFaixa": 6190,
   "temas": [
     {
       "id": "desapropriacao",
@@ -470,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1864
+      "total": 1866
     },
     {
       "id": "faixa-dominio",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7431
+      "total": 7516
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3750
+      "total": 3755
     },
     {
       "id": "acessos",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3602
+      "total": 3526
     },
     {
       "id": "pedagio",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1907
+      "total": 1916
     },
     {
       "id": "seguranca",
@@ -734,7 +734,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 127
+      "total": 128
     },
     {
       "id": "bens-reversiveis",
