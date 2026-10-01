@@ -16,14 +16,54 @@ let camadas = new Map(); // id -> polígonos Leaflet
 let mapa;
 let grupo;
 let marcadores;
+let satelite;
+
+// Imagens de satélite da Esri: no interior (Sinop, Novo Progresso, Itaituba) só existem até o zoom 17; nas cidades,
+// até o 19. Acima do que existe, o servidor devolve o aviso "Map data not yet available". O mapa amplia a imagem do
+// 17 e, ao aproximar, consulta (tilemap) se há imagem mais nítida no centro da tela.
+const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer';
+const NIVEL_GARANTIDO = 17;
+const ZOOM_MAXIMO = 19;
+const niveis = new Map(); // ladrilho do nível 17 -> maior nível com imagem
+let consulta = 0;
+
+async function nivelComImagem(latlng) {
+  const base = mapa.project(latlng, NIVEL_GARANTIDO).divideBy(256).floor();
+  const chave = `${base.x}/${base.y}`;
+  if (niveis.has(chave)) return niveis.get(chave);
+  let nivel = NIVEL_GARANTIDO;
+  for (let z = ZOOM_MAXIMO; z > NIVEL_GARANTIDO; z--) {
+    const p = mapa.project(latlng, z).divideBy(256).floor();
+    try {
+      const j = await fetch(`${ESRI}/tilemap/${z}/${p.y}/${p.x}/1/1`).then((r) => r.json());
+      if (j.data?.[0]) { nivel = z; break; }
+    } catch {
+      break;
+    }
+  }
+  niveis.set(chave, nivel);
+  return nivel;
+}
+
+async function ajustarSatelite() {
+  if (!mapa.hasLayer(satelite) || mapa.getZoom() <= NIVEL_GARANTIDO) return;
+  const minha = ++consulta;
+  const nivel = await nivelComImagem(mapa.getCenter());
+  if (minha !== consulta || nivel === satelite.options.maxNativeZoom) return;
+  satelite.options.maxNativeZoom = nivel;
+  // redraw() do Leaflet 1.9 não refaz a grade quando o nível muda (fica sem ladrilhos); tirar e recolocar refaz
+  satelite.remove();
+  satelite.addTo(mapa);
+}
 
 function iniciarMapa() {
   const ruas = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+    maxZoom: ZOOM_MAXIMO,
     attribution: '&copy; colaboradores do OpenStreetMap',
   });
-  const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19,
+  satelite = L.tileLayer(`${ESRI}/tile/{z}/{y}/{x}`, {
+    maxZoom: ZOOM_MAXIMO,
+    maxNativeZoom: NIVEL_GARANTIDO,
     attribution: 'Imagens &copy; Esri, Maxar, Earthstar Geographics',
   });
   mapa = L.map('mapa', { layers: [satelite], zoomControl: true }).setView([-10, -53], 5);
@@ -32,6 +72,7 @@ function iniciarMapa() {
   grupo = L.featureGroup().addTo(mapa);
   marcadores = L.featureGroup().addTo(mapa);
   mapa.on('zoomend', ajustarMarcadores);
+  mapa.on('moveend baselayerchange', ajustarSatelite);
 }
 
 function popup(it) {
