@@ -6,7 +6,7 @@
   <title>Sistema de Busca Normativa · Rodovias</title>
   <meta name="description" content="Sistema de busca de normas e documentos de rodovias: ANTT, DNIT, DUPs, autorizações de uso da faixa de domínio, documentos das concessões e mapa das desapropriações, atualizado automaticamente.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%231351b4'/%3E%3Cpath d='M8 6.5h8l4 4V15M8 6.5v15h5' fill='none' stroke='white' stroke-width='1.8' stroke-linejoin='round'/%3E%3Ccircle cx='17.5' cy='18' r='3.6' fill='none' stroke='white' stroke-width='1.8'/%3E%3Cpath d='m20.2 20.7 2.6 2.6' stroke='white' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=dev">
   <script>
     // aplica o tema salvo antes de pintar a página
     try { const t = localStorage.getItem('tema-visual'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
@@ -195,6 +195,6 @@
 
   <div class="dica" id="dica" role="tooltip"></div>
   <div class="toast" id="toast" role="status"></div>
-  <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/app.js?v=dev"></script>
 </body>
 </html>
