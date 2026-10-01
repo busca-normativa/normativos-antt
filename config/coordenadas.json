@@ -1,0 +1,36 @@
+{
+ "_leia": "Quadros de coordenadas de DUPs que não foram publicados no ANTTlegis (ex.: \"poligonais descritas no Processo\"). Inclua com: node scripts/importar-coordenadas.mjs \"<quadro.pdf>\" <DUP>. Só os vértices ficam aqui; a coleta converte e valida como os demais.",
+ "itens": {
+  "DCS-457-2025-SUROD.ANTT.MT-000": {
+   "origem": "Anexo I (Quadro de coordenadas) do processo SEI 50505.017106/2025-04",
+   "arquivo": "Anexo I-Quadro de coordenadas.pdf",
+   "incluidoEm": "2026-10-01",
+   "fuso": 21,
+   "sul": true,
+   "areaTotal": "81.951,732 m²",
+   "areas": [
+    [
+     [668819.575, 8707225.092],
+     [668657.66, 8706607.374],
+     [668609.757, 8706620.213],
+     [668672.978, 8706837.683],
+     [668584.566, 8706852.95],
+     [668623.73, 8707002.365],
+     [668708.266, 8706987.767],
+     [668726.456, 8707057.092],
+     [668781.1, 8707235.177]
+    ],
+    [
+     [668930.743, 8707195.953],
+     [668881.423, 8707005.504],
+     [668924.942, 8706994.234],
+     [668870.561, 8706784.24],
+     [668827.042, 8706795.51],
+     [668770.49, 8706577.134],
+     [668724.842, 8706589.368],
+     [668886.854, 8707207.457]
+    ]
+   ]
+  }
+ }
+}

@@ -38,6 +38,7 @@ function popup(it) {
   const linhas = [
     ['Concessão', it.cc], ['Obra', it.ob], ['Rodovia', it.ro], ['Trecho', it.km], ['Município', it.mu],
     ['Área total', it.at], ['Processo', it.pr], ['DOU', dataBR(it.dou)], ['Fuso UTM', it.fu ? `${it.fu} S (SIRGAS 2000)${it.fa === 'nenhum' ? ' — deduzido pela UF (o anexo não informa o fuso)' : it.fa ? ` — corrigido: o anexo informa fuso ${it.fa}, que joga a área longe do município/UF citados no ato` : ''}` : ''],
+    ['Coordenadas', it.og ? `${it.og} — o ato não publica o quadro; incluído manualmente a partir do processo` : ''],
     ['⚠ Atenção', it.al || ''],
     ['Observação', it.dv ? `${it.dv} vértice(s) do anexo descartado(s) por inconsistência (ponto fora da sequência — confira no PDF)` : ''],
   ].filter(([, v]) => v);

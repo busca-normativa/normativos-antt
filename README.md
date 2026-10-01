@@ -66,6 +66,16 @@ npm run coletar
 
 Outras opções: `--sem-relatorios` pula os documentos das concessões; `--sem-govbr` pula as páginas curadas do gov.br; `--sem-concessoes` pula a lista "Decisões por concessionária"; `--sem-fichas` não lê o texto integral das DUPs/autorizações; `--max-fichas=N` limita quantas fichas novas são lidas por execução (padrão 2.500); `--refazer-dups` relê as fichas de DUP já existentes; `--sem-mapa` pula a leitura dos quadros de coordenadas; `--refazer-mapa` relê os quadros não reconhecidos e `--refazer-mapa=todos` relê todos (use após mudar `scripts/lib/poligonais.mjs`).
 
+### DUP com coordenadas só no processo SEI
+
+Quando o ato diz que as poligonais estão "descritas no Processo", o quadro de coordenadas não sai no ANTTlegis e a DUP fica fora do mapa. Baixe o PDF do quadro no SEI e rode:
+
+```
+node scripts/importar-coordenadas.mjs "<quadro de coordenadas.pdf>" DCS-457-2025 --origem="Anexo I do processo SEI 50505.017106/2025-04"
+```
+
+A DUP pode ser indicada pelo começo do código (`DCS-457-2025`) ou pelo código completo (`DCS-457-2025-SUROD.ANTT.MT-000`, o que aparece no endereço do mapa). Só os vértices vão para `config/coordenadas.json`; o PDF não entra no repositório. Na próxima coleta a DUP é convertida e conferida (UF, município) como as demais e aparece no mapa com a origem das coordenadas.
+
 Para testar os avisos localmente: `node scripts/novidades.mjs --saida=novidades.md` (compara a base atual com a última versão gravada no Git).
 
 ## Publicar no GitHub (recomendado)

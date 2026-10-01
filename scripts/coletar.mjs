@@ -10,6 +10,7 @@
 //   node scripts/coletar.mjs --fontes=res,dlb   coleta só as listagens indicadas (ids de config/fontes.json; "nenhuma" pula todas)
 
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { criarSessaoLegis, coletarListagem, buscarTextoIntegral, idAto, urlAto, coletarDecisoesPorConcessionaria, chaveDoTitulo } from './lib/anttlegis.mjs';
@@ -428,14 +429,27 @@ try {
   MUNICIPIOS = {};
 }
 
+// Quadros incluídos à mão (baixados do processo no SEI quando o ato não publica as coordenadas):
+// config/coordenadas.json, gerado por scripts/importar-coordenadas.mjs. Só os vértices em UTM; aqui passam pela
+// mesma conversão e conferência (UF, município) que os quadros lidos do ANTTlegis.
+let COORDENADAS = {};
+try {
+  COORDENADAS = lerJSON(path.join(RAIZ, 'config', 'coordenadas.json')).itens || {};
+} catch {
+  COORDENADAS = {};
+}
+const assinatura = (obj) => createHash('sha1').update(JSON.stringify(obj)).digest('hex').slice(0, 10);
+
 async function etapaPoligonais() {
   const pdf = await carregarPdfjs();
   // erros de rede (ex.: PDF ainda não publicado) são sempre tentados de novo; --refazer-mapa tenta também os não reconhecidos
   // --refazer-mapa=todos relê todos os quadros (ex.: após melhorar o interpretador)
   const refazer = (st) => st === 'erro' || valor('refazer-mapa') === 'todos' || (opt('refazer-mapa') && st !== 'ok');
   // todas as DUPs: as que não tinham anexo marcado na ficha também são verificadas (link com outro nome, coordenadas no texto)
-  const pendentes = [...atos.values()].filter((a) => a.dup && (!poligonais[a.id] || refazer(poligonais[a.id].st)));
-  const lote = pendentes.sort((x, y) => (y.data || '').localeCompare(x.data || '')).slice(0, MAX_FICHAS);
+  // quadros incluídos à mão entram (de novo) sempre que o arquivo de coordenadas mudar
+  const manual = (a) => !!COORDENADAS[a.id] && poligonais[a.id]?.mn !== assinatura(COORDENADAS[a.id]);
+  const pendentes = [...atos.values()].filter((a) => a.dup && (!poligonais[a.id] || refazer(poligonais[a.id].st) || manual(a)));
+  const lote = pendentes.sort((x, y) => manual(y) - manual(x) || (y.data || '').localeCompare(x.data || '')).slice(0, MAX_FICHAS);
   log(`Mapa: quadros de coordenadas — ${lote.length} a ler${pdf ? '' : ' (pdfjs-dist não instalado: só os quadros no texto do ato)'}`);
   if (!lote.length) return;
   const sessaoLegis = criarSessaoLegis({ pausaMs: 250 });
@@ -445,6 +459,14 @@ async function etapaPoligonais() {
     try {
       let linhas;
       let html = '';
+      const cm = COORDENADAS[a.id];
+      if (cm) {
+        const q = { fuso: cm.fuso, sul: cm.sul !== false, areasUtm: cm.areas || [], areaTotal: cm.areaTotal, descartados: 0 };
+        poligonais[a.id] = { ...validarEMontar(a, q), mn: assinatura(cm), og: cm.origem };
+        if (poligonais[a.id].st === 'ok') ok++;
+        else log(`   ${a.id}: as coordenadas de config/coordenadas.json não caíram no estado do ato (${poligonais[a.id].st})`);
+        continue;
+      }
       if (!a.dup.anexo) {
         html = (await sessaoLegis.texto(urlAto(a))).slice(0);
         html = html.slice(Math.max(0, html.indexOf('id="conteudo"')));
@@ -473,22 +495,27 @@ async function etapaPoligonais() {
         poligonais[a.id] = { st: 'divergente', ref: q.referencia };
         continue;
       }
-      // UFs citadas no ato (rodovias "BR-163/PA" e municípios "Itaituba/PA") para conferir o fuso informado no anexo
-      const ufs = [...new Set([...(a.dup.rodovias || []), ...(a.dup.municipios || [])].map((x) => (x.match(/\/([A-Z]{2})$/) || [])[1]).filter(Boolean))];
-      // sedes dos municípios citados ("Lucas do Rio Verde/MT"), para conferir o fuso em estados que atravessam dois fusos
-      const reconhecidos = (a.dup.municipios || []).filter((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
-      const sedes = reconhecidos.map((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
-      const v = poligonosValidados(q, ufs, sedes);
-      poligonais[a.id] = v.poligonos.length
-        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso || 'nenhum' } : {}), ...(q.descartados ? { dv: q.descartados } : {}), ...(avisoDeMunicipio(v.poligonos, reconhecidos, sedes) ? { al: avisoDeMunicipio(v.poligonos, reconhecidos, sedes) } : {}) }
-        : { st: v.foraDaUf ? 'fora-da-uf' : 'sem', fu: q.fuso };
-      if (v.poligonos.length) ok++;
+      poligonais[a.id] = validarEMontar(a, q);
+      if (poligonais[a.id].st === 'ok') ok++;
     } catch (e) {
       poligonais[a.id] = { st: 'erro', msg: String(e.message).slice(0, 120) };
     }
     if ((i + 1) % 100 === 0) log(`   ${i + 1}/${lote.length}`);
   }
   log(`   ${ok} DUP(s) com poligonal no mapa`);
+}
+
+// Converte o quadro (UTM) em polígonos e confere com a UF e os municípios citados no ato
+function validarEMontar(a, q) {
+  // UFs citadas no ato (rodovias "BR-163/PA" e municípios "Itaituba/PA") para conferir o fuso informado no anexo
+  const ufs = [...new Set([...(a.dup.rodovias || []), ...(a.dup.municipios || [])].map((x) => (x.match(/\/([A-Z]{2})$/) || [])[1]).filter(Boolean))];
+  // sedes dos municípios citados ("Lucas do Rio Verde/MT"), para conferir o fuso em estados que atravessam dois fusos
+  const reconhecidos = (a.dup.municipios || []).filter((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
+  const sedes = reconhecidos.map((m) => MUNICIPIOS[normalizar(m).replace(/\s+/g, ' ').trim()]);
+  const v = poligonosValidados(q, ufs, sedes);
+  if (!v.poligonos.length) return { st: v.foraDaUf ? 'fora-da-uf' : 'sem', fu: q.fuso };
+  const aviso = avisoDeMunicipio(v.poligonos, reconhecidos, sedes);
+  return { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso || 'nenhum' } : {}), ...(q.descartados ? { dv: q.descartados } : {}), ...(aviso ? { al: aviso } : {}) };
 }
 
 function gravarMapa(lista) {
@@ -500,7 +527,7 @@ function gravarMapa(lista) {
     const d = a.dup;
     itens.push({
       i: a.id, ti: a.titulo, cc: a.concessao || '', ob: d.obra || '', mu: (d.municipios || []).join(', '), ro: (d.rodovias || []).join(', '),
-      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined, dv: pg.dv || undefined, al: pg.al || undefined,
+      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined, dv: pg.dv || undefined, al: pg.al || undefined, og: pg.og || undefined,
       u: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=${a.tipo}&numeroAto=${String(a.numero).padStart(8, '0')}&seqAto=${a.seq || '000'}&valorAno=${a.ano}&orgao=${a.orgao}&cod_modulo=161&cod_menu=5408`,
       p: pg.p,
     });
