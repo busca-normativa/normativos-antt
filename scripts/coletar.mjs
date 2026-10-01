@@ -18,7 +18,7 @@ import { coletarRelatorios, tipoDoRelatorio } from './lib/relatorios.mjs';
 import { setoresDoAto, ehAtoDePessoal, ehAdministrativo, nomeDoTipo, compilarTemas, temasPorPalavras } from './lib/classificar.mjs';
 import { normalizar } from './lib/texto.mjs';
 import { ehDup, ehUsoDaFaixa, fichaDaDup, fichaDaFaixa } from './lib/fichas.mjs';
-import { carregarPdfjs, linhasDoPdf, linhasDoHtml, interpretarQuadro, poligonosValidados } from './lib/poligonais.mjs';
+import { carregarPdfjs, linhasDoPdf, linhasDoHtml, linkDoAnexo, interpretarQuadro, poligonosValidados } from './lib/poligonais.mjs';
 import { Sessao } from './lib/http.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -423,8 +423,10 @@ try {
 async function etapaPoligonais() {
   const pdf = await carregarPdfjs();
   // erros de rede (ex.: PDF ainda não publicado) são sempre tentados de novo; --refazer-mapa tenta também os não reconhecidos
-  const refazer = (st) => st === 'erro' || (opt('refazer-mapa') && st !== 'ok');
-  const pendentes = [...atos.values()].filter((a) => a.dup && (a.dup.anexo || a.dup.quadroNoTexto) && (!poligonais[a.id] || refazer(poligonais[a.id].st)));
+  // --refazer-mapa=todos relê todos os quadros (ex.: após melhorar o interpretador)
+  const refazer = (st) => st === 'erro' || valor('refazer-mapa') === 'todos' || (opt('refazer-mapa') && st !== 'ok');
+  // todas as DUPs: as que não tinham anexo marcado na ficha também são verificadas (link com outro nome, coordenadas no texto)
+  const pendentes = [...atos.values()].filter((a) => a.dup && (!poligonais[a.id] || refazer(poligonais[a.id].st)));
   const lote = pendentes.sort((x, y) => (y.data || '').localeCompare(x.data || '')).slice(0, MAX_FICHAS);
   log(`Mapa: quadros de coordenadas — ${lote.length} a ler${pdf ? '' : ' (pdfjs-dist não instalado: só os quadros no texto do ato)'}`);
   if (!lote.length) return;
@@ -434,14 +436,29 @@ async function etapaPoligonais() {
   for (const [i, a] of lote.entries()) {
     try {
       let linhas;
+      let html = '';
+      if (!a.dup.anexo) {
+        html = (await sessaoLegis.texto(urlAto(a))).slice(0);
+        html = html.slice(Math.max(0, html.indexOf('id="conteudo"')));
+        const link = linkDoAnexo(html);
+        if (link) a.dup.anexo = link; // anexo que a ficha não tinha reconhecido
+      }
       if (a.dup.anexo) {
         if (!pdf) continue;
         linhas = await linhasDoPdf(await sessaoPdf.binario(a.dup.anexo));
       } else {
-        const html = await sessaoLegis.texto(urlAto(a));
-        linhas = linhasDoHtml(html.slice(Math.max(0, html.indexOf('id="conteudo"'))));
+        linhas = linhasDoHtml(html);
       }
       const q = interpretarQuadro(linhas);
+      if (!q.areasUtm.length && /poligonais\s+descritas\s+no\s+Processo/i.test(html.replace(/<[^>]+>/g, ' '))) {
+        a.dup.poligonaisNoProcesso = true;
+        poligonais[a.id] = { st: 'so-processo' };
+        continue;
+      }
+      if (!q.areasUtm.length && !a.dup.anexo && !a.dup.quadroNoTexto) {
+        poligonais[a.id] = { st: 'sem-quadro' };
+        continue;
+      }
       // anexo de outro processo E de outra rodovia (erro de publicação): não entra no mapa
       const outraRodovia = q.rodovias.length && a.dup.rodovias?.length && !q.rodovias.some((r) => a.dup.rodovias.includes(r));
       if (q.referencia && a.dup.processo && q.referencia !== a.dup.processo && outraRodovia) {
@@ -452,7 +469,7 @@ async function etapaPoligonais() {
       const ufs = [...new Set([...(a.dup.rodovias || []), ...(a.dup.municipios || [])].map((x) => (x.match(/\/([A-Z]{2})$/) || [])[1]).filter(Boolean))];
       const v = poligonosValidados(q, ufs);
       poligonais[a.id] = v.poligonos.length
-        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso } : {}) }
+        ? { st: 'ok', fu: v.fuso, at: q.areaTotal, p: v.poligonos, ...(v.fusoCorrigido ? { fuAnexo: q.fuso || 'nenhum' } : {}), ...(q.descartados ? { dv: q.descartados } : {}) }
         : { st: v.foraDaUf ? 'fora-da-uf' : 'sem', fu: q.fuso };
       if (v.poligonos.length) ok++;
     } catch (e) {
@@ -472,7 +489,7 @@ function gravarMapa(lista) {
     const d = a.dup;
     itens.push({
       i: a.id, ti: a.titulo, cc: a.concessao || '', ob: d.obra || '', mu: (d.municipios || []).join(', '), ro: (d.rodovias || []).join(', '),
-      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined,
+      km: (d.kms || []).join('; '), d: a.data || '', dou: d.dou || '', pr: d.processo || '', ax: d.anexo || '', at: pg.at || '', fu: pg.fu, fa: pg.fuAnexo || undefined, dv: pg.dv || undefined,
       u: `https://anttlegis.antt.gov.br/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=${a.tipo}&numeroAto=${String(a.numero).padStart(8, '0')}&seqAto=${a.seq || '000'}&valorAno=${a.ano}&orgao=${a.orgao}&cod_modulo=161&cod_menu=5408`,
       p: pg.p,
     });

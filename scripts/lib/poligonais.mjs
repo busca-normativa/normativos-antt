@@ -41,12 +41,21 @@ export async function linhasDoPdf(bytes) {
   return linhas;
 }
 
-/** Linhas de uma tabela HTML (quadro de coordenadas publicado no texto do ato). */
+/** Linhas do quadro de coordenadas publicado no texto do ato (tabela ou parágrafos). */
 export function linhasDoHtml(html) {
   const i = html.search(/QUADRO DE COORDENADAS|ANEXO/i);
   const trecho = i >= 0 ? html.slice(i) : html;
-  // cada linha da tabela vira uma linha de texto (as células ficam lado a lado)
-  return trecho.split(/<\/tr>/i).map((l) => textoPuro(l.replace(/<\/t[dh]>/gi, ' '))).filter(Boolean);
+  // tabela: cada linha vira uma linha de texto (as células ficam lado a lado); sem tabela: parágrafos e quebras
+  const separador = /<tr[\s>]/i.test(trecho) ? /<\/tr>/i : /<\/p>|<br\s*\/?>/i;
+  return trecho.split(separador).map((l) => textoPuro(l.replace(/<\/t[dh]>/gi, ' '))).filter(Boolean);
+}
+
+/** Link do PDF anexo com o quadro de coordenadas (o texto do link varia: "ANEXO", "QUADRO DE COORDENADAS"...). */
+export function linkDoAnexo(html) {
+  for (const m of html.matchAll(/href="((?:https?:)?\/\/[^"]+\.pdf)"[^>]*>([\s\S]{0,200}?)<\/a>/gi)) {
+    if (/anexo|quadro|coordenada|memorial|poligona/i.test(textoPuro(m[2]))) return m[1].startsWith('//') ? 'https:' + m[1] : m[1];
+  }
+  return null;
 }
 
 // ------------------------------------------------------------------ interpretação do quadro
@@ -74,31 +83,91 @@ export function interpretarQuadro(linhas) {
 
   const areas = [];
   let atual = [];
+  // Título de nova área ("PERÍMETRO - ÁREA 18", "ÁREA - 04"): encerra a área anterior mesmo que o ponto de
+  // fechamento não tenha sido repetido (quadros "De P-30 Para P-01" só trazem a coordenada do ponto de partida).
+  const RE_TITULO = /^\s*(PER[IÍ]METRO\b|[ÁA]REA\s*[-–]\s*\d)/i;
   for (const linha of linhas) {
+    if (RE_TITULO.test(linha)) {
+      if (atual.length >= 3) areas.push(atual);
+      atual = [];
+      continue;
+    }
     const nums = (linha.match(NUMERO) || []).map(paraNumero);
-    // primeiro par plausível da linha, nas ordens (E, N) ou (N, E)
-    let par = null;
+    // pares plausíveis da linha, nas ordens (E, N) ou (N, E); numa tabela há um por linha, num parágrafo podem vir vários
+    const pares = [];
     for (let k = 0; k + 1 < nums.length; k++) {
       const [x, y] = [nums[k], nums[k + 1]];
-      if (ehE(x) && ehN(y)) { par = [x, y]; break; }
-      if (ehN(x) && ehE(y)) { par = [y, x]; break; }
+      if (ehE(x) && ehN(y)) { pares.push([x, y]); k++; }
+      else if (ehN(x) && ehE(y)) { pares.push([y, x]); k++; }
     }
-    if (!par) continue;
-    if (atual.length && Math.abs(atual[0][0] - par[0]) < 0.02 && Math.abs(atual[0][1] - par[1]) < 0.02 && atual.length >= 3) {
-      atual.push(par);
-      areas.push(atual);
-      atual = [];
-    } else {
-      atual.push(par);
+    // 1 ou 2 pares: linha de tabela (o 2º seria de outra tabela ao lado) → só o primeiro; 3+: parágrafo com a lista toda
+    for (const par of pares.length >= 3 ? pares : pares.slice(0, 1)) {
+      if (atual.length >= 3 && Math.abs(atual[0][0] - par[0]) < 0.02 && Math.abs(atual[0][1] - par[1]) < 0.02) {
+        atual.push(par);
+        areas.push(atual);
+        atual = [];
+      } else {
+        atual.push(par);
+      }
     }
   }
   if (atual.length >= 3) areas.push(atual);
+  const limpas = areas.flatMap(limparArea);
   // nº do processo citado no anexo: serve para conferir se o anexo publicado é mesmo o deste ato
   const ref = texto.match(/Refer[êe]ncia\s*:?\s*(\d{5}\.\d{6}\/\d{4}-\d{2})/i);
   const referencia = ref ? ref[1] : null;
   const rodovias = [...new Set([...texto.matchAll(/BR[-‐–\s]*(\d{3})\s*\/\s*([A-Z]{2})\b/g)].map((m) => `BR-${m[1]}/${m[2]}`))];
   const total = texto.replace(/m\s*&sup2;|m²/gi, 'm2 ').match(/[ÁA]REA\s+TOTAL[^\d]{0,40}(?:m2\s*\)?\s*)?([\d.]+,\d+)/i);
-  return { fuso, sul: !norte, areasUtm: areas, areaTotal: total ? total[1] + ' m²' : null, referencia, rodovias };
+  const descartados = areas.reduce((s, a) => s + a.length, 0) - limpas.reduce((s, a) => s + a.length, 0);
+  return { fuso, sul: !norte, areasUtm: limpas, areaTotal: total ? total[1] + ' m²' : null, referencia, rodovias, descartados };
+}
+
+// ------------------------------------------------------------------ limpeza geométrica (em metros, UTM)
+
+const distUtm = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+function ladoTipico(pts) {
+  const lados = pts.slice(1).map((p, i) => distUtm(pts[i], p)).sort((a, b) => a - b);
+  return Math.max(lados[Math.floor(lados.length / 2)] || 0, 5);
+}
+
+/**
+ * Remove vértices "desgarrados" (um ponto que salta para longe e volta — erro de digitação no anexo ou número
+ * de outra coluna) e separa áreas emendadas (salto enorme entre o fim de uma área e o início da seguinte).
+ */
+function limparArea(pts) {
+  let p = pts.filter((q, i) => i === 0 || distUtm(q, pts[i - 1]) > 0.001);
+  const tipico = ladoTipico(p);
+  const limite = Math.max(20 * tipico, 300);
+  // "pico": 1 a 3 vértices seguidos que saltam para longe e a sequência volta para perto de onde estava
+  const semPicos = [p[0]];
+  for (let i = 1; i < p.length; i++) {
+    const ant = semPicos[semPicos.length - 1];
+    if (distUtm(ant, p[i]) > limite) {
+      let volta = -1;
+      for (let j = i + 1; j <= Math.min(i + 3, p.length - 1); j++) {
+        if (distUtm(ant, p[j]) <= limite) { volta = j; break; }
+      }
+      if (volta > 0) { i = volta - 1; continue; }
+    }
+    semPicos.push(p[i]);
+  }
+  p = semPicos;
+  // primeiro/último vértice isolado
+  if (p.length > 3 && distUtm(p[0], p[1]) > limite && distUtm(p[0], p[p.length - 1]) > limite) p = p.slice(1);
+  if (p.length > 3 && distUtm(p[p.length - 1], p[p.length - 2]) > limite && distUtm(p[p.length - 1], p[0]) > limite) p = p.slice(0, -1);
+  // salto entre áreas emendadas: corta em pedaços
+  const corte = Math.max(30 * ladoTipico(p), 1000);
+  const pedacos = [];
+  let atual = [p[0]];
+  for (let i = 1; i < p.length; i++) {
+    if (distUtm(p[i], p[i - 1]) > corte) {
+      if (atual.length >= 3) pedacos.push(atual);
+      atual = [];
+    }
+    atual.push(p[i]);
+  }
+  if (atual.length >= 3) pedacos.push(atual);
+  return pedacos;
 }
 
 // ------------------------------------------------------------------ UTM (SIRGAS 2000 ≈ WGS84) -> lat/lon
@@ -159,7 +228,9 @@ export function poligonosValidados(q, ufs = []) {
   const tentar = (fuso) => poligonosLatLon({ ...q, fuso });
   const centro = (polys) => L_centro(polys.flat());
   let polys = tentar(q.fuso);
-  if (!conhecidas.length || !polys.length || naUf(centro(polys), conhecidas)) return { poligonos: polys, fuso: q.fuso, fusoCorrigido: false };
+  // anexo sem fuso: sem UF para conferir não há como converter; com UF, infere o fuso abaixo
+  if (!q.fuso && !conhecidas.length) return { poligonos: [], fuso: null, fusoCorrigido: false };
+  if (q.fuso && (!conhecidas.length || !polys.length || naUf(centro(polys), conhecidas))) return { poligonos: polys, fuso: q.fuso, fusoCorrigido: false };
   const candidatos = [];
   for (let f = 18; f <= 25; f++) {
     if (f === q.fuso) continue;
@@ -183,10 +254,11 @@ export function poligonosLatLon(q) {
   // uma área de DUP não passa de ~1° (≈110 km) de extensão; acima disso a leitura falhou
   const validos = polys.filter((p) => p.length >= 3 && extensao(p) <= 1.2);
   if (validos.length < 3) return validos;
-  // áreas isoladas a mais de ~3° (≈330 km) do conjunto do ato também são erro de leitura (ex.: fuso trocado)
+  // áreas isoladas a mais de ~2° (≈220 km) do conjunto do ato são erro (fuso trocado ou área de outra obra copiada
+  // no anexo); duplicações longas legítimas espalham áreas por até ~150 km
   const centros = validos.map((p) => [mediana(p.map((x) => x[0])), mediana(p.map((x) => x[1]))]);
   const c = [mediana(centros.map((x) => x[0])), mediana(centros.map((x) => x[1]))];
-  return validos.filter((_, i) => Math.hypot(centros[i][0] - c[0], centros[i][1] - c[1]) <= 3);
+  return validos.filter((_, i) => Math.hypot(centros[i][0] - c[0], centros[i][1] - c[1]) <= 2);
 }
 
 const mediana = (v) => {

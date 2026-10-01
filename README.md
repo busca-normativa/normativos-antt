@@ -64,7 +64,7 @@ npm run coletar
 | `npm run coletar:completo` | Recoleta todos os anos (capta revogações de atos antigos) | 15 a 25 min |
 | `npm run coletar:rapido` | Incremental sem a busca por temas | 1 a 2 min |
 
-Outras opções: `--sem-relatorios` pula os documentos das concessões; `--sem-govbr` pula as páginas curadas do gov.br; `--sem-concessoes` pula a lista "Decisões por concessionária"; `--sem-fichas` não lê o texto integral das DUPs/autorizações; `--max-fichas=N` limita quantas fichas novas são lidas por execução (padrão 2.500); `--refazer-dups` relê as fichas de DUP já existentes; `--sem-mapa` pula a leitura dos quadros de coordenadas.
+Outras opções: `--sem-relatorios` pula os documentos das concessões; `--sem-govbr` pula as páginas curadas do gov.br; `--sem-concessoes` pula a lista "Decisões por concessionária"; `--sem-fichas` não lê o texto integral das DUPs/autorizações; `--max-fichas=N` limita quantas fichas novas são lidas por execução (padrão 2.500); `--refazer-dups` relê as fichas de DUP já existentes; `--sem-mapa` pula a leitura dos quadros de coordenadas; `--refazer-mapa` relê os quadros não reconhecidos e `--refazer-mapa=todos` relê todos (use após mudar `scripts/lib/poligonais.mjs`).
 
 Para testar os avisos localmente: `node scripts/novidades.mjs --saida=novidades.md` (compara a base atual com a última versão gravada no Git).
 

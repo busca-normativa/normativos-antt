@@ -32,7 +32,8 @@ function iniciarMapa() {
 function popup(it) {
   const linhas = [
     ['Concessão', it.cc], ['Obra', it.ob], ['Rodovia', it.ro], ['Trecho', it.km], ['Município', it.mu],
-    ['Área total', it.at], ['Processo', it.pr], ['DOU', dataBR(it.dou)], ['Fuso UTM', it.fu ? `${it.fu} S (SIRGAS 2000)${it.fa ? ` — corrigido: o anexo informa fuso ${it.fa}, incompatível com a UF` : ''}` : ''],
+    ['Área total', it.at], ['Processo', it.pr], ['DOU', dataBR(it.dou)], ['Fuso UTM', it.fu ? `${it.fu} S (SIRGAS 2000)${it.fa === 'nenhum' ? ' — deduzido pela UF (o anexo não informa o fuso)' : it.fa ? ` — corrigido: o anexo informa fuso ${it.fa}, incompatível com a UF` : ''}` : ''],
+    ['Observação', it.dv ? `${it.dv} vértice(s) do anexo descartado(s) por inconsistência (ponto fora da sequência — confira no PDF)` : ''],
   ].filter(([, v]) => v);
   const numero = (it.ti.match(/N[º°]\s*([\d.]+)/) || [])[1] || '';
   return `<h3>${esc(it.ti)}</h3><dl>${linhas.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>

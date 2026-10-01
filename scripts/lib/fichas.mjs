@@ -5,6 +5,7 @@
 
 import { textoPuro, normalizar, dataBR } from './texto.mjs';
 import { urlAto } from './anttlegis.mjs';
+import { linkDoAnexo, linhasDoHtml, interpretarQuadro } from './poligonais.mjs';
 
 // ------------------------------------------------------------------ classificação pela ementa
 
@@ -166,22 +167,26 @@ async function textoIntegral(sessao, ato) {
   const texto = textoPuro(trecho);
   const dou = texto.match(/D\.O\.U\.?,?\s*(\d{2}\/\d{2}\/\d{4})/);
   // Anexo publicado à parte (PDF com o quadro de coordenadas / memorial descritivo)
-  const anexo = trecho.match(/href="((?:https?:)?\/\/[^"]+\.pdf)"[^>]*>\s*(?:<[^>]+>\s*)*ANEXO/i);
-  // Quadro de coordenadas publicado no próprio texto (atos mais antigos)
-  const temQuadro = /QUADRO DE COORDENADAS/i.test(texto) && /<table/i.test(trecho.slice(trecho.search(/ANEXO/i)));
+  const anexo = linkDoAnexo(trecho);
+  // Coordenadas publicadas no próprio texto (tabela ou parágrafo com a lista de vértices)
+  const temQuadro = !anexo && interpretarQuadro(linhasDoHtml(trecho)).areasUtm.length > 0;
+  // Poligonais só no processo SEI (o ato não as publica)
+  const soNoProcesso = !anexo && !temQuadro && /poligonais\s+descritas\s+no\s+Processo/i.test(texto);
   // o quadro de coordenadas/memorial do anexo não interessa para a ficha
   const corpo = texto.split(/ANEXO\s*[-–]?\s*QUADRO DE COORDENADAS|QUADRO DE COORDENADAS|ANEXO I\s*-\s*[ÁA]rea/i)[0];
   return {
     corpo,
     dou: dou ? dataBR(dou[1]) : null,
-    anexo: anexo ? (anexo[1].startsWith('//') ? 'https:' + anexo[1] : anexo[1]) : null,
+    anexo,
     quadroNoTexto: temQuadro,
+    soNoProcesso,
   };
 }
 
-function completar(ficha, { dou, anexo, quadroNoTexto }) {
+function completar(ficha, { dou, anexo, quadroNoTexto, soNoProcesso }) {
   if (dou) ficha.dou = dou;
   if (anexo) ficha.anexo = anexo;
+  if (soNoProcesso) ficha.poligonaisNoProcesso = true;
   if (quadroNoTexto) ficha.quadroNoTexto = true;
   return ficha;
 }
