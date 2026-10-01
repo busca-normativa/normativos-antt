@@ -97,7 +97,9 @@ button, input, select { font: inherit; color: inherit; }
 .topo { background: var(--surface); border-bottom: 1px solid var(--border); }
 .topo .wrap { display: flex; align-items: center; gap: 16px; min-height: 56px; flex-wrap: wrap; }
 .marca { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 16px; text-decoration: none; color: var(--ink); }
-.marca-logo { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.marca-logo { width: 30px; height: 30px; flex: none; color: var(--accent); }
+.marca-texto { display: flex; flex-direction: column; line-height: 1.15; }
+.marca-texto small { font-size: 11px; font-weight: 500; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
 .topo nav { margin-left: auto; display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 .topo nav a, .botao-icone {
   display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 8px;
