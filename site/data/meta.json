@@ -1,18 +1,18 @@
 {
-  "atualizadoEm": "2026-10-01T20:10:19.356Z",
+  "atualizadoEm": "2026-10-02T16:58:17.106Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 4,
-  "total": 41639,
+  "duracaoSegundos": 2334,
+  "total": 42433,
   "porTipo": {
+    "Portaria": 7530,
     "Aviso": 160,
-    "Decisão": 4574,
+    "Decisão": 4573,
     "Deliberação": 11011,
-    "Portaria": 7528,
     "Comunicado": 27,
-    "Voto": 1638,
+    "Voto": 1637,
     "Resolução": 6446,
-    "Voto Vista": 39,
+    "Voto Vista": 40,
     "Reunião Participativa": 128,
     "Audiência Pública": 229,
     "Tomada de Subsídio": 100,
@@ -23,7 +23,7 @@
     "Licitação - Concessão": 1,
     "Leilão / Concessão": 7,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 406,
+    "Documento": 1143,
     "Manual": 162,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -33,11 +33,11 @@
     "Portaria Complementar": 16,
     "Lei": 14,
     "Norma Técnica": 789,
-    "Relatório de Obras": 2619,
+    "Relatório de Obras": 2660,
     "Relatório de Monitoração": 1297,
-    "Relatório do Verificador": 10,
+    "Relatório do Verificador": 22,
     "Relatório Financeiro": 352,
-    "Relatório do Verificador (mensal)": 18,
+    "Relatório do Verificador (mensal)": 21,
     "Relatório de Concessão": 45,
     "Ofício Circular": 2,
     "Regulamento": 9,
@@ -53,18 +53,18 @@
     "Recomendação": 1
   },
   "porSetor": {
-    "R": 21339,
+    "G": 15099,
+    "R": 21400,
     "C": 1769,
-    "G": 14369,
     "P": 3118,
-    "F": 2377
+    "F": 2380
   },
   "porFonte": {
+    "por": 6775,
     "reu": 187,
     "dcsrod": 4416,
     "dlb": 11011,
-    "busca": 11766,
-    "por": 6774,
+    "busca": 11765,
     "porrod": 3941,
     "res": 6356,
     "govbr": 504,
@@ -72,11 +72,11 @@
     "aud": 229,
     "inm": 48,
     "cpb": 48,
-    "dnit": 1429,
+    "dnit": 2167,
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
-    "relatorios": 8158
+    "relatorios": 8214
   },
   "fontes": [
     {
@@ -176,49 +176,49 @@
     {
       "nome": "Nova Rota do Oeste",
       "destaque": false,
-      "total": 810,
+      "total": 812,
       "dups": 65,
       "faixa": 185
     },
     {
       "nome": "Motiva Pantanal (MSVia)",
       "destaque": false,
-      "total": 587,
+      "total": 590,
       "dups": 24,
       "faixa": 217
     },
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 843,
+      "total": 847,
       "dups": 57,
       "faixa": 233
     },
     {
       "nome": "Autopista Fluminense",
       "destaque": false,
-      "total": 717,
+      "total": 719,
       "dups": 28,
       "faixa": 146
     },
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 1527,
+      "total": 1530,
       "dups": 29,
       "faixa": 862
     },
     {
       "nome": "Autopista Planalto Sul",
       "destaque": false,
-      "total": 626,
+      "total": 629,
       "dups": 7,
       "faixa": 157
     },
     {
       "nome": "Autopista Régis Bittencourt",
       "destaque": false,
-      "total": 841,
+      "total": 844,
       "dups": 11,
       "faixa": 256
     },
@@ -267,42 +267,42 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 618,
+      "total": 621,
       "dups": 24,
       "faixa": 129
     },
     {
       "nome": "Ecovias Minas Goiás (Eco050)",
       "destaque": false,
-      "total": 472,
+      "total": 474,
       "dups": 40,
       "faixa": 101
     },
     {
       "nome": "Ecovias Ponte (Ecoponte)",
       "destaque": false,
-      "total": 358,
+      "total": 359,
       "dups": 4,
       "faixa": 25
     },
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 423,
+      "total": 428,
       "dups": 52,
       "faixa": 88
     },
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 369,
+      "total": 372,
       "dups": 18,
       "faixa": 48
     },
     {
       "nome": "Ecovias do Cerrado",
       "destaque": false,
-      "total": 471,
+      "total": 473,
       "dups": 35,
       "faixa": 88
     },
@@ -316,7 +316,7 @@
     {
       "nome": "Transbrasiliana",
       "destaque": false,
-      "total": 617,
+      "total": 620,
       "dups": 18,
       "faixa": 152
     },
@@ -344,14 +344,14 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 570,
+      "total": 571,
       "dups": 10,
       "faixa": 433
     },
     {
       "nome": "EPR Litoral Pioneiro",
       "destaque": false,
-      "total": 305,
+      "total": 307,
       "dups": 44,
       "faixa": 72
     },
@@ -379,14 +379,14 @@
     {
       "nome": "Nova 364",
       "destaque": false,
-      "total": 46,
+      "total": 50,
       "dups": 1,
       "faixa": 19
     },
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 82,
+      "total": 89,
       "dups": 2,
       "faixa": 10
     },
@@ -442,7 +442,7 @@
     {
       "nome": "EPR Paraná",
       "destaque": false,
-      "total": 21,
+      "total": 23,
       "dups": 0,
       "faixa": 3
     }
@@ -470,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1866
+      "total": 1888
     },
     {
       "id": "faixa-dominio",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7516
+      "total": 7495
     },
     {
       "id": "ocupacao-faixa",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3526
+      "total": 3676
     },
     {
       "id": "pedagio",
@@ -645,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1577
+      "total": 1575
     },
     {
       "id": "penalidades",
@@ -665,7 +665,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1194
+      "total": 1195
     },
     {
       "id": "ambiental",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1916
+      "total": 1978
     },
     {
       "id": "seguranca",
@@ -701,7 +701,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 736
+      "total": 737
     },
     {
       "id": "pesagem",
@@ -785,7 +785,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 128
+      "total": 143
     },
     {
       "id": "rcr",
