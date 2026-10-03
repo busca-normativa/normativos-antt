@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-10-02T16:58:17.106Z",
+  "atualizadoEm": "2026-10-03T15:19:59.208Z",
   "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
   "modo": "incremental",
-  "duracaoSegundos": 2334,
-  "total": 42433,
+  "duracaoSegundos": 1984,
+  "total": 42450,
   "porTipo": {
-    "Portaria": 7530,
+    "Portaria": 7529,
     "Aviso": 160,
     "Decisão": 4573,
     "Deliberação": 11011,
     "Comunicado": 27,
-    "Voto": 1637,
+    "Voto": 1638,
     "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 128,
@@ -33,7 +33,7 @@
     "Portaria Complementar": 16,
     "Lei": 14,
     "Norma Técnica": 789,
-    "Relatório de Obras": 2660,
+    "Relatório de Obras": 2670,
     "Relatório de Monitoração": 1297,
     "Relatório do Verificador": 22,
     "Relatório Financeiro": 352,
@@ -47,14 +47,14 @@
     "Contrato e anexos (PER)": 196,
     "Reuniões": 214,
     "Planejamento de obras": 820,
-    "Revisões e reajustes": 1772,
+    "Revisões e reajustes": 1779,
     "Pesquisa e desenvolvimento (RDT)": 46,
     "Processo de licitação": 154,
     "Recomendação": 1
   },
   "porSetor": {
-    "G": 15099,
-    "R": 21400,
+    "G": 15105,
+    "R": 21411,
     "C": 1769,
     "P": 3118,
     "F": 2380
@@ -76,7 +76,7 @@
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
-    "relatorios": 8214
+    "relatorios": 8231
   },
   "fontes": [
     {
@@ -169,7 +169,7 @@
     {
       "nome": "Via Brasil BR-163",
       "destaque": true,
-      "total": 224,
+      "total": 226,
       "dups": 20,
       "faixa": 15
     },
@@ -204,7 +204,7 @@
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 1530,
+      "total": 1536,
       "dups": 29,
       "faixa": 862
     },
@@ -288,7 +288,7 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 428,
+      "total": 429,
       "dups": 52,
       "faixa": 88
     },
@@ -358,7 +358,7 @@
     {
       "nome": "EPR Via Mineira",
       "destaque": false,
-      "total": 118,
+      "total": 120,
       "dups": 3,
       "faixa": 5
     },
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7495
+      "total": 7519
     },
     {
       "id": "ocupacao-faixa",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3676
+      "total": 3924
     },
     {
       "id": "pedagio",
@@ -645,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1575
+      "total": 1577
     },
     {
       "id": "penalidades",
