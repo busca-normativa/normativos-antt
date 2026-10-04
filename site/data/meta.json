@@ -1,13 +1,13 @@
 {
-  "atualizadoEm": "2026-10-03T15:19:59.208Z",
-  "ultimaColetaCompleta": "2026-09-29T18:12:08.826Z",
-  "modo": "incremental",
-  "duracaoSegundos": 1984,
-  "total": 42450,
+  "atualizadoEm": "2026-10-04T16:29:12.957Z",
+  "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
+  "modo": "completo",
+  "duracaoSegundos": 3657,
+  "total": 42449,
   "porTipo": {
-    "Portaria": 7529,
+    "Portaria": 7528,
     "Aviso": 160,
-    "Decisão": 4573,
+    "Decisão": 4574,
     "Deliberação": 11011,
     "Comunicado": 27,
     "Voto": 1638,
@@ -33,38 +33,38 @@
     "Portaria Complementar": 16,
     "Lei": 14,
     "Norma Técnica": 789,
-    "Relatório de Obras": 2670,
-    "Relatório de Monitoração": 1297,
-    "Relatório do Verificador": 22,
-    "Relatório Financeiro": 352,
-    "Relatório do Verificador (mensal)": 21,
-    "Relatório de Concessão": 45,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
+    "Recomendação": 1,
+    "Relatório Financeiro": 352,
+    "Relatório de Obras": 2669,
+    "Relatório de Monitoração": 1297,
+    "Relatório do Verificador": 22,
     "Termo de arrolamento": 222,
     "Licenciamento ambiental": 393,
     "Contrato e anexos (PER)": 196,
     "Reuniões": 214,
+    "Relatório de Concessão": 45,
     "Planejamento de obras": 820,
     "Revisões e reajustes": 1779,
     "Pesquisa e desenvolvimento (RDT)": 46,
     "Processo de licitação": 154,
-    "Recomendação": 1
+    "Relatório do Verificador (mensal)": 21
   },
   "porSetor": {
     "G": 15105,
-    "R": 21411,
-    "C": 1769,
+    "R": 21410,
+    "C": 1767,
     "P": 3118,
-    "F": 2380
+    "F": 2381
   },
   "porFonte": {
     "por": 6775,
     "reu": 187,
     "dcsrod": 4416,
     "dlb": 11011,
-    "busca": 11765,
+    "busca": 11696,
     "porrod": 3941,
     "res": 6356,
     "govbr": 504,
@@ -76,7 +76,7 @@
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
-    "relatorios": 8231
+    "relatorios": 8230
   },
   "fontes": [
     {
@@ -204,7 +204,7 @@
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 1536,
+      "total": 1535,
       "dups": 29,
       "faixa": 862
     },
@@ -323,7 +323,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 231,
+      "total": 230,
       "dups": 23,
       "faixa": 108
     },
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7519
+      "total": 7496
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3755
+      "total": 3754
     },
     {
       "id": "acessos",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3924
+      "total": 3937
     },
     {
       "id": "pedagio",
