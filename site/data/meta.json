@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-10-04T16:29:12.957Z",
+  "atualizadoEm": "2026-10-05T20:01:12.827Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
-  "modo": "completo",
-  "duracaoSegundos": 3657,
-  "total": 42449,
+  "modo": "incremental",
+  "duracaoSegundos": 2407,
+  "total": 42455,
   "porTipo": {
-    "Portaria": 7528,
+    "Portaria": 7531,
+    "Decisão": 4578,
     "Aviso": 160,
-    "Decisão": 4574,
     "Deliberação": 11011,
     "Comunicado": 27,
-    "Voto": 1638,
+    "Voto": 1637,
     "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 128,
@@ -53,18 +53,18 @@
     "Relatório do Verificador (mensal)": 21
   },
   "porSetor": {
-    "G": 15105,
-    "R": 21410,
-    "C": 1767,
+    "G": 15107,
+    "R": 21415,
+    "C": 1769,
     "P": 3118,
-    "F": 2381
+    "F": 2379
   },
   "porFonte": {
-    "por": 6775,
+    "por": 6777,
+    "dcsrod": 4421,
     "reu": 187,
-    "dcsrod": 4416,
+    "busca": 11757,
     "dlb": 11011,
-    "busca": 11696,
     "porrod": 3941,
     "res": 6356,
     "govbr": 504,
@@ -232,7 +232,7 @@
     {
       "nome": "ViaCosteira",
       "destaque": false,
-      "total": 425,
+      "total": 426,
       "dups": 83,
       "faixa": 43
     },
@@ -267,7 +267,7 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 621,
+      "total": 624,
       "dups": 24,
       "faixa": 129
     },
@@ -323,7 +323,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 230,
+      "total": 231,
       "dups": 23,
       "faixa": 108
     },
@@ -386,7 +386,7 @@
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 89,
+      "total": 90,
       "dups": 2,
       "faixa": 10
     },
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7496
+      "total": 7524
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3754
+      "total": 3755
     },
     {
       "id": "acessos",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3937
+      "total": 3600
     },
     {
       "id": "pedagio",
@@ -645,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1577
+      "total": 1575
     },
     {
       "id": "penalidades",
@@ -665,7 +665,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1195
+      "total": 1196
     },
     {
       "id": "ambiental",
