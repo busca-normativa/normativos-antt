@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-10-05T20:01:12.827Z",
+  "atualizadoEm": "2026-10-06T17:32:45.869Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
   "duracaoSegundos": 2407,
-  "total": 42455,
+  "total": 42466,
   "porTipo": {
-    "Portaria": 7531,
-    "Decisão": 4578,
+    "Portaria": 7534,
+    "Decisão": 4581,
+    "Deliberação": 11015,
     "Aviso": 160,
-    "Deliberação": 11011,
     "Comunicado": 27,
-    "Voto": 1637,
+    "Voto": 1638,
     "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 128,
@@ -53,18 +53,18 @@
     "Relatório do Verificador (mensal)": 21
   },
   "porSetor": {
-    "G": 15107,
-    "R": 21415,
+    "G": 15110,
+    "R": 21421,
+    "F": 2381,
     "C": 1769,
-    "P": 3118,
-    "F": 2379
+    "P": 3118
   },
   "porFonte": {
-    "por": 6777,
-    "dcsrod": 4421,
+    "por": 6780,
+    "dcsrod": 4424,
+    "busca": 11768,
+    "dlb": 11015,
     "reu": 187,
-    "busca": 11757,
-    "dlb": 11011,
     "porrod": 3941,
     "res": 6356,
     "govbr": 504,
@@ -239,7 +239,7 @@
     {
       "nome": "Concebra",
       "destaque": false,
-      "total": 636,
+      "total": 637,
       "dups": 7,
       "faixa": 276
     },
@@ -288,9 +288,9 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 429,
+      "total": 430,
       "dups": 52,
-      "faixa": 88
+      "faixa": 89
     },
     {
       "nome": "Ecovias do Araguaia",
@@ -302,7 +302,7 @@
     {
       "nome": "Ecovias do Cerrado",
       "destaque": false,
-      "total": 473,
+      "total": 474,
       "dups": 35,
       "faixa": 88
     },
@@ -337,7 +337,7 @@
     {
       "nome": "PR Vias",
       "destaque": false,
-      "total": 155,
+      "total": 156,
       "dups": 24,
       "faixa": 91
     },
@@ -365,7 +365,7 @@
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 81,
+      "total": 83,
       "dups": 6,
       "faixa": 21
     },
@@ -448,7 +448,7 @@
     }
   ],
   "totalDups": 1033,
-  "totalFaixa": 6190,
+  "totalFaixa": 6191,
   "temas": [
     {
       "id": "desapropriacao",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7524
+      "total": 7510
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3755
+      "total": 3756
     },
     {
       "id": "acessos",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3600
+      "total": 3853
     },
     {
       "id": "pedagio",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1978
+      "total": 1979
     },
     {
       "id": "seguranca",
