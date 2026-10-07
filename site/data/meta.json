@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-10-06T17:32:45.869Z",
+  "atualizadoEm": "2026-10-07T18:10:40.262Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
-  "duracaoSegundos": 2407,
-  "total": 42466,
+  "duracaoSegundos": 2471,
+  "total": 42477,
   "porTipo": {
-    "Portaria": 7534,
-    "Decisão": 4581,
+    "Decisão": 4588,
+    "Portaria": 7535,
     "Deliberação": 11015,
     "Aviso": 160,
+    "Voto": 1642,
     "Comunicado": 27,
-    "Voto": 1638,
     "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 128,
@@ -30,7 +30,7 @@
     "Decreto": 6,
     "Súmula": 3,
     "Nota Técnica": 3,
-    "Portaria Complementar": 16,
+    "Portaria Complementar": 15,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -53,16 +53,16 @@
     "Relatório do Verificador (mensal)": 21
   },
   "porSetor": {
-    "G": 15110,
-    "R": 21421,
+    "R": 21430,
+    "G": 15113,
     "F": 2381,
-    "C": 1769,
+    "C": 1766,
     "P": 3118
   },
   "porFonte": {
-    "por": 6780,
-    "dcsrod": 4424,
-    "busca": 11768,
+    "dcsrod": 4430,
+    "busca": 11778,
+    "por": 6781,
     "dlb": 11015,
     "reu": 187,
     "porrod": 3941,
@@ -176,15 +176,15 @@
     {
       "nome": "Nova Rota do Oeste",
       "destaque": false,
-      "total": 812,
+      "total": 813,
       "dups": 65,
       "faixa": 185
     },
     {
       "nome": "Motiva Pantanal (MSVia)",
       "destaque": false,
-      "total": 590,
-      "dups": 24,
+      "total": 591,
+      "dups": 25,
       "faixa": 217
     },
     {
@@ -267,7 +267,7 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 624,
+      "total": 625,
       "dups": 24,
       "faixa": 129
     },
@@ -302,7 +302,7 @@
     {
       "nome": "Ecovias do Cerrado",
       "destaque": false,
-      "total": 474,
+      "total": 475,
       "dups": 35,
       "faixa": 88
     },
@@ -323,7 +323,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 231,
+      "total": 230,
       "dups": 23,
       "faixa": 108
     },
@@ -337,7 +337,7 @@
     {
       "nome": "PR Vias",
       "destaque": false,
-      "total": 156,
+      "total": 157,
       "dups": 24,
       "faixa": 91
     },
@@ -365,8 +365,8 @@
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 83,
-      "dups": 6,
+      "total": 84,
+      "dups": 7,
       "faixa": 21
     },
     {
@@ -407,9 +407,9 @@
     {
       "nome": "Rota Agro",
       "destaque": false,
-      "total": 13,
+      "total": 14,
       "dups": 0,
-      "faixa": 2
+      "faixa": 3
     },
     {
       "nome": "Elovias",
@@ -447,8 +447,8 @@
       "faixa": 3
     }
   ],
-  "totalDups": 1033,
-  "totalFaixa": 6191,
+  "totalDups": 1035,
+  "totalFaixa": 6193,
   "temas": [
     {
       "id": "desapropriacao",
@@ -470,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1888
+      "total": 1891
     },
     {
       "id": "faixa-dominio",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7510
+      "total": 7479
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3756
+      "total": 3755
     },
     {
       "id": "acessos",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3853
+      "total": 3698
     },
     {
       "id": "pedagio",
@@ -645,7 +645,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1575
+      "total": 1584
     },
     {
       "id": "penalidades",
@@ -665,7 +665,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1196
+      "total": 1195
     },
     {
       "id": "ambiental",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1979
+      "total": 1944
     },
     {
       "id": "seguranca",
@@ -701,7 +701,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 737
+      "total": 739
     },
     {
       "id": "pesagem",
@@ -719,7 +719,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 267
+      "total": 268
     },
     {
       "id": "ppd",
@@ -751,7 +751,7 @@
         "inventário de bens",
         "desvinculação de bens"
       ],
-      "total": 130
+      "total": 131
     },
     {
       "id": "encerramento",
@@ -799,7 +799,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 203
+      "total": 204
     }
   ],
   "erros": []
