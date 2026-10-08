@@ -1,15 +1,15 @@
 {
-  "atualizadoEm": "2026-10-07T18:10:40.262Z",
+  "atualizadoEm": "2026-10-08T18:09:28.448Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
-  "duracaoSegundos": 2471,
-  "total": 42477,
+  "duracaoSegundos": 2461,
+  "total": 42498,
   "porTipo": {
-    "Decisão": 4588,
-    "Portaria": 7535,
+    "Portaria": 7537,
+    "Decisão": 4589,
     "Deliberação": 11015,
     "Aviso": 160,
-    "Voto": 1642,
+    "Voto": 1643,
     "Comunicado": 27,
     "Resolução": 6446,
     "Voto Vista": 40,
@@ -30,7 +30,7 @@
     "Decreto": 6,
     "Súmula": 3,
     "Nota Técnica": 3,
-    "Portaria Complementar": 15,
+    "Portaria Complementar": 16,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -39,7 +39,7 @@
     "Recomendação": 1,
     "Relatório Financeiro": 352,
     "Relatório de Obras": 2669,
-    "Relatório de Monitoração": 1297,
+    "Relatório de Monitoração": 1301,
     "Relatório do Verificador": 22,
     "Termo de arrolamento": 222,
     "Licenciamento ambiental": 393,
@@ -50,19 +50,19 @@
     "Revisões e reajustes": 1779,
     "Pesquisa e desenvolvimento (RDT)": 46,
     "Processo de licitação": 154,
-    "Relatório do Verificador (mensal)": 21
+    "Relatório do Verificador (mensal)": 33
   },
   "porSetor": {
-    "R": 21430,
-    "G": 15113,
-    "F": 2381,
-    "C": 1766,
+    "G": 15115,
+    "R": 21451,
+    "F": 2378,
+    "C": 1769,
     "P": 3118
   },
   "porFonte": {
-    "dcsrod": 4430,
-    "busca": 11778,
-    "por": 6781,
+    "por": 6783,
+    "dcsrod": 4434,
+    "busca": 11780,
     "dlb": 11015,
     "reu": 187,
     "porrod": 3941,
@@ -76,7 +76,7 @@
     "pcj": 26,
     "isv": 51,
     "ntc": 3,
-    "relatorios": 8230
+    "relatorios": 8246
   },
   "fontes": [
     {
@@ -176,7 +176,7 @@
     {
       "nome": "Nova Rota do Oeste",
       "destaque": false,
-      "total": 813,
+      "total": 814,
       "dups": 65,
       "faixa": 185
     },
@@ -190,7 +190,7 @@
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 847,
+      "total": 848,
       "dups": 57,
       "faixa": 233
     },
@@ -239,7 +239,7 @@
     {
       "nome": "Concebra",
       "destaque": false,
-      "total": 637,
+      "total": 641,
       "dups": 7,
       "faixa": 276
     },
@@ -288,14 +288,14 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 430,
+      "total": 435,
       "dups": 52,
       "faixa": 89
     },
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 372,
+      "total": 375,
       "dups": 18,
       "faixa": 48
     },
@@ -323,7 +323,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 230,
+      "total": 231,
       "dups": 23,
       "faixa": 108
     },
@@ -337,8 +337,8 @@
     {
       "nome": "PR Vias",
       "destaque": false,
-      "total": 157,
-      "dups": 24,
+      "total": 158,
+      "dups": 25,
       "faixa": 91
     },
     {
@@ -414,7 +414,7 @@
     {
       "nome": "Elovias",
       "destaque": false,
-      "total": 35,
+      "total": 39,
       "dups": 1,
       "faixa": 7
     },
@@ -447,7 +447,7 @@
       "faixa": 3
     }
   ],
-  "totalDups": 1035,
+  "totalDups": 1036,
   "totalFaixa": 6193,
   "temas": [
     {
@@ -470,7 +470,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1891
+      "total": 1892
     },
     {
       "id": "faixa-dominio",
@@ -488,7 +488,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7479
+      "total": 7527
     },
     {
       "id": "ocupacao-faixa",
@@ -512,7 +512,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3755
+      "total": 3756
     },
     {
       "id": "acessos",
@@ -587,7 +587,7 @@
         "remanejamento de interferências",
         "acordos com terceiros"
       ],
-      "total": 258
+      "total": 259
     },
     {
       "id": "obras",
@@ -606,7 +606,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3698
+      "total": 3608
     },
     {
       "id": "pedagio",
@@ -626,7 +626,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1476
+      "total": 1478
     },
     {
       "id": "reequilibrio",
@@ -683,7 +683,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1944
+      "total": 1981
     },
     {
       "id": "seguranca",
@@ -719,7 +719,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 268
+      "total": 269
     },
     {
       "id": "ppd",
@@ -785,7 +785,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 143
+      "total": 155
     },
     {
       "id": "rcr",
@@ -799,7 +799,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 204
+      "total": 206
     }
   ],
   "erros": []
