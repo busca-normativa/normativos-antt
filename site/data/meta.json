@@ -1,22 +1,22 @@
 {
-  "atualizadoEm": "2026-10-09T17:49:16.182Z",
+  "atualizadoEm": "2026-10-10T16:32:53.083Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
-  "duracaoSegundos": 2540,
-  "total": 42535,
+  "duracaoSegundos": 2256,
+  "total": 42533,
   "porTipo": {
+    "Voto": 1645,
     "Deliberação": 11019,
-    "Portaria": 7536,
-    "Decisão": 4610,
+    "Portaria": 7533,
+    "Decisão": 4609,
     "Comunicado": 28,
     "Aviso": 160,
-    "Voto": 1643,
     "Resolução": 6446,
     "Voto Vista": 40,
     "Reunião Participativa": 128,
     "Leilão / Concessão": 8,
     "Audiência Pública": 229,
-    "DPS": 4,
+    "DPS": 5,
     "Tomada de Subsídio": 100,
     "Nota Técnica": 8,
     "Instrução Normativa": 63,
@@ -31,7 +31,7 @@
     "Instrução de Serviço": 51,
     "Decreto": 6,
     "Súmula": 3,
-    "Portaria Complementar": 16,
+    "Portaria Complementar": 15,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -54,21 +54,21 @@
     "Relatório do Verificador (mensal)": 33
   },
   "porSetor": {
+    "R": 21481,
     "G": 15121,
-    "R": 21478,
-    "C": 1769,
+    "C": 1765,
     "P": 3121,
-    "F": 2380
+    "F": 2376
   },
   "porFonte": {
+    "busca": 11803,
     "dlb": 11019,
-    "busca": 11805,
     "por": 6783,
     "dcsrod": 4452,
     "reu": 187,
     "porrod": 3941,
     "res": 6356,
-    "govbr": 504,
+    "govbr": 505,
     "tms": 165,
     "aud": 229,
     "ntc": 8,
@@ -296,7 +296,7 @@
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 376,
+      "total": 377,
       "dups": 18,
       "faixa": 48
     },
@@ -324,7 +324,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 231,
+      "total": 230,
       "dups": 23,
       "faixa": 108
     },
@@ -387,7 +387,7 @@
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 94,
+      "total": 95,
       "dups": 2,
       "faixa": 10
     },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7526
+      "total": 7443
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3755
+      "total": 3752
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3599
+      "total": 3601
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1482
+      "total": 1481
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1590
+      "total": 1591
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1983
+      "total": 1984
     },
     {
       "id": "seguranca",
@@ -735,7 +735,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 128
+      "total": 129
     },
     {
       "id": "bens-reversiveis",
