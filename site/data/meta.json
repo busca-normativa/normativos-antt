@@ -1,14 +1,14 @@
 {
-  "atualizadoEm": "2026-10-10T16:32:53.083Z",
+  "atualizadoEm": "2026-10-11T17:25:59.549Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
-  "modo": "incremental",
-  "duracaoSegundos": 2256,
-  "total": 42533,
+  "modo": "completo",
+  "duracaoSegundos": 3710,
+  "total": 42526,
   "porTipo": {
-    "Voto": 1645,
+    "Voto": 1644,
     "Deliberação": 11019,
-    "Portaria": 7533,
-    "Decisão": 4609,
+    "Portaria": 7532,
+    "Decisão": 4610,
     "Comunicado": 28,
     "Aviso": 160,
     "Resolução": 6446,
@@ -31,7 +31,7 @@
     "Instrução de Serviço": 51,
     "Decreto": 6,
     "Súmula": 3,
-    "Portaria Complementar": 15,
+    "Portaria Complementar": 16,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -41,7 +41,7 @@
     "Relatório Financeiro": 352,
     "Relatório de Obras": 2669,
     "Relatório de Monitoração": 1301,
-    "Relatório do Verificador": 22,
+    "Relatório do Verificador": 18,
     "Termo de arrolamento": 222,
     "Licenciamento ambiental": 393,
     "Contrato e anexos (PER)": 196,
@@ -51,23 +51,23 @@
     "Revisões e reajustes": 1779,
     "Pesquisa e desenvolvimento (RDT)": 46,
     "Processo de licitação": 154,
-    "Relatório do Verificador (mensal)": 33
+    "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21481,
+    "R": 21473,
     "G": 15121,
     "C": 1765,
     "P": 3121,
-    "F": 2376
+    "F": 2377
   },
   "porFonte": {
-    "busca": 11803,
+    "busca": 11702,
     "dlb": 11019,
-    "por": 6783,
+    "por": 6782,
     "dcsrod": 4452,
     "reu": 187,
-    "porrod": 3941,
     "res": 6356,
+    "porrod": 3940,
     "govbr": 505,
     "tms": 165,
     "aud": 229,
@@ -77,7 +77,7 @@
     "dnit": 2169,
     "pcj": 26,
     "isv": 51,
-    "relatorios": 8246
+    "relatorios": 8239
   },
   "fontes": [
     {
@@ -296,7 +296,7 @@
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 377,
+      "total": 374,
       "dups": 18,
       "faixa": 48
     },
@@ -415,7 +415,7 @@
     {
       "nome": "Elovias",
       "destaque": false,
-      "total": 39,
+      "total": 35,
       "dups": 1,
       "faixa": 7
     },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7443
+      "total": 7475
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3752
+      "total": 3756
     },
     {
       "id": "acessos",
@@ -588,7 +588,7 @@
         "remanejamento de interferências",
         "acordos com terceiros"
       ],
-      "total": 259
+      "total": 258
     },
     {
       "id": "obras",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3601
+      "total": 3548
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1591
+      "total": 1593
     },
     {
       "id": "penalidades",
@@ -786,7 +786,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 155
+      "total": 148
     },
     {
       "id": "rcr",
@@ -803,5 +803,7 @@
       "total": 210
     }
   ],
-  "erros": []
+  "erros": [
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/rodovias/operacoes-rodoviarias/faixa-de-dominio/regulamentacao-vigente-ate-31-08-2020/instrucao-de-servico-no-8-2008-dg-dnit: terminated"
+  ]
 }
