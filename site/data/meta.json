@@ -1,13 +1,13 @@
 {
-  "atualizadoEm": "2026-10-11T17:25:59.549Z",
+  "atualizadoEm": "2026-10-12T20:35:47.964Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
-  "modo": "completo",
-  "duracaoSegundos": 3710,
-  "total": 42526,
+  "modo": "incremental",
+  "duracaoSegundos": 2447,
+  "total": 42528,
   "porTipo": {
-    "Voto": 1644,
+    "Voto": 1645,
     "Deliberação": 11019,
-    "Portaria": 7532,
+    "Portaria": 7534,
     "Decisão": 4610,
     "Comunicado": 28,
     "Aviso": 160,
@@ -31,7 +31,7 @@
     "Instrução de Serviço": 51,
     "Decreto": 6,
     "Súmula": 3,
-    "Portaria Complementar": 16,
+    "Portaria Complementar": 15,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -56,12 +56,12 @@
   "porSetor": {
     "R": 21473,
     "G": 15121,
-    "C": 1765,
+    "C": 1767,
     "P": 3121,
-    "F": 2377
+    "F": 2379
   },
   "porFonte": {
-    "busca": 11702,
+    "busca": 11781,
     "dlb": 11019,
     "por": 6782,
     "dcsrod": 4452,
@@ -324,7 +324,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 230,
+      "total": 231,
       "dups": 23,
       "faixa": 108
     },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7475
+      "total": 7458
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3756
+      "total": 3755
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3548
+      "total": 3694
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1593
+      "total": 1591
     },
     {
       "id": "penalidades",
@@ -803,7 +803,5 @@
       "total": 210
     }
   ],
-  "erros": [
-    "DNIT gov.br https://www.gov.br/dnit/pt-br/rodovias/operacoes-rodoviarias/faixa-de-dominio/regulamentacao-vigente-ate-31-08-2020/instrucao-de-servico-no-8-2008-dg-dnit: terminated"
-  ]
+  "erros": []
 }
