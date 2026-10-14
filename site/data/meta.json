@@ -1,17 +1,17 @@
 {
-  "atualizadoEm": "2026-10-13T18:23:28.793Z",
+  "atualizadoEm": "2026-10-14T15:59:52.038Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
-  "duracaoSegundos": 2488,
-  "total": 42548,
+  "duracaoSegundos": 2446,
+  "total": 42561,
   "porTipo": {
+    "Portaria": 7542,
     "Aviso": 161,
     "Reunião Participativa": 129,
+    "Deliberação": 11022,
     "Voto": 1644,
     "Resolução": 6447,
-    "Decisão": 4626,
-    "Deliberação": 11019,
-    "Portaria": 7535,
+    "Decisão": 4630,
     "Comunicado": 28,
     "Voto Vista": 40,
     "Leilão / Concessão": 8,
@@ -31,7 +31,7 @@
     "Instrução de Serviço": 51,
     "Decreto": 6,
     "Súmula": 3,
-    "Portaria Complementar": 16,
+    "Portaria Complementar": 15,
     "Lei": 14,
     "Norma Técnica": 789,
     "Ofício Circular": 2,
@@ -54,20 +54,20 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21493,
-    "F": 2378,
+    "G": 15125,
+    "R": 21500,
+    "F": 2382,
     "P": 3122,
-    "G": 15122,
-    "C": 1767
+    "C": 1769
   },
   "porFonte": {
+    "por": 6785,
     "reu": 189,
-    "busca": 11808,
+    "dlb": 11022,
+    "porrod": 3942,
+    "busca": 11828,
     "res": 6357,
-    "dcsrod": 4469,
-    "dlb": 11019,
-    "por": 6782,
-    "porrod": 3940,
+    "dcsrod": 4473,
     "govbr": 505,
     "tms": 165,
     "aud": 229,
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7483
+      "total": 7527
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3871
+      "total": 3793
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1481
+      "total": 1482
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1593
+      "total": 1594
     },
     {
       "id": "penalidades",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 771
+      "total": 772
     },
     {
       "id": "pesagem",
@@ -735,7 +735,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 129
+      "total": 130
     },
     {
       "id": "bens-reversiveis",
@@ -752,7 +752,7 @@
         "inventário de bens",
         "desvinculação de bens"
       ],
-      "total": 131
+      "total": 132
     },
     {
       "id": "encerramento",
@@ -770,7 +770,7 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 1038
+      "total": 1039
     },
     {
       "id": "verificador",
@@ -800,7 +800,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 210
+      "total": 212
     }
   ],
   "erros": []
