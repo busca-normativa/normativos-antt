@@ -1,17 +1,17 @@
 {
-  "atualizadoEm": "2026-10-14T15:59:52.038Z",
+  "atualizadoEm": "2026-10-15T15:49:23.460Z",
   "ultimaColetaCompleta": "2026-10-04T16:29:12.957Z",
   "modo": "incremental",
-  "duracaoSegundos": 2446,
-  "total": 42561,
+  "duracaoSegundos": 2340,
+  "total": 42583,
   "porTipo": {
     "Portaria": 7542,
     "Aviso": 161,
     "Reunião Participativa": 129,
     "Deliberação": 11022,
-    "Voto": 1644,
+    "Voto": 1645,
     "Resolução": 6447,
-    "Decisão": 4630,
+    "Decisão": 4649,
     "Comunicado": 28,
     "Voto Vista": 40,
     "Leilão / Concessão": 8,
@@ -31,9 +31,9 @@
     "Instrução de Serviço": 51,
     "Decreto": 6,
     "Súmula": 3,
-    "Portaria Complementar": 15,
+    "Portaria Complementar": 16,
     "Lei": 14,
-    "Norma Técnica": 789,
+    "Norma Técnica": 790,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
@@ -54,27 +54,27 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "G": 15125,
-    "R": 21500,
-    "F": 2382,
+    "G": 15126,
+    "R": 21519,
+    "F": 2383,
     "P": 3122,
-    "C": 1769
+    "C": 1770
   },
   "porFonte": {
     "por": 6785,
     "reu": 189,
     "dlb": 11022,
     "porrod": 3942,
-    "busca": 11828,
+    "busca": 11849,
     "res": 6357,
-    "dcsrod": 4473,
+    "dcsrod": 4492,
     "govbr": 505,
     "tms": 165,
     "aud": 229,
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2170,
+    "dnit": 2171,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8239
@@ -289,8 +289,8 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 437,
-      "dups": 52,
+      "total": 438,
+      "dups": 53,
       "faixa": 90
     },
     {
@@ -366,9 +366,9 @@
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 84,
+      "total": 90,
       "dups": 7,
-      "faixa": 21
+      "faixa": 27
     },
     {
       "nome": "Way-262",
@@ -448,8 +448,8 @@
       "faixa": 3
     }
   ],
-  "totalDups": 1037,
-  "totalFaixa": 6196,
+  "totalDups": 1038,
+  "totalFaixa": 6202,
   "temas": [
     {
       "id": "desapropriacao",
@@ -471,7 +471,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1894
+      "total": 1895
     },
     {
       "id": "faixa-dominio",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7527
+      "total": 7566
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3757
+      "total": 3758
     },
     {
       "id": "acessos",
@@ -553,7 +553,7 @@
         "placas publicitárias",
         "outdoor"
       ],
-      "total": 136
+      "total": 142
     },
     {
       "id": "receitas",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3793
+      "total": 3820
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1482
+      "total": 1481
     },
     {
       "id": "reequilibrio",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 772
+      "total": 790
     },
     {
       "id": "pesagem",
