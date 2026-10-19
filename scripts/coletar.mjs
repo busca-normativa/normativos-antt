@@ -54,7 +54,7 @@ const inicio = Date.now();
 const log = (...m) => console.log(`[${((Date.now() - inicio) / 1000).toFixed(0).padStart(4)}s]`, ...m);
 
 // ---------- formato compacto em disco ----------
-const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', fa: 'faixa', cc: 'concessao', cl: 'concessaoLegis', mp: 'noMapa' };
+const CHAVES = { i: 'id', t: 'tipo', tn: 'tipoNome', n: 'numero', a: 'ano', o: 'orgao', q: 'seq', ti: 'titulo', e: 'ementa', si: 'situacao', d: 'data', p: 'publicado', u: 'url', f: 'fontes', tm: 'temas', tb: 'temasBusca', se: 'setores', g: 'destaque', nt: 'nota', dp: 'dup', fa: 'faixa', cc: 'concessao', cl: 'concessaoLegis', mp: 'noMapa', au: 'ausente' };
 const CHAVES_INV = Object.fromEntries(Object.entries(CHAVES).map(([k, v]) => [v, k]));
 
 function paraDisco(a) {
@@ -88,6 +88,15 @@ const anteriores = COMPLETO ? carregarExistentes() : atos;
 const erros = [];
 const fontesOk = new Set();
 
+// Um item que some de uma fonte só sai da base depois de várias execuções seguidas sem aparecer: as páginas do
+// ANTTlegis e do gov.br às vezes devolvem listas incompletas sem dar erro, e o item voltava no dia seguinte
+// (ex.: Decisão SUFER 8/2026 e relatórios da MSVia entrando e saindo da base em dias alternados).
+const AUSENCIAS_PARA_REMOVER = 5;
+function marcarAusente(id, a) {
+  a.ausente = (a.ausente || 0) + 1;
+  if (a.ausente >= AUSENCIAS_PARA_REMOVER) atos.delete(id);
+}
+
 function unir(lista = [], extra = []) {
   return [...new Set([...(lista || []), ...extra])];
 }
@@ -117,6 +126,7 @@ function registrar(novo, fonteId) {
     atos.set(novo.id, { ...novo, fontes: [fonteId] });
     return atos.get(novo.id);
   }
+  delete ex.ausente;
   for (const campo of ['tipo', 'numero', 'ano', 'orgao', 'seq', 'titulo', 'ementa', 'situacao', 'data', 'publicado', 'url']) {
     if (novo[campo] !== undefined && novo[campo] !== null && novo[campo] !== '') ex[campo] = novo[campo];
   }
@@ -183,7 +193,7 @@ async function etapaTemas() {
     fontesOk.add('busca');
     for (const [id, a] of atos) {
       a.temasBusca = [];
-      if (!acertos.has(id) && a.fontes?.length === 1 && a.fontes[0] === 'busca') atos.delete(id);
+      if (!acertos.has(id) && a.fontes?.length === 1 && a.fontes[0] === 'busca') marcarAusente(id, a);
     }
   }
   for (const [id, set] of acertos) {
@@ -283,7 +293,8 @@ async function etapaGovBr() {
   }
   // Documentos que saíram das páginas do gov.br deixam a base (só quando o rastreamento foi completo)
   if (!r.erros.length && r.itens.length) {
-    for (const [id, a] of atos) if (a.tipo === 'GOV' && !govVistos.has(id)) atos.delete(id);
+    for (const [id, a] of atos) if (a.tipo === 'GOV' && !govVistos.has(id)) marcarAusente(id, a);
+    for (const id of govVistos) if (atos.get(id)) delete atos.get(id).ausente;
   }
   log(`   ${r.itens.length} itens em ${r.paginas} páginas (${ligados} ligados ao ANTTlegis, ${novos} documentos próprios)`);
 }
@@ -628,7 +639,7 @@ async function etapaDnit() {
     }, 'dnit');
   }
   // documentos que saíram do site do DNIT deixam a base (só quando o rastreamento foi completo)
-  if (!r.erros.length && vistos.size) for (const [id, a] of atos) if (a.tipo === 'DNIT' && !vistos.has(id)) atos.delete(id);
+  if (!r.erros.length && vistos.size) for (const [id, a] of atos) if (a.tipo === 'DNIT' && !vistos.has(id)) marcarAusente(id, a);
   log(`   ${vistos.size} documentos do DNIT em ${r.paginas} páginas`);
 }
 
@@ -684,7 +695,12 @@ async function principal() {
     for (const [id, a] of anteriores) {
       if (atos.has(id)) continue;
       const aindaValido = (a.fontes || []).some((f) => !fontesOk.has(f));
-      if (aindaValido) atos.set(id, a);
+      if (aindaValido) {
+        atos.set(id, a);
+        continue;
+      }
+      atos.set(id, a);
+      marcarAusente(id, a);
     }
   }
 
