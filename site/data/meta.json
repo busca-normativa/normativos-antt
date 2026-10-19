@@ -1,20 +1,20 @@
 {
-  "atualizadoEm": "2026-10-18T15:10:44.386Z",
+  "atualizadoEm": "2026-10-19T17:45:17.405Z",
   "ultimaColetaCompleta": "2026-10-18T15:10:44.386Z",
-  "modo": "completo",
-  "duracaoSegundos": 3811,
-  "total": 42792,
+  "modo": "incremental",
+  "duracaoSegundos": 2470,
+  "total": 42811,
   "porTipo": {
-    "Aviso": 162,
+    "Aviso": 165,
+    "Tomada de Subsídio": 105,
     "Reunião Participativa": 130,
-    "Portaria": 7542,
+    "Portaria": 7537,
+    "Decisão": 4660,
     "Deliberação": 11022,
     "Voto": 1645,
     "Resolução": 6447,
-    "Decisão": 4653,
     "Comunicado": 28,
     "Voto Vista": 40,
-    "Tomada de Subsídio": 102,
     "Leilão / Concessão": 8,
     "Audiência Pública": 229,
     "DPS": 5,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 1353,
+    "Documento": 1359,
     "Manual": 164,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -33,7 +33,7 @@
     "Súmula": 3,
     "Portaria Complementar": 15,
     "Lei": 14,
-    "Norma Técnica": 793,
+    "Norma Técnica": 798,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
@@ -54,27 +54,27 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21538,
-    "G": 15315,
-    "F": 2384,
+    "R": 21549,
+    "G": 15327,
+    "F": 2380,
     "P": 3122,
-    "C": 1770
+    "C": 1768
   },
   "porFonte": {
-    "reu": 191,
+    "reu": 192,
+    "tms": 172,
     "por": 6785,
+    "dcsrod": 4503,
+    "busca": 11856,
     "dlb": 11022,
     "porrod": 3942,
-    "busca": 11826,
     "res": 6357,
-    "dcsrod": 4495,
     "govbr": 505,
-    "tms": 167,
     "aud": 229,
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2384,
+    "dnit": 2395,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8228
@@ -324,7 +324,7 @@
     {
       "nome": "Via Araucária",
       "destaque": false,
-      "total": 231,
+      "total": 230,
       "dups": 23,
       "faixa": 108
     },
@@ -387,9 +387,9 @@
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 95,
+      "total": 96,
       "dups": 2,
-      "faixa": 10
+      "faixa": 11
     },
     {
       "nome": "Rota Verde Goiás",
@@ -408,9 +408,9 @@
     {
       "nome": "Rota Agro",
       "destaque": false,
-      "total": 14,
+      "total": 15,
       "dups": 0,
-      "faixa": 3
+      "faixa": 4
     },
     {
       "nome": "Elovias",
@@ -449,7 +449,7 @@
     }
   ],
   "totalDups": 1038,
-  "totalFaixa": 6203,
+  "totalFaixa": 6205,
   "temas": [
     {
       "id": "desapropriacao",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7583
+      "total": 7520
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3655
+      "total": 3905
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1598
+      "total": 1597
     },
     {
       "id": "penalidades",
@@ -666,7 +666,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1196
+      "total": 1197
     },
     {
       "id": "ambiental",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 799
+      "total": 806
     },
     {
       "id": "pesagem",
@@ -803,5 +803,7 @@
       "total": 212
     }
   ],
-  "erros": []
+  "erros": [
+    "EPR Litoral Pioneiro https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/epr-litoral-pioneiro/documentos-de-gestao/acompanhamento-de-obras/percentuais-de-avanco-fisico-dos-cronogramas-de-obras-e-servicos-do-planejamento-anual: fetch failed"
+  ]
 }
