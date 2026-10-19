@@ -925,7 +925,16 @@ function preencherSobre() {
   const dias = META.atualizadoEm ? (Date.now() - new Date(META.atualizadoEm)) / 864e5 : 0;
   const avisos = [];
   if (dias > 3) avisos.push(`A base não é atualizada há ${Math.floor(dias)} dias. Verifique a automação (GitHub Actions) ou rode <code>npm run coletar</code>.`);
-  if (META.erros?.length) avisos.push(`A última coleta teve ${META.erros.length} falha(s) pontual(is); parte dos atos pode estar desatualizada até a próxima execução.`);
+  // Página do gov.br (relatórios, DNIT) que não respondeu: os documentos dela são mantidos e a página é lida de novo
+  // na próxima coleta — vira só uma nota. O alerta fica para falhas no ANTTlegis (atos novos podem ter ficado de fora).
+  const erros = META.erros || [];
+  const pontuais = erros.filter((e) => /https?:\/\/(www\.)?gov\.br\//.test(e));
+  const graves = erros.length - pontuais.length;
+  if (graves) avisos.push(`A última coleta teve ${graves} falha(s) no ANTTlegis; parte dos atos pode estar desatualizada até a próxima execução.`);
+  if (pontuais.length) {
+    const nomes = [...new Set(pontuais.map((e) => e.split(' https')[0].trim()).filter(Boolean))].join(', ');
+    $('#info-atualizacao').insertAdjacentHTML('beforeend', ` <small>${pontuais.length} página(s) do gov.br não respondeu(ram) nesta coleta${nomes ? ` (${escapar(nomes)})` : ''}; os documentos foram mantidos e serão relidos na próxima.</small>`);
+  }
   $('#alerta-atualizacao').innerHTML = avisos.map((a) => `<div class="alerta">${a}</div>`).join('');
 }
 
