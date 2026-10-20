@@ -201,6 +201,7 @@ button, input, select { font: inherit; color: inherit; }
   width: 100%; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
   color-scheme: light dark;
 }
+.periodo-datas { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 8px; align-items: center; font-size: 13px; color: var(--ink-2); }
 .pub-dias { display: flex; justify-content: space-between; gap: 6px; margin-top: 4px; }
 .busca-filtro {
   width: 100%; min-width: 0; padding: 5px 8px; margin: 0 0 6px; border: 1px solid var(--border); border-radius: 8px;
