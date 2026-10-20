@@ -124,6 +124,18 @@
         </fieldset>
 
         <fieldset>
+          <legend>Publicado em</legend>
+          <label class="sr-only" for="f-pub">Data de publicação</label>
+          <input type="date" id="f-pub" class="campo-data" min="1990-01-01" max="2100-12-31">
+          <div class="pub-dias" id="pub-dias">
+            <button type="button" class="link-botao" data-pub="anterior" title="Dia anterior com publicações">‹ anterior</button>
+            <button type="button" class="link-botao" data-pub="ultimo" title="Último dia com publicações na base">último dia</button>
+            <button type="button" class="link-botao" data-pub="proximo" title="Próximo dia com publicações">próximo ›</button>
+          </div>
+          <p class="dica-filtro">Data do DOU (atos da ANTT) ou da publicação no site (relatórios, DNIT).</p>
+        </fieldset>
+
+        <fieldset>
           <legend>Tipo de ato</legend>
           <label class="sr-only" for="f-tipos-busca">Filtrar tipos de ato</label>
           <input type="search" id="f-tipos-busca" class="busca-filtro" placeholder="Digite para filtrar os tipos…" autocomplete="off">

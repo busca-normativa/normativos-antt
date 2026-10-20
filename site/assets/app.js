@@ -44,6 +44,16 @@ function dataBR(iso) {
 function compacto(n) {
   return NF.format(n);
 }
+// Dia em que o item foi publicado (DOU para os atos da ANTT; publicação no site para relatórios e DNIT)
+function diaPublicado(a) {
+  return (a.publicado || a.data || '').slice(0, 10);
+}
+let cacheDias = null;
+function diasComPublicacao() {
+  if (!cacheDias) cacheDias = [...new Set(ATOS.map(diaPublicado).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort();
+  return cacheDias;
+}
+
 function debounce(fn, ms) {
   let t;
   return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
@@ -100,6 +110,7 @@ const estado = {
   categoria: '',
   de: null,
   ate: null,
+  pub: '', // "2026-11-20": só o que foi publicado nesse dia
   rodovias: true,
   vigentes: false,
   destaque: false,
@@ -268,7 +279,7 @@ function aplicar() {
   const passaOrgao = (a) => !estado.orgao || a._org === estado.orgao;
   const passaConc = (a) => !estado.concessao || a.concessao === estado.concessao;
   const passaUso = (a) => !estado.uso || (a.faixa?.usos || []).includes(estado.uso);
-  const passaPeriodo = (a) => (!estado.de || (a.ano || 0) >= estado.de) && (!estado.ate || (a.ano || 0) <= estado.ate);
+  const passaPeriodo = (a) => (!estado.de || (a.ano || 0) >= estado.de) && (!estado.ate || (a.ano || 0) <= estado.ate) && (!estado.pub || diaPublicado(a) === estado.pub);
 
   const paraAno = f1.filter((a) => passaTipo(a) && passaOrgao(a) && passaConc(a));
   const f2 = f1.filter(passaPeriodo);
@@ -512,6 +523,7 @@ function desenharCabecalho({ final, consulta, ocultosSetor, ordem }) {
   if (estado.uso) chips.push(['uso', `Uso: ${estado.uso}`]);
   if (estado.categoria) chips.push(['categoria', `gov.br: ${estado.categoria}`]);
   if (estado.de || estado.ate) chips.push(['periodo', estado.de === estado.ate ? `Ano: ${estado.de}` : `Período: ${estado.de || '…'}–${estado.ate || '…'}`]);
+  if (estado.pub) chips.push(['pub', `Publicado em ${dataBR(estado.pub)}`]);
   if (estado.vigentes) chips.push(['vigentes', 'Sem revogados']);
   if (estado.destaque) chips.push(['destaque', 'Destaques gov.br']);
   $('#filtros-ativos').innerHTML = chips.map(([k, r]) => `<button type="button" class="filtro-ativo" data-limpar="${escapar(k)}" title="Remover filtro">${escapar(r)} <span aria-hidden="true">×</span></button>`).join('');
@@ -653,6 +665,7 @@ function salvarUrl() {
   if (estado.categoria) p.set('gov', estado.categoria);
   if (estado.de) p.set('de', estado.de);
   if (estado.ate) p.set('ate', estado.ate);
+  if (estado.pub) p.set('pub', estado.pub);
   if (!estado.rodovias) p.set('setores', 'todos');
   if (estado.vigentes) p.set('vigentes', '1');
   if (estado.destaque) p.set('destaques', '1');
@@ -676,6 +689,7 @@ function lerUrl() {
   estado.categoria = p.get('gov') || '';
   estado.de = +p.get('de') || null;
   estado.ate = +p.get('ate') || null;
+  estado.pub = /^\d{4}-\d{2}-\d{2}$/.test(p.get('pub') || '') ? p.get('pub') : '';
   estado.rodovias = p.get('setores') !== 'todos';
   estado.vigentes = p.get('vigentes') === '1';
   estado.destaque = p.get('destaques') === '1';
@@ -692,6 +706,7 @@ function sincronizarControles() {
   $('#f-faixa').checked = estado.soFaixa;
   $('#f-de').value = estado.de || '';
   $('#f-ate').value = estado.ate || '';
+  $('#f-pub').value = estado.pub;
 }
 
 // ---------------------------------------------------------------- exportação
@@ -792,6 +807,23 @@ function ligarEventos() {
   $('#f-destaque').addEventListener('change', (e) => { estado.destaque = e.target.checked; executar(); });
   const periodo = debounce(() => { estado.de = +$('#f-de').value || null; estado.ate = +$('#f-ate').value || null; executar(); }, 400);
   $('#f-de').addEventListener('input', periodo);
+  // "Publicado em": digitar a data ou andar pelos dias que tiveram publicação
+  $('#f-pub').addEventListener('change', (e) => { estado.pub = e.target.value || ''; executar(); });
+  $('#pub-dias').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-pub]');
+    if (!b) return;
+    const dias = diasComPublicacao();
+    const hoje = new Date().toLocaleDateString('sv-SE'); // AAAA-MM-DD no fuso local
+    const atual = estado.pub || hoje;
+    let alvo = '';
+    if (b.dataset.pub === 'ultimo') alvo = dias[dias.length - 1] || '';
+    else if (b.dataset.pub === 'anterior') alvo = [...dias].reverse().find((d) => d < atual) || '';
+    else if (b.dataset.pub === 'proximo') alvo = dias.find((d) => d > atual) || '';
+    if (!alvo) { toast(b.dataset.pub === 'proximo' ? 'Não há publicações depois desse dia' : 'Não há publicações antes desse dia'); return; }
+    estado.pub = alvo;
+    sincronizarControles();
+    executar();
+  });
   $('#f-ate').addEventListener('input', periodo);
   $('#f-tipos').addEventListener('change', (e) => {
     if (e.target.type !== 'checkbox') return;
@@ -821,7 +853,7 @@ function ligarEventos() {
   $('#f-categoria').addEventListener('change', (e) => { estado.categoria = e.target.value; executar(); });
   $('#ordem').addEventListener('change', (e) => { estado.ordem = e.target.value; executar(); });
   $('#limpar').addEventListener('click', () => {
-    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', concessao: '', soDups: false, soFaixa: false, uso: '', orgao: '', categoria: '', de: null, ate: null, rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
+    Object.assign(estado, { q: '', tema: '', tipos: new Set(), tiposFora: new Set(), conteudo: 'tudo', concessao: '', soDups: false, soFaixa: false, uso: '', orgao: '', categoria: '', de: null, ate: null, pub: '', rodovias: true, vigentes: false, destaque: false, ordem: 'auto' });
     sincronizarControles();
     executar();
   });
@@ -850,6 +882,7 @@ function ligarEventos() {
       else if (k === 'uso') estado.uso = '';
       else if (k === 'categoria') estado.categoria = '';
       else if (k === 'periodo') { estado.de = null; estado.ate = null; }
+      else if (k === 'pub') estado.pub = '';
       else if (k === 'vigentes') estado.vigentes = false;
       else if (k === 'destaque') estado.destaque = false;
       sincronizarControles();
