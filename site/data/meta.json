@@ -1,17 +1,17 @@
 {
-  "atualizadoEm": "2026-10-20T15:58:10.281Z",
+  "atualizadoEm": "2026-10-21T16:08:07.755Z",
   "ultimaColetaCompleta": "2026-10-18T15:10:44.386Z",
   "modo": "incremental",
-  "duracaoSegundos": 2591,
-  "total": 42816,
+  "duracaoSegundos": 2405,
+  "total": 43158,
   "porTipo": {
     "Aviso": 165,
     "Tomada de Subsídio": 105,
-    "Deliberação": 11023,
+    "Deliberação": 11024,
     "Reunião Participativa": 130,
-    "Portaria": 7539,
-    "Voto": 1646,
-    "Decisão": 4660,
+    "Decisão": 4676,
+    "Portaria": 7542,
+    "Voto": 1647,
     "Resolução": 6447,
     "Comunicado": 28,
     "Voto Vista": 40,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 1359,
+    "Documento": 1661,
     "Manual": 164,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -33,7 +33,7 @@
     "Súmula": 3,
     "Portaria Complementar": 16,
     "Lei": 14,
-    "Norma Técnica": 798,
+    "Norma Técnica": 817,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
@@ -54,19 +54,19 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21550,
-    "G": 15328,
-    "F": 2382,
+    "R": 21590,
+    "G": 15623,
+    "F": 2386,
     "P": 3122,
-    "C": 1770
+    "C": 1774
   },
   "porFonte": {
     "reu": 192,
     "tms": 172,
-    "dlb": 11023,
+    "dlb": 11024,
+    "busca": 11880,
+    "dcsrod": 4518,
     "por": 6785,
-    "busca": 11860,
-    "dcsrod": 4503,
     "porrod": 3942,
     "res": 6357,
     "govbr": 505,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2395,
+    "dnit": 2716,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8228
@@ -191,7 +191,7 @@
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 850,
+      "total": 851,
       "dups": 57,
       "faixa": 233
     },
@@ -296,7 +296,7 @@
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 374,
+      "total": 375,
       "dups": 18,
       "faixa": 48
     },
@@ -345,9 +345,9 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 572,
+      "total": 573,
       "dups": 10,
-      "faixa": 433
+      "faixa": 434
     },
     {
       "nome": "EPR Litoral Pioneiro",
@@ -401,9 +401,9 @@
     {
       "nome": "Rota Sertaneja",
       "destaque": false,
-      "total": 13,
+      "total": 14,
       "dups": 0,
-      "faixa": 3
+      "faixa": 4
     },
     {
       "nome": "Rota Agro",
@@ -443,13 +443,13 @@
     {
       "nome": "EPR Paraná",
       "destaque": false,
-      "total": 23,
+      "total": 24,
       "dups": 0,
-      "faixa": 3
+      "faixa": 4
     }
   ],
   "totalDups": 1038,
-  "totalFaixa": 6205,
+  "totalFaixa": 6208,
   "temas": [
     {
       "id": "desapropriacao",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7489
+      "total": 7563
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3759
+      "total": 3761
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3981
+      "total": 3811
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1486
+      "total": 1487
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1597
+      "total": 1600
     },
     {
       "id": "penalidades",
@@ -666,7 +666,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1196
+      "total": 1197
     },
     {
       "id": "ambiental",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1984
+      "total": 1986
     },
     {
       "id": "seguranca",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 806
+      "total": 820
     },
     {
       "id": "pesagem",
@@ -800,7 +800,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 212
+      "total": 213
     }
   ],
   "erros": []
