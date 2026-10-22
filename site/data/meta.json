@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-10-21T16:08:07.755Z",
+  "atualizadoEm": "2026-10-22T16:09:25.731Z",
   "ultimaColetaCompleta": "2026-10-18T15:10:44.386Z",
   "modo": "incremental",
-  "duracaoSegundos": 2405,
-  "total": 43158,
+  "duracaoSegundos": 2588,
+  "total": 43167,
   "porTipo": {
+    "Decisão": 4684,
+    "Portaria": 7543,
     "Aviso": 165,
     "Tomada de Subsídio": 105,
     "Deliberação": 11024,
     "Reunião Participativa": 130,
-    "Decisão": 4676,
-    "Portaria": 7542,
     "Voto": 1647,
     "Resolução": 6447,
     "Comunicado": 28,
@@ -54,19 +54,19 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21590,
+    "R": 21598,
+    "F": 2388,
     "G": 15623,
-    "F": 2386,
     "P": 3122,
     "C": 1774
   },
   "porFonte": {
+    "dcsrod": 4525,
+    "busca": 11887,
+    "por": 6786,
     "reu": 192,
     "tms": 172,
     "dlb": 11024,
-    "busca": 11880,
-    "dcsrod": 4518,
-    "por": 6785,
     "porrod": 3942,
     "res": 6357,
     "govbr": 505,
@@ -289,14 +289,14 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 438,
+      "total": 439,
       "dups": 53,
       "faixa": 90
     },
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 375,
+      "total": 376,
       "dups": 18,
       "faixa": 48
     },
@@ -408,7 +408,7 @@
     {
       "nome": "Rota Agro",
       "destaque": false,
-      "total": 15,
+      "total": 16,
       "dups": 0,
       "faixa": 4
     },
@@ -471,7 +471,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1895
+      "total": 1896
     },
     {
       "id": "faixa-dominio",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7563
+      "total": 7534
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3811
+      "total": 3991
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1600
+      "total": 1602
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 1986
+      "total": 1890
     },
     {
       "id": "seguranca",
@@ -720,7 +720,7 @@
         "posto de pesagem",
         "postos de pesagem"
       ],
-      "total": 272
+      "total": 273
     },
     {
       "id": "ppd",
