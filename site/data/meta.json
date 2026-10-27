@@ -1,14 +1,14 @@
 {
-  "atualizadoEm": "2026-10-26T17:36:58.931Z",
+  "atualizadoEm": "2026-10-27T16:42:08.666Z",
   "ultimaColetaCompleta": "2026-10-25T15:39:17.801Z",
   "modo": "incremental",
   "duracaoSegundos": 2746,
   "total": 43239,
   "porTipo": {
-    "Voto": 1649,
+    "Voto": 1651,
     "Aviso": 166,
     "Resolução": 6447,
-    "Decisão": 4731,
+    "Decisão": 4733,
     "Deliberação": 11031,
     "Portaria": 7543,
     "Tomada de Subsídio": 105,
@@ -33,7 +33,7 @@
     "Súmula": 3,
     "Portaria Complementar": 16,
     "Lei": 14,
-    "Norma Técnica": 822,
+    "Norma Técnica": 818,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
@@ -54,17 +54,17 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "F": 2392,
-    "R": 21651,
-    "C": 1776,
-    "G": 15638,
+    "F": 2393,
+    "R": 21654,
+    "C": 1777,
+    "G": 15634,
     "P": 3122
   },
   "porFonte": {
-    "busca": 11894,
+    "busca": 11934,
     "reu": 193,
     "res": 6358,
-    "dcsrod": 4572,
+    "dcsrod": 4574,
     "dlb": 11031,
     "por": 6786,
     "tms": 172,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2730,
+    "dnit": 2726,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8228
@@ -387,9 +387,9 @@
     {
       "nome": "Nova 381",
       "destaque": false,
-      "total": 98,
+      "total": 99,
       "dups": 2,
-      "faixa": 11
+      "faixa": 12
     },
     {
       "nome": "Rota Verde Goiás",
@@ -449,7 +449,7 @@
     }
   ],
   "totalDups": 1039,
-  "totalFaixa": 6210,
+  "totalFaixa": 6211,
   "temas": [
     {
       "id": "desapropriacao",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7543
+      "total": 7634
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3761
+      "total": 3762
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3615
+      "total": 3884
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1489
+      "total": 1490
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1607
+      "total": 1611
     },
     {
       "id": "penalidades",
@@ -666,7 +666,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1199
+      "total": 1198
     },
     {
       "id": "ambiental",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 857
+      "total": 858
     },
     {
       "id": "pesagem",
@@ -770,7 +770,7 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 1040
+      "total": 1041
     },
     {
       "id": "verificador",
@@ -786,7 +786,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 150
+      "total": 151
     },
     {
       "id": "rcr",
