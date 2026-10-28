@@ -1,21 +1,21 @@
 {
-  "atualizadoEm": "2026-10-27T16:42:08.666Z",
+  "atualizadoEm": "2026-10-28T17:25:50.257Z",
   "ultimaColetaCompleta": "2026-10-25T15:39:17.801Z",
   "modo": "incremental",
-  "duracaoSegundos": 2746,
-  "total": 43239,
+  "duracaoSegundos": 2436,
+  "total": 43258,
   "porTipo": {
+    "Decisão": 4747,
+    "Deliberação": 11033,
     "Voto": 1651,
     "Aviso": 166,
     "Resolução": 6447,
-    "Decisão": 4733,
-    "Deliberação": 11031,
-    "Portaria": 7543,
+    "Portaria": 7544,
     "Tomada de Subsídio": 105,
     "Reunião Participativa": 130,
     "Comunicado": 28,
     "Voto Vista": 40,
-    "Leilão / Concessão": 8,
+    "Leilão / Concessão": 9,
     "Audiência Pública": 229,
     "DPS": 5,
     "Nota Técnica": 8,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 1671,
+    "Documento": 1672,
     "Manual": 164,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -54,18 +54,18 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
+    "R": 21668,
+    "G": 15639,
     "F": 2393,
-    "R": 21654,
     "C": 1777,
-    "G": 15634,
     "P": 3122
   },
   "porFonte": {
-    "busca": 11934,
+    "dcsrod": 4588,
+    "dlb": 11033,
+    "busca": 11948,
     "reu": 193,
     "res": 6358,
-    "dcsrod": 4574,
-    "dlb": 11031,
     "por": 6786,
     "tms": 172,
     "porrod": 3942,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2726,
+    "dnit": 2728,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8228
@@ -289,8 +289,8 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 440,
-      "dups": 53,
+      "total": 441,
+      "dups": 54,
       "faixa": 90
     },
     {
@@ -352,9 +352,9 @@
     {
       "nome": "EPR Litoral Pioneiro",
       "destaque": false,
-      "total": 307,
+      "total": 308,
       "dups": 44,
-      "faixa": 72
+      "faixa": 73
     },
     {
       "nome": "EPR Via Mineira",
@@ -380,9 +380,9 @@
     {
       "nome": "Nova 364",
       "destaque": false,
-      "total": 50,
+      "total": 51,
       "dups": 1,
-      "faixa": 19
+      "faixa": 20
     },
     {
       "nome": "Nova 381",
@@ -394,7 +394,7 @@
     {
       "nome": "Rota Verde Goiás",
       "destaque": false,
-      "total": 45,
+      "total": 46,
       "dups": 0,
       "faixa": 15
     },
@@ -448,8 +448,8 @@
       "faixa": 4
     }
   ],
-  "totalDups": 1039,
-  "totalFaixa": 6211,
+  "totalDups": 1041,
+  "totalFaixa": 6213,
   "temas": [
     {
       "id": "desapropriacao",
@@ -471,7 +471,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1897
+      "total": 1899
     },
     {
       "id": "faixa-dominio",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7634
+      "total": 7586
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3762
+      "total": 3764
     },
     {
       "id": "acessos",
@@ -532,7 +532,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 2061
+      "total": 2063
     },
     {
       "id": "publicidade",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3884
+      "total": 3679
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1490
+      "total": 1492
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1611
+      "total": 1610
     },
     {
       "id": "penalidades",
@@ -666,7 +666,7 @@
         "penalidade de advertência",
         "penalidade de multa"
       ],
-      "total": 1198
+      "total": 1199
     },
     {
       "id": "ambiental",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 858
+      "total": 868
     },
     {
       "id": "pesagem",
@@ -735,7 +735,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 130
+      "total": 131
     },
     {
       "id": "bens-reversiveis",
