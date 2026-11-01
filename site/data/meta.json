@@ -1,9 +1,9 @@
 {
-  "atualizadoEm": "2026-10-31T16:30:34.194Z",
-  "ultimaColetaCompleta": "2026-10-25T15:39:17.801Z",
-  "modo": "incremental",
-  "duracaoSegundos": 2502,
-  "total": 43285,
+  "atualizadoEm": "2026-11-01T17:54:58.772Z",
+  "ultimaColetaCompleta": "2026-11-01T17:54:58.772Z",
+  "modo": "completo",
+  "duracaoSegundos": 3665,
+  "total": 43272,
   "porTipo": {
     "Decisão": 4764,
     "Portaria": 7547,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 1672,
+    "Documento": 1659,
     "Manual": 164,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -55,8 +55,8 @@
   },
   "porSetor": {
     "R": 21692,
-    "G": 15642,
-    "F": 2393,
+    "G": 15630,
+    "F": 2392,
     "C": 1777,
     "P": 3122
   },
@@ -64,7 +64,7 @@
     "dcsrod": 4605,
     "por": 6789,
     "porrod": 3943,
-    "busca": 11984,
+    "busca": 11957,
     "dlb": 11033,
     "reu": 193,
     "res": 6358,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 2729,
+    "dnit": 2716,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8234
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7653
+      "total": 7639
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3680
+      "total": 4006
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1610
+      "total": 1612
     },
     {
       "id": "penalidades",
