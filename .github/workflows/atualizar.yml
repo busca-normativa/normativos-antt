@@ -32,7 +32,7 @@ jobs:
     timeout-minutes: 150
     environment:
       name: github-pages
-      url: ${{ steps.publicacao.outputs.page_url }}
+      url: ${{ steps.publicacao.outputs.page_url || steps.publicacao2.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -118,5 +118,17 @@ jobs:
         with:
           path: site
 
+      # O GitHub Pages às vezes trava a publicação até estourar o tempo; os dados já estão salvos, então tenta de novo
       - id: publicacao
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+        with:
+          timeout: 300000
+
+      - name: Aguardar antes de publicar de novo
+        if: steps.publicacao.outcome == 'failure'
+        run: sleep 120
+
+      - id: publicacao2
+        if: steps.publicacao.outcome == 'failure'
         uses: actions/deploy-pages@v4
