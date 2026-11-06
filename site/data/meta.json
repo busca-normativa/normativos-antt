@@ -1,12 +1,12 @@
 {
-  "atualizadoEm": "2026-11-05T18:56:03.237Z",
+  "atualizadoEm": "2026-11-06T18:19:33.195Z",
   "ultimaColetaCompleta": "2026-11-01T17:54:58.772Z",
   "modo": "incremental",
-  "duracaoSegundos": 2764,
-  "total": 43943,
+  "duracaoSegundos": 2571,
+  "total": 43946,
   "porTipo": {
     "Voto": 1653,
-    "Decisão": 4794,
+    "Decisão": 4795,
     "Deliberação": 11035,
     "Portaria": 7555,
     "Aviso": 166,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 2232,
+    "Documento": 2234,
     "Manual": 165,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -54,15 +54,15 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21834,
+    "R": 21837,
     "G": 16158,
     "C": 1778,
     "F": 2394,
     "P": 3124
   },
   "porFonte": {
-    "busca": 12014,
-    "dcsrod": 4635,
+    "busca": 12015,
+    "dcsrod": 4636,
     "dlb": 11035,
     "por": 6796,
     "porrod": 3944,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 3340,
+    "dnit": 3342,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8240
@@ -345,7 +345,7 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 649,
+      "total": 650,
       "dups": 11,
       "faixa": 435
     },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7662
+      "total": 7651
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3765
+      "total": 3766
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3734
+      "total": 3573
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1497
+      "total": 1498
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1615
+      "total": 1617
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 2092
+      "total": 2091
     },
     {
       "id": "seguranca",
