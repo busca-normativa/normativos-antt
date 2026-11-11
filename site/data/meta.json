@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-11-10T18:49:26.390Z",
+  "atualizadoEm": "2026-11-11T18:42:57.074Z",
   "ultimaColetaCompleta": "2026-11-08T17:50:38.954Z",
   "modo": "incremental",
-  "duracaoSegundos": 2770,
-  "total": 43916,
+  "duracaoSegundos": 2694,
+  "total": 43925,
   "porTipo": {
+    "Portaria": 7563,
     "Voto": 1656,
-    "Voto Vista": 41,
+    "Voto Vista": 42,
     "Resolução": 6448,
     "Deliberação": 11046,
-    "Portaria": 7560,
-    "Decisão": 4838,
+    "Decisão": 4843,
     "Aviso": 166,
     "Tomada de Subsídio": 105,
     "Reunião Participativa": 130,
@@ -54,22 +54,22 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 21880,
-    "G": 16084,
+    "G": 16087,
+    "R": 21885,
+    "F": 2394,
     "C": 1779,
-    "P": 3125,
-    "F": 2393
+    "P": 3125
   },
   "porFonte": {
-    "busca": 12064,
+    "por": 6805,
+    "busca": 12069,
     "res": 6359,
     "dlb": 11046,
-    "por": 6802,
+    "dcsrod": 4684,
     "porrod": 3945,
-    "dcsrod": 4679,
     "reu": 193,
     "tms": 172,
-    "govbr": 505,
+    "govbr": 506,
     "aud": 229,
     "ntc": 8,
     "inm": 48,
@@ -177,7 +177,7 @@
     {
       "nome": "Nova Rota do Oeste",
       "destaque": false,
-      "total": 820,
+      "total": 821,
       "dups": 66,
       "faixa": 187
     },
@@ -191,7 +191,7 @@
     {
       "nome": "RioSP (Nova Dutra)",
       "destaque": false,
-      "total": 865,
+      "total": 866,
       "dups": 57,
       "faixa": 233
     },
@@ -205,7 +205,7 @@
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 1538,
+      "total": 1539,
       "dups": 29,
       "faixa": 864
     },
@@ -219,7 +219,7 @@
     {
       "nome": "Autopista Régis Bittencourt",
       "destaque": false,
-      "total": 845,
+      "total": 847,
       "dups": 11,
       "faixa": 257
     },
@@ -240,7 +240,7 @@
     {
       "nome": "Concebra",
       "destaque": false,
-      "total": 648,
+      "total": 649,
       "dups": 8,
       "faixa": 276
     },
@@ -268,7 +268,7 @@
     {
       "nome": "Ecovias Capixaba (Eco101)",
       "destaque": false,
-      "total": 629,
+      "total": 632,
       "dups": 25,
       "faixa": 129
     },
@@ -296,7 +296,7 @@
     {
       "nome": "Ecovias do Araguaia",
       "destaque": false,
-      "total": 383,
+      "total": 384,
       "dups": 18,
       "faixa": 48
     },
@@ -345,7 +345,7 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 650,
+      "total": 676,
       "dups": 11,
       "faixa": 435
     },
@@ -359,21 +359,21 @@
     {
       "nome": "EPR Via Mineira",
       "destaque": false,
-      "total": 121,
+      "total": 122,
       "dups": 3,
       "faixa": 5
     },
     {
       "nome": "Via Cristais",
       "destaque": false,
-      "total": 96,
+      "total": 97,
       "dups": 7,
       "faixa": 27
     },
     {
       "nome": "Way-262",
       "destaque": false,
-      "total": 35,
+      "total": 37,
       "dups": 0,
       "faixa": 7
     },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7605
+      "total": 7668
     },
     {
       "id": "ocupacao-faixa",
@@ -532,7 +532,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 2069
+      "total": 2070
     },
     {
       "id": "publicidade",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3908
+      "total": 4014
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1621
+      "total": 1620
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 2091
+      "total": 2092
     },
     {
       "id": "seguranca",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 947
+      "total": 949
     },
     {
       "id": "pesagem",
@@ -735,7 +735,7 @@
         "pontos de parada e descanso",
         "ponto de parada e descanso"
       ],
-      "total": 132
+      "total": 134
     },
     {
       "id": "bens-reversiveis",
