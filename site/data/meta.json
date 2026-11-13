@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-11-12T19:16:43.985Z",
+  "atualizadoEm": "2026-11-13T18:46:48.247Z",
   "ultimaColetaCompleta": "2026-11-08T17:50:38.954Z",
   "modo": "incremental",
-  "duracaoSegundos": 2839,
-  "total": 43959,
+  "duracaoSegundos": 3004,
+  "total": 44206,
   "porTipo": {
     "Portaria": 7563,
     "Voto": 1656,
     "Voto Vista": 42,
     "Resolução": 6448,
     "Deliberação": 11046,
-    "Decisão": 4845,
+    "Decisão": 4881,
     "Aviso": 166,
     "Tomada de Subsídio": 105,
     "Reunião Participativa": 130,
@@ -25,7 +25,7 @@
     "PT9": 1,
     "Licitação - Concessão": 1,
     "Instrução Normativa Conjunta": 1,
-    "Documento": 2263,
+    "Documento": 2473,
     "Manual": 164,
     "PT7": 1,
     "Instrução de Serviço": 51,
@@ -33,7 +33,7 @@
     "Súmula": 3,
     "Portaria Complementar": 16,
     "Lei": 14,
-    "Norma Técnica": 774,
+    "Norma Técnica": 775,
     "Ofício Circular": 2,
     "Regulamento": 9,
     "Plano de Fiscalização": 4,
@@ -54,18 +54,18 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "G": 16118,
-    "R": 21887,
+    "G": 16322,
+    "R": 21929,
     "F": 2395,
-    "C": 1779,
+    "C": 1780,
     "P": 3125
   },
   "porFonte": {
     "por": 6805,
-    "busca": 12071,
+    "busca": 12107,
     "res": 6359,
     "dlb": 11046,
-    "dcsrod": 4685,
+    "dcsrod": 4721,
     "porrod": 3945,
     "reu": 193,
     "tms": 172,
@@ -74,7 +74,7 @@
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
-    "dnit": 3275,
+    "dnit": 3486,
     "pcj": 26,
     "isv": 51,
     "relatorios": 8244
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7715
+      "total": 7738
     },
     {
       "id": "ocupacao-faixa",
@@ -532,7 +532,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 2070
+      "total": 2072
     },
     {
       "id": "publicidade",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 4013
+      "total": 3975
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1621
+      "total": 1619
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 2092
+      "total": 2088
     },
     {
       "id": "seguranca",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 949
+      "total": 955
     },
     {
       "id": "pesagem",
