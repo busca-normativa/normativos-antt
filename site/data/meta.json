@@ -1,8 +1,8 @@
 {
-  "atualizadoEm": "2026-11-20T20:22:03.676Z",
+  "atualizadoEm": "2026-11-21T17:58:10.421Z",
   "ultimaColetaCompleta": "2026-11-15T18:28:45.854Z",
   "modo": "incremental",
-  "duracaoSegundos": 6019,
+  "duracaoSegundos": 948,
   "total": 44689,
   "porTipo": {
     "Portaria": 7566,
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7807
+      "total": 7766
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3596
+      "total": 3869
     },
     {
       "id": "pedagio",
@@ -804,55 +804,12 @@
     }
   ],
   "erros": [
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/contrato-e-anexos/contrato-e-aditivos: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/contrato-e-anexos/anexos-do-contrato: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/contrato-e-anexos/termos-aditivos: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/planejamento-de-obras/planejamento-anual: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/planejamento-de-obras/planejamento-quinquenal: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/planejamento-de-obras/planejamento-global: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/acompanhamento-de-obras/execucao-acumulada-de-obras-de-ampliacao-de-capacidade-e-melhorias: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/acompanhamento-de-obras/percentuais-de-avanco-fisico-dos-cronogramas-de-obras-e-servicos-do-planejamento-anual: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/processo-de-licitacao/br-116-465-493-rj-mg/arquivos-para-download: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/processo-de-licitacao/br-116-465-493-rj-mg/galeria: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/documentos-de-gestao/cronograma-de-reunioes/reunioes-tripartite: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/revisoes-e-reajustes/localizacao-das-pracas-de-pedagio: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/revisoes-e-reajustes/tarifas-de-pedagios: fetch failed",
-    "Ecovias Rio Minas Extensão do Trecho Concedido: 733 km https://www.gov.br/antt/pt-br/assuntos/rodovias/concessionarias/lista-de-concessoes/ecoriominas/revisoes-e-reajustes/revisoes-e-reajustes: fetch failed",
-    "Ecovias Araguaia: fetch failed",
-    "Ecovias Cerrado: fetch failed",
-    "Ecovias das Gerais: fetch failed",
-    "Elovias: fetch failed",
-    "EPR Iguaçu: fetch failed",
-    "EPR Paraná: fetch failed",
-    "EPR Litoral Pioneiro: fetch failed",
-    "EPR Via Mineira: fetch failed",
-    "Motiva Minas SP: fetch failed",
-    "Motiva Paraná: fetch failed",
-    "Motiva Pantanal: fetch failed",
-    "Nova Rota do Oeste: fetch failed",
-    "Nova 364: fetch failed",
-    "Nova 381: fetch failed",
-    "RioSP: fetch failed",
-    "Rota Verde Goiás: fetch failed",
-    "Transbrasiliana: fetch failed",
-    "Via Araucária: fetch failed",
-    "Via Brasil BR-163: fetch failed",
-    "ViaCosteira: fetch failed",
-    "Via Cristais: fetch failed",
-    "ViaSul: fetch failed",
-    "Via Campo: fetch failed",
-    "Way-153: fetch failed",
-    "Way-262: fetch failed",
-    "Way-364: fetch failed",
-    "CCR Ponte (Contrato Encerrado): fetch failed",
-    "CONCEPA (Contrato Encerrado): fetch failed",
-    "CRT (Contrato Encerrado): fetch failed",
-    "Galvão BR-153 (Caducidade Declarada): fetch failed",
-    "Nova Dutra (Contrato Encerrado): fetch failed",
-    "VIA 040 (Contrato Encerrado): fetch failed",
-    "Via Bahia (Contrato Encerrado) Via Bahia: fetch failed",
-    "Rodovia do Aço (Caducidade Declarada): fetch failed",
-    "CONCER (Contrato Encerrado): fetch failed",
-    "Ecovias Sul (Contrato Encerrado): fetch failed"
+    "gov.br https://www.gov.br/antt/pt-br/assuntos/rodovias/normativos-de-rodovias: fetch failed",
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/tipo: fetch failed",
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/central-de-conteudos/atos-normativos/decreto-10-139-2019-revisaco/revogadas: fetch failed",
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/rodovias/operacoes-rodoviarias/faixa-de-dominio: fetch failed",
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-manuais: fetch failed",
+    "DNIT gov.br https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-normas: fetch failed",
+    "relatórios: fetch failed"
   ]
 }
