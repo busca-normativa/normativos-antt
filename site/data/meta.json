@@ -1,15 +1,15 @@
 {
-  "atualizadoEm": "2026-11-21T17:58:10.421Z",
+  "atualizadoEm": "2026-11-22T18:20:19.135Z",
   "ultimaColetaCompleta": "2026-11-15T18:28:45.854Z",
-  "modo": "incremental",
-  "duracaoSegundos": 948,
-  "total": 44689,
+  "modo": "completo",
+  "duracaoSegundos": 1253,
+  "total": 44688,
   "porTipo": {
     "Portaria": 7566,
     "Decisão": 4938,
     "Deliberação": 11048,
     "Voto": 1653,
-    "Voto Vista": 42,
+    "Voto Vista": 41,
     "Resolução": 6448,
     "Aviso": 167,
     "Tomada de Subsídio": 105,
@@ -54,7 +54,7 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "G": 16715,
+    "G": 16714,
     "R": 22010,
     "C": 1793,
     "F": 2395,
@@ -63,19 +63,19 @@
   "porFonte": {
     "por": 6807,
     "dcsrod": 4778,
-    "busca": 12160,
+    "busca": 12107,
     "dlb": 11048,
     "res": 6359,
     "porrod": 3945,
     "reu": 193,
     "tms": 172,
-    "govbr": 506,
     "aud": 229,
     "ntc": 8,
     "inm": 48,
     "cpb": 48,
     "dnit": 3906,
     "pcj": 26,
+    "govbr": 389,
     "isv": 51,
     "relatorios": 8248
   },
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7766
+      "total": 7794
     },
     {
       "id": "ocupacao-faixa",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3869
+      "total": 3888
     },
     {
       "id": "pedagio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1621
+      "total": 1622
     },
     {
       "id": "penalidades",
