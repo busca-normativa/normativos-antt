@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-11-23T22:24:05.712Z",
+  "atualizadoEm": "2026-11-24T21:00:31.845Z",
   "ultimaColetaCompleta": "2026-11-15T18:28:45.854Z",
   "modo": "incremental",
-  "duracaoSegundos": 960,
-  "total": 44691,
+  "duracaoSegundos": 969,
+  "total": 44720,
   "porTipo": {
+    "Voto": 1657,
+    "Deliberação": 11053,
     "Aviso": 168,
     "Tomada de Subsídio": 106,
-    "Decisão": 4939,
+    "Decisão": 4959,
     "Portaria": 7566,
-    "Deliberação": 11048,
-    "Voto": 1653,
     "Voto Vista": 41,
     "Resolução": 6448,
     "Reunião Participativa": 130,
@@ -54,18 +54,18 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "P": 3127,
-    "F": 2396,
-    "R": 22011,
-    "G": 16714,
+    "R": 22035,
+    "F": 2398,
+    "G": 16717,
+    "P": 3128,
     "C": 1793
   },
   "porFonte": {
+    "busca": 12184,
+    "dlb": 11053,
     "tms": 174,
-    "dcsrod": 4779,
+    "dcsrod": 4799,
     "por": 6807,
-    "busca": 12158,
-    "dlb": 11048,
     "res": 6359,
     "porrod": 3945,
     "reu": 193,
@@ -198,7 +198,7 @@
     {
       "nome": "Autopista Fluminense",
       "destaque": false,
-      "total": 724,
+      "total": 725,
       "dups": 29,
       "faixa": 146
     },
@@ -219,7 +219,7 @@
     {
       "nome": "Autopista Régis Bittencourt",
       "destaque": false,
-      "total": 847,
+      "total": 848,
       "dups": 11,
       "faixa": 257
     },
@@ -275,8 +275,8 @@
     {
       "nome": "Ecovias Minas Goiás (Eco050)",
       "destaque": false,
-      "total": 478,
-      "dups": 40,
+      "total": 479,
+      "dups": 41,
       "faixa": 102
     },
     {
@@ -289,9 +289,9 @@
     {
       "nome": "Ecovias Rio Minas",
       "destaque": false,
-      "total": 450,
+      "total": 451,
       "dups": 55,
-      "faixa": 90
+      "faixa": 91
     },
     {
       "nome": "Ecovias do Araguaia",
@@ -401,7 +401,7 @@
     {
       "nome": "Rota Sertaneja",
       "destaque": false,
-      "total": 14,
+      "total": 15,
       "dups": 0,
       "faixa": 4
     },
@@ -448,8 +448,8 @@
       "faixa": 5
     }
   ],
-  "totalDups": 1059,
-  "totalFaixa": 6220,
+  "totalDups": 1061,
+  "totalFaixa": 6221,
   "temas": [
     {
       "id": "desapropriacao",
@@ -471,7 +471,7 @@
         "servidão administrativa",
         "imissão na posse"
       ],
-      "total": 1922
+      "total": 1925
     },
     {
       "id": "faixa-dominio",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7783
+      "total": 7793
     },
     {
       "id": "ocupacao-faixa",
@@ -513,7 +513,7 @@
         "uso da faixa de domínio",
         "ocupação da faixa de domínio"
       ],
-      "total": 3767
+      "total": 3768
     },
     {
       "id": "acessos",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3744
+      "total": 3740
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1502
+      "total": 1504
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1622
+      "total": 1625
     },
     {
       "id": "penalidades",
@@ -684,7 +684,7 @@
         "regularização ambiental",
         "passivo ambiental"
       ],
-      "total": 2093
+      "total": 2095
     },
     {
       "id": "seguranca",
@@ -770,7 +770,7 @@
         "encerramento contratual",
         "extinção do contrato"
       ],
-      "total": 1046
+      "total": 1047
     },
     {
       "id": "verificador",
@@ -786,7 +786,7 @@
       "busca": [
         "verificador independente"
       ],
-      "total": 152
+      "total": 154
     },
     {
       "id": "rcr",
@@ -800,7 +800,7 @@
       "busca": [
         "Regulamento das Concessões Rodoviárias"
       ],
-      "total": 215
+      "total": 217
     }
   ],
   "erros": [
