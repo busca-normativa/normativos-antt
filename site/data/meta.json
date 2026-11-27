@@ -1,16 +1,16 @@
 {
-  "atualizadoEm": "2026-11-26T20:00:16.033Z",
+  "atualizadoEm": "2026-11-27T19:49:17.860Z",
   "ultimaColetaCompleta": "2026-11-15T18:28:45.854Z",
   "modo": "incremental",
-  "duracaoSegundos": 956,
-  "total": 44745,
+  "duracaoSegundos": 950,
+  "total": 44752,
   "porTipo": {
     "Voto": 1658,
     "Deliberação": 11054,
     "Portaria": 7567,
     "Aviso": 168,
     "Tomada de Subsídio": 106,
-    "Decisão": 4981,
+    "Decisão": 4988,
     "Voto Vista": 41,
     "Resolução": 6448,
     "Reunião Participativa": 130,
@@ -54,19 +54,19 @@
     "Relatório do Verificador (mensal)": 30
   },
   "porSetor": {
-    "R": 22060,
+    "R": 22067,
     "F": 2398,
     "G": 16717,
     "P": 3128,
     "C": 1793
   },
   "porFonte": {
-    "busca": 12208,
+    "busca": 12214,
     "dlb": 11054,
     "por": 6808,
     "porrod": 3946,
     "tms": 174,
-    "dcsrod": 4821,
+    "dcsrod": 4828,
     "res": 6359,
     "reu": 193,
     "aud": 229,
@@ -205,9 +205,9 @@
     {
       "nome": "Autopista Litoral Sul",
       "destaque": false,
-      "total": 1542,
+      "total": 1545,
       "dups": 29,
-      "faixa": 865
+      "faixa": 868
     },
     {
       "nome": "Autopista Planalto Sul",
@@ -345,9 +345,9 @@
     {
       "nome": "EPR Iguaçu",
       "destaque": false,
-      "total": 740,
+      "total": 754,
       "dups": 11,
-      "faixa": 435
+      "faixa": 436
     },
     {
       "nome": "EPR Litoral Pioneiro",
@@ -449,7 +449,7 @@
     }
   ],
   "totalDups": 1062,
-  "totalFaixa": 6228,
+  "totalFaixa": 6232,
   "temas": [
     {
       "id": "desapropriacao",
@@ -489,7 +489,7 @@
         "non aedificandi",
         "área não edificável"
       ],
-      "total": 7792
+      "total": 7782
     },
     {
       "id": "ocupacao-faixa",
@@ -532,7 +532,7 @@
         "readequação de acesso",
         "acesso à rodovia"
       ],
-      "total": 2076
+      "total": 2079
     },
     {
       "id": "publicidade",
@@ -607,7 +607,7 @@
         "obras de ampliação de capacidade",
         "anteprojeto"
       ],
-      "total": 3934
+      "total": 3964
     },
     {
       "id": "pedagio",
@@ -627,7 +627,7 @@
         "free flow",
         "livre passagem"
       ],
-      "total": 1506
+      "total": 1507
     },
     {
       "id": "reequilibrio",
@@ -646,7 +646,7 @@
         "revisão extraordinária",
         "revisão quinquenal"
       ],
-      "total": 1626
+      "total": 1628
     },
     {
       "id": "penalidades",
@@ -702,7 +702,7 @@
         "sinalização de obras",
         "dispositivos de contenção"
       ],
-      "total": 963
+      "total": 964
     },
     {
       "id": "pesagem",
